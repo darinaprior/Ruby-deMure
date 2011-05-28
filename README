@@ -1,0 +1,6 @@
+This git repository is the codebase for the Ruby deMure website http://www.rubydemure.com
+It largely consists of PHP and MySQL with various third-party javascript/jQuery plugins.
+It is quite out-of-date and needs a serious overhaulo, so please excuse its crudeness!
+
+All code (other than third-party plugins) written by Darina White from 2007 to date.
+My code is open-source as are all the third-party plugins.
