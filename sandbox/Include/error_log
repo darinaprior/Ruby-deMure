@@ -1,0 +1,13 @@
+[08-Jan-2010 19:21:14] PHP Warning:  file(http://www.rubydemure.com/sanbox/Include/test.php) [<a href='function.file'>function.file</a>]: failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in /home/rubydemu/public_html/sandbox/Include/__strip_navigation.php on line 25
+[08-Jan-2010 19:21:14] PHP Warning:  implode() [<a href='function.implode'>function.implode</a>]: Invalid arguments passed in /home/rubydemu/public_html/sandbox/Include/__strip_navigation.php on line 25
+[03-May-2011 17:14:08] PHP Warning:  mysqli::mysqli() [<a href='mysqli.mysqli'>mysqli.mysqli</a>]: (28000/1045): Access denied for user 'yourUsername'@'localhost' (using password: YES) in /home/rubydemu/public_html/sandbox/Include/search.php on line 5
+[03-May-2011 17:14:08] PHP Warning:  mysqli::real_escape_string() [<a href='mysqli.real-escape-string'>mysqli.real-escape-string</a>]: Couldn't fetch mysqli in /home/rubydemu/public_html/sandbox/Include/search.php on line 13
+[03-May-2011 18:06:08] PHP Parse error:  syntax error, unexpected '*' in /home/rubydemu/public_html/sandbox/Include/search.php on line 63
+[03-May-2011 18:06:26] PHP Parse error:  syntax error, unexpected '*' in /home/rubydemu/public_html/sandbox/Include/search.php on line 63
+[04-May-2011 18:42:02] PHP Fatal error:  Cannot pass parameter 2 by reference in /home/rubydemu/public_html/sandbox/Include/search.php on line 30
+[04-May-2011 18:42:09] PHP Fatal error:  Cannot pass parameter 2 by reference in /home/rubydemu/public_html/sandbox/Include/search.php on line 30
+[04-May-2011 18:42:10] PHP Fatal error:  Cannot pass parameter 2 by reference in /home/rubydemu/public_html/sandbox/Include/search.php on line 30
+[04-May-2011 18:42:54] PHP Warning:  mysqli_stmt::bind_param() [<a href='mysqli-stmt.bind-param'>mysqli-stmt.bind-param</a>]: Number of elements in type definition string doesn't match number of bind variables in /home/rubydemu/public_html/sandbox/Include/search.php on line 31
+[04-May-2011 18:43:40] PHP Warning:  mysqli_stmt::bind_param() [<a href='mysqli-stmt.bind-param'>mysqli-stmt.bind-param</a>]: Number of elements in type definition string doesn't match number of bind variables in /home/rubydemu/public_html/sandbox/Include/search.php on line 31
+[16-May-2011 17:08:20] PHP Parse error:  syntax error, unexpected T_STRING, expecting ',' or ';' in /home/rubydemu/public_html/sandbox/Include/search.php on line 57

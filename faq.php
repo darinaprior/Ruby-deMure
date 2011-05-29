@@ -34,14 +34,14 @@ include("Include/header.php");
 	}
 	function showHideQuestions(catId)
 	{
-		var isVisible = $jq("tr[name=cid_"+catId+"]").is(":visible");
-		if (isVisible)
+		var isHidden = $jq("tr[name=cid_"+catId+"]").is(":hidden");
+		if (isHidden)
 		{
-			$jq("tr[name*=cid_"+catId+"]").hide();	// hide all questions AND answers in this category
+			$jq("tr[name=cid_"+catId+"]").show();	// show ONLY the questions in this category (not the answers)
 		}
 		else
 		{
-			$jq("tr[name=cid_"+catId+"]").show();		// show ONLY the questions in this category (not the answers)
+			$jq("tr[name*=cid_"+catId+"]").hide();	// hide all questions AND answers in this category
 		}
 	}
 	function showHideAnswer(faqId)

@@ -1,3 +1,4 @@
+pre
 <?php
 $sPageTitle		= 'Ready-Made items';
 $sPageKeywords	= 'ready-made, stock, off-the-shelf';
@@ -51,33 +52,44 @@ include("Include/header.php");
 																?>
 								
 																<td class="tdTitleReadyMade" style="width:25%; margin:0px; padding-left:5px; vertical-align:top;">
-																	<?php //jQuery Cycle slideshow - see http://www.malsup.com/jquery/cycle/ ?>
-																	<div class="cycle" id="<?php echo $CollectionID; ?>" style="height: 90px;">
+																	<?php
+																	// Get default images for all the products in the collection
+																	$images = array();
+																	$qImages	= "select ProductImage.Filepath from ProductImage inner join Product on ProductImage.ProdImageID = Product.DefaultImageID where Product.CollectionID = ".$CollectionID." and Filepath <> 'img_not_avail.gif'";
+																	$rsImages	= mysql_query($qImages, $cnRuby);
+																	while ($recImages = mysql_fetch_array($rsImages)) {
+																		$Filepath	= $recImages['Filepath'];
+																		// we want the thumbnail
+																		$Filepath	= str_replace("images/", "images/thumbs/", $Filepath);
+																		$images[] = $Filepath;
+																	}
 																	
-																		<?php		
-																		// Get default images for all the products in the collection
-																		$qImages	= "select ProductImage.Filepath from ProductImage inner join Product on ProductImage.ProdImageID = Product.DefaultImageID where Product.CollectionID = ".$CollectionID." and Filepath <> 'img_not_avail.gif'";
-																		$rsImages	= mysql_query($qImages, $cnRuby);
+																	// If there's only image, just display it (jQuery Cycle won't work)
+																	if (COUNT($images) == 1) {
+																		?><img src="<?php echo $images[0]; ?>" /><?php
 																		
-																		// Add each image to the collection's slideshow
-																		while ($recImages = mysql_fetch_array($rsImages))
-																		{
-																			$Filepath	= $recImages['Filepath'];
-																			// we want the thumbnail
-																			$Filepath	= str_replace("images/", "images/thumbs/", $Filepath);
-																			?>
-																			<img src="<?=$Filepath?>" />
-																			<?php
-																		}
+																	// If there's more than one, add them all to the cycle DIV
+																	//jQuery Cycle slideshow - see http://www.malsup.com/jquery/cycle/
+																	} else {
 																		?>
-																	</div>
+																		<div class="cycle" id="<?php echo $CollectionID; ?>" style="height: 90px;">
+																			<?php							
+																			foreach ($images as $image) {
+																				?><img src="<?php echo $image; ?>" /><?php
+																			}
+																			?>
+																		</div>
+																		<?php
+																	}
+																	unset($images);	// unset for the next collection
+																	?>
 																	<a href="collection.php?cid=<?php echo $CollectionID; ?>"><?php echo $Title; ?></a>
 																</td>
 																<?php
 																if ($iCol == 4)	// 4 collections per row
 																{
 																	echo '</tr><tr>';
-																	$iCol = 1;
+																	$iCol = 0;
 																}
 																$iCol++;
 															}//while
@@ -169,8 +181,10 @@ include("Include/header.php");
 										<table class="tblStdFull" cellspacing="0" cellpadding="0">
 											<tr><td colspan="3" class="tdHeading">Ready-Made Items</td></tr>	
 										</table>
-										<p align="left" />Once I started on the path of making pasties, I found I couldn't stop coming up with designs.  It's quite addictive.  Every season brings new ideas and every occasion conjures up vivid images of the events and the times we all love.  And as soon as one idea pops into my head, it sprouts new ones all around it.
-										<br/><br/>So I started building collections of stock items that I sell "off the rack".  I have so many ideas for designs; it saddens me that there are simply not enough hours in the day to bring all of them to fruition.  But here are some that I have brought to life, and there are many more on the way!
+										<p align="left" />Once I started making accessories, I found I couldn't stop coming up with designs.  It's quite addictive.  Every season brings new ideas and every occasion conjures up vivid images of the events and the times we all love.  And as soon as one idea pops into my head, it sprouts new ones all around it.
+										<br/><br/>So I started building collections of stock items that I sell "off the rack".  To the left are some that I have brought to life, and there are many more on the way!
+										<br/><br/><a href="bespoke.php">Click here for Bespoke Work...</a>
+										<br/><br/><a href="vouchers.php">...or here for Gift Vouchers.</a>
 									</td>
 									
 								</tr>

@@ -85,7 +85,7 @@ else
 													// Get the products in this collection
 													$iCount = 1;
 													$iRow	= 1;
-													$qProducts	= "select *, case when NumRemaining < 1 then 1 else 0 end as OutOfStock from Product where CollectionID = ".$g_iCollectID." order by OutOfStock, Priority desc";
+													$qProducts	= "select *, case when NumRemaining < 1 then 1 else 0 end as OutOfStock from Product where CollectionID = ".$g_iCollectID." and Priority is not null order by OutOfStock, Priority desc";
 													$rsProducts	= mysql_query($qProducts, $cnRuby);
 													while ($recProduct = mysql_fetch_array($rsProducts))
 													{
@@ -142,7 +142,7 @@ else
 																if ($numRemaining > 0)
 																{
 																	?>
-																	<br/>&euro;<?=$TotalCost?>
+																	<br/>&euro;<?php echo str_replace('.00', '', number_format($TotalCost, 2) ); ?>
 																	<?php
 																	if ($sSizes != '')
 																		echo " ($sSizes)	";

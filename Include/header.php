@@ -1,11 +1,14 @@
+<?php
+include 'check_status.php';
+?>
 <!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">-->
 
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<title>Ruby deMure - <?php echo $sPageTitle ?></title>
-	<meta name="DESCRIPTION" content="Ruby deMure luxury tassels and pasties - <?php echo $sPageTitle ?>" />
-	<meta name="KEYWORDS" content="Ruby deMure, Ruby de Mure, tassels, nipple tassels, pasties, <?php echo $sPageKeywords ?>, burlesque, ireland, hand made, hand-made, dublin" />
+	<meta name="DESCRIPTION" content="Ruby deMure Luxury Burlesque Accessories - <?php echo $sPageTitle ?>" />
+	<meta name="KEYWORDS" content="Ruby deMure, Ruby de Mure, burlesque, tassels, nipple tassels, pasties, <?php echo $sPageKeywords ?>, ireland, hand made, hand-made, dublin" />
 	<link rel="SHORTCUT ICON" href="images/favicon.ico">
 	<link rel="STYLESHEET" href="css/styles.css">
 	
@@ -76,6 +79,10 @@
 	{
 		?>
 		<script type="text/javascript" src="js/jquery.cycle.lite.min.js"></script>
+<style>
+.cycle img { display: none }
+.cycle img.first { display: block }
+</style>
 		<script type="text/javascript">
 			$jq(document).ready(function(){
 				// Get all elements that have the "cycle" class applied

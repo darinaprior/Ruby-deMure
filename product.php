@@ -87,14 +87,16 @@ else
 								$sColours = substr($sColours, 0, -2);	// strip trailing comma and space
 				
 								// Get the sizes available
-								$sSizes		= "";
-								$qSizes		= "select Size.Name from ProductSize inner join Size on ProductSize.SizeID = Size.SizeID where ProductSize.ProdID = ".$g_iProdID;
-								$rsSizes	= mysql_query($qSizes, $cnRuby);
-								while ($recSize = mysql_fetch_array($rsSizes))
-								{
+                                                                $sSizes		= "";
+								if ($ProductTypeID != 4 && $ProductTypeID != 9) {	// not for stocking toppers or brooches
+								  $qSizes		= "select Size.Name from ProductSize inner join Size on ProductSize.SizeID = Size.SizeID where ProductSize.ProdID = ".$g_iProdID;
+								  $rsSizes	= mysql_query($qSizes, $cnRuby);
+								  while ($recSize = mysql_fetch_array($rsSizes))
+								  {
 									$sSizes = $sSizes.$recSize['Name'].", ";
-								}
-								$sSizes = substr($sSizes, 0, -2);	// strip trailing comma and space
+								  }
+								  $sSizes = substr($sSizes, 0, -2);	// strip trailing comma and space
+                                                                }//if $ProductTypeID
 				
 								// Get any testimonials
 								$sComment	= "<ul>";
@@ -415,8 +417,12 @@ else
 												<tr>
 													<td valign="top">Basic Details:</td>
 													<td>
-														<?=$Shape?>-shaped 
 														<?php
+														echo $Shape;
+														if ($ShapeID != 1 && $ShapeID != 5 && $ShapeID != 10) {
+															echo '-shaped';
+														}
+														echo '&nbsp;';
 														if ($HasTassel == 1)
 														{
 															?>tasseled <?php

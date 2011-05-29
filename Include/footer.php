@@ -31,7 +31,10 @@
 						</td>
 						<td align="right" style="padding-right:10px;">
 							<a href="http://twitter.com/rubydemure" target="_blank">
-								<img class="tt" src="/images/followTwitter.gif" title="Follow Ruby on Twitter" />
+								<img class="tt" src="/images/followMeTwitter.gif" title="Follow Ruby on Twitter" />
+							</a>
+							<a href="http://www.facebook.com/rubydemure" target="_blank">
+								<img class="tt" src="/images/followMeFacebook.jpg" title="Be Ruby's friend on Facebook" />
 							</a>
 						</td>
 					</tr>

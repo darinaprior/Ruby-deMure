@@ -1,0 +1,232 @@
+[01-Nov-2009 16:55:42] PHP Parse error:  syntax error, unexpected '=' in /home/rubydemu/public_html/sandbox/bespoke.php on line 61
+[04-Nov-2009 09:28:10] PHP Fatal error:  Call to undefined function  year() in /home/rubydemu/public_html/sandbox/press.php on line 77
+[04-Nov-2009 09:56:55] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/gallery_publicity.php on line 44
+[04-Nov-2009 09:56:55] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/gallery_publicity.php on line 91
+[04-Nov-2009 10:57:18] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/gallery_publicity.php on line 44
+[04-Nov-2009 10:57:18] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/gallery_publicity.php on line 91
+[04-Nov-2009 10:59:38] PHP Parse error:  syntax error, unexpected ')' in /home/rubydemu/public_html/sandbox/press.php on line 73
+[07-Nov-2009 16:11:48] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/bespoke.php on line 98
+[07-Nov-2009 16:11:48] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/bespoke.php on line 105
+[13-Nov-2009 09:00:09] PHP Warning:  mysql_query(): 2 is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 71
+[13-Nov-2009 09:00:09] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/collection.php on line 72
+[13-Nov-2009 09:00:09] PHP Warning:  mysql_close(): 2 is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 151
+[13-Nov-2009 09:06:43] PHP Warning:  mysql_query(): 2 is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 71
+[13-Nov-2009 09:06:43] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/collection.php on line 72
+[13-Nov-2009 09:06:43] PHP Warning:  mysql_close(): 2 is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 151
+[13-Nov-2009 09:07:21] PHP Warning:  mysql_query(): 2 is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 71
+[13-Nov-2009 09:07:21] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/collection.php on line 72
+[13-Nov-2009 09:07:21] PHP Warning:  mysql_close(): 2 is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 151
+[13-Nov-2009 09:07:52] PHP Warning:  mysql_query(): 2 is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 71
+[13-Nov-2009 09:07:52] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/collection.php on line 72
+[13-Nov-2009 09:07:52] PHP Warning:  mysql_close(): 2 is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 151
+[13-Nov-2009 09:14:39] PHP Warning:  mysql_query(): 2 is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 71
+[13-Nov-2009 09:14:39] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/collection.php on line 72
+[13-Nov-2009 09:14:39] PHP Warning:  mysql_close(): 2 is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 151
+[13-Nov-2009 09:19:03] PHP Warning:  mysql_query(): 2 is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 71
+[13-Nov-2009 09:19:03] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/collection.php on line 72
+[13-Nov-2009 09:19:03] PHP Warning:  mysql_close(): 2 is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 151
+[13-Nov-2009 09:20:06] PHP Warning:  mysql_query(): 2 is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 71
+[13-Nov-2009 09:20:06] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/collection.php on line 72
+[13-Nov-2009 09:20:06] PHP Warning:  mysql_close(): 2 is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 151
+[13-Nov-2009 09:22:31] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 17
+[13-Nov-2009 09:22:31] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/collection.php on line 18
+[13-Nov-2009 09:22:31] PHP Warning:  mysql_query(): 3 is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 71
+[13-Nov-2009 09:22:31] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/collection.php on line 72
+[13-Nov-2009 09:22:31] PHP Warning:  mysql_close(): 3 is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 151
+[13-Nov-2009 09:23:17] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 17
+[13-Nov-2009 09:23:17] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/collection.php on line 18
+[13-Nov-2009 09:29:50] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 17
+[13-Nov-2009 09:29:50] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/collection.php on line 18
+[13-Nov-2009 09:31:01] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 17
+[13-Nov-2009 09:31:01] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/collection.php on line 18
+[13-Nov-2009 09:32:44] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 17
+[13-Nov-2009 09:32:44] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/collection.php on line 18
+[13-Nov-2009 09:33:17] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/collection.php on line 17
+[13-Nov-2009 09:33:17] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/collection.php on line 18
+[13-Nov-2009 09:51:25] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/header.php on line 110
+[13-Nov-2009 09:51:25] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/header.php on line 112
+[13-Nov-2009 09:55:16] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/header.php on line 110
+[13-Nov-2009 09:55:16] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/header.php on line 112
+[13-Nov-2009 09:55:23] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/header.php on line 110
+[13-Nov-2009 09:55:23] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/header.php on line 112
+[13-Nov-2009 18:48:58] PHP Fatal error:  Call to undefined function  noconflict() in /home/rubydemu/public_html/sandbox/Include/header.php on line 42
+[13-Nov-2009 18:49:09] PHP Fatal error:  Call to undefined function  noconflict() in /home/rubydemu/public_html/sandbox/Include/header.php on line 42
+[07-Dec-2009 16:50:08] PHP Parse error:  syntax error, unexpected T_STRING in /home/rubydemu/public_html/sandbox/index.php on line 53
+[10-Dec-2009 14:35:32] PHP Parse error:  syntax error, unexpected '<' in /home/rubydemu/public_html/sandbox/vouchers.php on line 85
+[05-Jan-2010 18:41:40] PHP Fatal error:  Call to undefined function  mysql_fetch() in /home/rubydemu/public_html/sandbox/product.php on line 90
+[07-Jan-2010 17:53:14] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/header.php on line 193
+[08-Jan-2010 19:56:52] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 19:58:04] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 19:58:55] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 19:59:06] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 19:59:36] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 19:59:54] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:00:05] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:00:36] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:00:46] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:01:31] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:01:43] PHP Parse error:  syntax error, unexpected T_AS in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:02:15] PHP Parse error:  syntax error, unexpected T_AS in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:04:37] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:04:47] PHP Parse error:  syntax error, unexpected T_AS in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:07:34] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:07:34] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:07:34] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:08:11] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:10:19] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:10:53] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:11:04] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:11:15] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:11:26] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:11:37] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:11:48] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:12:09] PHP Parse error:  syntax error, unexpected T_AS in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:20:08] PHP Parse error:  syntax error, unexpected T_AS in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:53:32] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/browse.php on line 17
+[08-Jan-2010 20:53:32] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 18
+[08-Jan-2010 20:53:32] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:53:32] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:53:32] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:53:32] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:53:32] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:53:32] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:53:32] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:53:32] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:53:32] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:53:32] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:53:32] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:53:32] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:53:32] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:53:32] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[08-Jan-2010 20:54:33] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/browse.php on line 17
+[08-Jan-2010 20:54:33] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 18
+[08-Jan-2010 21:15:01] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 100
+[08-Jan-2010 21:16:12] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 99
+[08-Jan-2010 21:20:45] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 99
+[08-Jan-2010 21:26:22] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 99
+[08-Jan-2010 21:28:53] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 107
+[08-Jan-2010 21:29:21] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 107
+[08-Jan-2010 21:30:38] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 107
+[08-Jan-2010 21:31:29] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 107
+[08-Jan-2010 21:37:12] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 107
+[08-Jan-2010 21:38:38] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 107
+[08-Jan-2010 21:38:55] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 107
+[08-Jan-2010 21:39:01] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 107
+[08-Jan-2010 21:44:04] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 99
+[08-Jan-2010 21:49:00] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 99
+[08-Jan-2010 21:59:59] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 99
+[08-Jan-2010 22:00:25] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/browse.php on line 99
+[23-Jan-2010 10:30:27] PHP Parse error:  syntax error, unexpected $end in /home/rubydemu/public_html/sandbox/collection.php on line 187
+[23-Jan-2010 10:31:41] PHP Parse error:  syntax error, unexpected $end in /home/rubydemu/public_html/sandbox/collection.php on line 186
+[23-Jan-2010 10:33:43] PHP Parse error:  syntax error, unexpected $end in /home/rubydemu/public_html/sandbox/collection.php on line 186
+[23-Jan-2010 10:40:25] PHP Parse error:  syntax error, unexpected $end in /home/rubydemu/public_html/sandbox/collection.php on line 177
+[03-Mar-2010 08:28:06] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/faq.php on line 53
+[03-Mar-2010 08:46:53] PHP Parse error:  syntax error, unexpected ';', expecting '(' in /home/rubydemu/public_html/sandbox/faq.php on line 43
+[03-Mar-2010 13:31:43] PHP Warning:  include(navigation_stripped.php) [<a href='function.include'>function.include</a>]: failed to open stream: No such file or directory in /home/rubydemu/public_html/sandbox/faq.php on line 116
+[03-Mar-2010 13:31:43] PHP Warning:  include(navigation_stripped.php) [<a href='function.include'>function.include</a>]: failed to open stream: No such file or directory in /home/rubydemu/public_html/sandbox/faq.php on line 116
+[03-Mar-2010 13:31:43] PHP Warning:  include() [<a href='function.include'>function.include</a>]: Failed opening 'navigation_stripped.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/rubydemu/public_html/sandbox/faq.php on line 116
+[03-Mar-2010 13:34:02] PHP Warning:  include(navigation_stripped.php) [<a href='function.include'>function.include</a>]: failed to open stream: No such file or directory in /home/rubydemu/public_html/sandbox/faq.php on line 136
+[03-Mar-2010 13:34:02] PHP Warning:  include(navigation_stripped.php) [<a href='function.include'>function.include</a>]: failed to open stream: No such file or directory in /home/rubydemu/public_html/sandbox/faq.php on line 136
+[03-Mar-2010 13:34:02] PHP Warning:  include() [<a href='function.include'>function.include</a>]: Failed opening 'navigation_stripped.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/rubydemu/public_html/sandbox/faq.php on line 136
+[03-Mar-2010 13:34:16] PHP Warning:  include(navigation_stripped.php) [<a href='function.include'>function.include</a>]: failed to open stream: No such file or directory in /home/rubydemu/public_html/sandbox/faq.php on line 136
+[03-Mar-2010 13:34:16] PHP Warning:  include(navigation_stripped.php) [<a href='function.include'>function.include</a>]: failed to open stream: No such file or directory in /home/rubydemu/public_html/sandbox/faq.php on line 136
+[03-Mar-2010 13:34:16] PHP Warning:  include() [<a href='function.include'>function.include</a>]: Failed opening 'navigation_stripped.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/rubydemu/public_html/sandbox/faq.php on line 136
+[03-Mar-2010 16:18:25] PHP Fatal error:  Call to undefined function  writetitlerow() in /home/rubydemu/public_html/sandbox/links.php on line 80
+[03-Mar-2010 16:51:42] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/links.php on line 89
+[03-Mar-2010 16:51:42] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/links.php on line 89
+[03-Mar-2010 16:51:42] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/links.php on line 89
+[03-Mar-2010 16:51:42] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/links.php on line 89
+[03-Mar-2010 16:51:42] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/links.php on line 89
+[03-Mar-2010 17:03:15] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/links.php on line 91
+[03-Mar-2010 17:03:15] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/links.php on line 91
+[03-Mar-2010 17:03:15] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/links.php on line 91
+[03-Mar-2010 17:03:15] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/links.php on line 91
+[03-Mar-2010 17:03:15] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/links.php on line 91
+[21-Mar-2010 14:10:31] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/bespoke.php on line 80
+[21-Mar-2010 14:10:31] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/bespoke.php on line 87
+[21-Mar-2010 14:19:52] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/bespoke.php on line 81
+[21-Mar-2010 14:19:52] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/bespoke.php on line 88
+[21-Mar-2010 14:21:18] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/bespoke.php on line 84
+[21-Mar-2010 14:21:18] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/bespoke.php on line 91
+[05-Jul-2010 13:19:53] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/press.php on line 16
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_query(): supplied argument is not a valid MySQL-Link resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/navigation_stripped.php on line 1
+[05-Jul-2010 13:25:25] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/press.php on line 17
+[05-Jul-2010 13:26:04] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/press.php on line 16
+[05-Jul-2010 13:26:49] PHP Fatal error:  Call to undefined function  mysql_fetch() in /home/rubydemu/public_html/sandbox/press.php on line 16
+[20-Jul-2010 15:32:36] PHP Parse error:  syntax error, unexpected T_STRING in /home/rubydemu/public_html/sandbox/Include/check_status.php on line 9
+[20-Jul-2010 15:45:52] PHP Parse error:  syntax error, unexpected T_STRING in /home/rubydemu/public_html/sandbox/Include/check_status.php on line 9
+[20-Jul-2010 15:46:20] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/Include/check_status.php on line 11
+[20-Jul-2010 16:21:52] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/rubydemu/public_html/sandbox/Include/check_status.php:15) in /home/rubydemu/public_html/sandbox/Include/check_status.php on line 23
+[19-Oct-2010 04:55:15] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/gallery.php on line 43
+[21-Oct-2010 18:25:15] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/gallery.php on line 43
+[17-Dec-2010 22:42:15] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 58
+[17-Dec-2010 22:42:15] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 63
+[17-Dec-2010 22:42:15] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 68
+[18-Dec-2010 01:22:10] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 58
+[18-Dec-2010 01:22:10] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 63
+[18-Dec-2010 01:22:10] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 68
+[18-Dec-2010 21:18:46] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 58
+[18-Dec-2010 21:18:46] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 63
+[18-Dec-2010 21:18:46] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 68
+[19-Dec-2010 07:36:24] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 58
+[19-Dec-2010 07:36:24] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 63
+[19-Dec-2010 07:36:24] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 68
+[19-Dec-2010 23:02:56] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/gallery.php on line 43
+[25-Dec-2010 01:26:26] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/gallery.php on line 43
+[01-Jan-2011 20:56:05] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 58
+[01-Jan-2011 20:56:07] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 63
+[01-Jan-2011 20:56:07] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 68
+[02-Jan-2011 01:32:14] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 58
+[02-Jan-2011 01:32:14] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 63
+[02-Jan-2011 01:32:14] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 68
+[02-Jan-2011 01:45:48] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/gallery.php on line 43
+[26-Jan-2011 18:14:39] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 58
+[26-Jan-2011 18:14:39] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 63
+[26-Jan-2011 18:14:39] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 68
+[26-Jan-2011 21:54:13] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/gallery.php on line 43
+[27-Jan-2011 05:23:53] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 58
+[27-Jan-2011 05:23:53] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 63
+[27-Jan-2011 05:23:53] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 68
+[18-Feb-2011 06:16:30] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 58
+[18-Feb-2011 06:16:30] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 63
+[18-Feb-2011 06:16:30] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 68
+[18-Feb-2011 07:45:15] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/gallery.php on line 43
+[02-Mar-2011 09:07:45] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 18
+[02-Mar-2011 09:07:45] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 58
+[02-Mar-2011 09:07:45] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 63
+[02-Mar-2011 09:07:45] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 68
+[02-Mar-2011 09:07:45] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 83
+[02-Mar-2011 09:07:45] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 93
+[02-Mar-2011 09:07:45] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 103
+[02-Mar-2011 09:07:45] PHP Warning:  mysql_num_rows(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 115
+[11-Apr-2011 21:00:30] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/gallery.php on line 43
+[03-May-2011 17:05:38] PHP Warning:  include(check_status.php) [<a href='function.include'>function.include</a>]: failed to open stream: No such file or directory in /home/rubydemu/public_html/sandbox/test_search.php on line 8
+[03-May-2011 17:05:38] PHP Warning:  include(check_status.php) [<a href='function.include'>function.include</a>]: failed to open stream: No such file or directory in /home/rubydemu/public_html/sandbox/test_search.php on line 8
+[03-May-2011 17:05:38] PHP Warning:  include() [<a href='function.include'>function.include</a>]: Failed opening 'check_status.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/rubydemu/public_html/sandbox/test_search.php on line 8
+[03-May-2011 17:05:38] PHP Warning:  include(navigation_stripped.php) [<a href='function.include'>function.include</a>]: failed to open stream: No such file or directory in /home/rubydemu/public_html/sandbox/test_search.php on line 198
+[03-May-2011 17:05:38] PHP Warning:  include(navigation_stripped.php) [<a href='function.include'>function.include</a>]: failed to open stream: No such file or directory in /home/rubydemu/public_html/sandbox/test_search.php on line 198
+[03-May-2011 17:05:38] PHP Warning:  include() [<a href='function.include'>function.include</a>]: Failed opening 'navigation_stripped.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/rubydemu/public_html/sandbox/test_search.php on line 198
+[03-May-2011 17:06:52] PHP Warning:  include(navigation_stripped.php) [<a href='function.include'>function.include</a>]: failed to open stream: No such file or directory in /home/rubydemu/public_html/sandbox/test_search.php on line 198
+[03-May-2011 17:06:52] PHP Warning:  include(navigation_stripped.php) [<a href='function.include'>function.include</a>]: failed to open stream: No such file or directory in /home/rubydemu/public_html/sandbox/test_search.php on line 198
+[03-May-2011 17:06:52] PHP Warning:  include() [<a href='function.include'>function.include</a>]: Failed opening 'navigation_stripped.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/rubydemu/public_html/sandbox/test_search.php on line 198
+[13-May-2011 12:03:47] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 58
+[13-May-2011 12:03:47] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 63
+[13-May-2011 12:03:47] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 68
+[26-May-2011 10:28:37] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 58
+[26-May-2011 10:28:37] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 63
+[26-May-2011 10:28:37] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/rubydemu/public_html/sandbox/product.php on line 68

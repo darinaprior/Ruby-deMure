@@ -306,6 +306,23 @@ a.aLight
 {
 	color:#F1C9E1;
 }
+/* mailto and pdf hyperlinks - add icons */
+a[href ^="mailto:"] {
+   padding-right: 20px;
+   background: transparent url(../images/link_mail.gif) no-repeat center right;
+}
+a[href $='.pdf'] { 
+   padding-right: 18px;
+   background: transparent url(../images/link_pdf.gif) no-repeat center right;
+}
+a[class ~="external"] {
+   padding-right: 18px;
+   background: transparent url(../images/link_ext.gif) no-repeat center right;
+}
+a[class ~="popup"] {
+   padding-right: 18px;
+   background: transparent url(../images/link_popup.gif) no-repeat center right;
+}
 
 /* tooltips */
 .tt

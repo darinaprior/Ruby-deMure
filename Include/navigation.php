@@ -98,6 +98,15 @@
 			{
 				$aMaterials[$records['MaterialID']] = $records['Name'];
 			}
+
+			/* Publicity types */
+			$sql	= "select PublicityTypeId, Type from PublicityType where Priority >= 0 order by Priority desc";
+			$rset	= mysql_query($sql, $cnRuby);
+			$publicityTypes = array();
+			while ($records = mysql_fetch_array($rset))
+			{
+				$publicityTypes[$records['PublicityTypeId']] = $records['Type'];
+			}
 				
 			/* Link categories */
 			$sql	= "select LinkCategoryID, Category from LinkCategory where Priority is not null order by Priority desc";
@@ -187,7 +196,17 @@
 									</li>
 								</ul>
 							</li>
-							<li><a href="press.php">Publicity</a></li>
+							<li>
+								<a href="press.php">Publicity</a>
+								<ul>
+									<?php 
+									foreach ($publicityTypes as $publicityTypeId => $publicityType)
+									{
+										?><li><a href="press.php?typeid=<?php echo $publicityTypeId ?>"><?php echo $publicityType ?></a></li><?php 
+									}
+									?>
+								</ul>
+							</li>
 							<li>
 								<a href="links.php">Community</a>
 								<ul>
@@ -200,9 +219,10 @@
 								</ul>
 							</li>
 							<li>
-								<a href="#">Info</a>
+								<a href="#">Information</a>
 								<ul>
 									<li><a href="faq.php">FAQ</a></li>
+									<li><a href="testimonials.php">Testimonials</a></li>
 									<li><a href="sizing.php">Sizing Chart</a></li>
 									<li><a href="about.php">About Ruby</a></li>
 									<li><a href="contact.php">Contact</a></li>

@@ -1,0 +1,49 @@
+/* Adapted from marcofolio.net */
+
+/* COMMON CLASSES */
+.break { clear:both; }
+
+/* SEARCH FORM */
+#searchform { margin:0px 0px; }
+#searchform div { color:#0F050D; }	/* the whole visible div */
+#searchform p {	/* the visible paragraph that says "Search" */
+	display:inline;
+	color:#F1C9E1;
+	font-family: 'Times New Roman',Times,serif;
+	font-size: 16px;
+	font-style: italic;
+	font-weight: bold;
+	/* ORIGINAL VALUES: this didn't exist */
+}
+#searchform div input {	/* the input box where the user types */
+	padding:2px;
+	width:160px;
+	height:22px;
+	font-size:11px;
+	/* ORIGINAL VALUES: font-size:18px; padding:5px; width:320px; */
+}
+#suggestions{	/* this box that gets shown/hidden and contains the search results */
+	position:absolute;
+	right:100px;
+	top: 130px;
+	z-index: 9999;
+	width:320px;
+	line-height:0;
+	display:none;
+	/* ORIGINAL VALUES: position: relative; left:235px; width:320px; display:none; */
+}
+    
+
+/* SEARCHRESULTS */
+#searchresults { border-width:1px; border-color:#461b37; border-style:solid; width:320px; text-align:left; font-size:10px; line-height:14px; }
+#searchresults a { display:block; background-color:#f2cae2; color:#ffffff; clear:left; height:56px; text-decoration:none; }
+#searchresults a:hover { background-color:#ffffff; color:#461b37; }
+#searchresults a img { float:left; padding:5px 10px; }
+#searchresults a span.searchheading { display:block; font-weight:bold; padding-top:5px; color:#191919; }
+#searchresults a:hover span.searchheading { color:#ffffff; }
+#searchresults a span { color:#555555; }
+#searchresults a:hover span { color:#f1f1f1; }
+#searchresults span.category { background-color:#4C213D; font-size:11px; margin:5px; display:block; color:#ffffff; }
+#searchresults span.seperator { background-color:#4C213D; float:right; padding-right:15px; margin-right:5px;
+			background-image:url(../images/shortcuts_arrow.gif); background-repeat:no-repeat; background-position:right; }
+#searchresults span.seperator a { background-color:transparent; display:block; margin:5px; height:auto; color:#ffffff; }
