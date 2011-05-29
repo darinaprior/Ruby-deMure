@@ -238,7 +238,7 @@
 										<form id="searchform">
 											<div>
 												<p>Search</p>
-												<input id="inputString" type="text" size="15" value="Search this site" onkeyup="lookup(this.value);" />
+												<input id="inputString" type="text" size="15" value="" onkeyup="lookup(this.value);" />
 											</div>
 											<div id="suggestions"></div>
 										</form>

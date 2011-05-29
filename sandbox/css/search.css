@@ -16,7 +16,6 @@
 	/* ORIGINAL VALUES: this didn't exist */
 }
 #searchform div input {	/* the input box where the user types */
-	padding:2px;
 	width:160px;
 	height:22px;
 	font-size:11px;
@@ -35,15 +34,73 @@
     
 
 /* SEARCHRESULTS */
-#searchresults { border-width:1px; border-color:#461b37; border-style:solid; width:320px; text-align:left; font-size:10px; line-height:14px; }
-#searchresults a { display:block; background-color:#f2cae2; color:#ffffff; clear:left; height:56px; text-decoration:none; }
-#searchresults a:hover { background-color:#ffffff; color:#461b37; }
-#searchresults a img { float:left; padding:5px 10px; }
-#searchresults a span.searchheading { display:block; font-weight:bold; padding-top:5px; color:#191919; }
-#searchresults a:hover span.searchheading { color:#ffffff; }
-#searchresults a span { color:#555555; }
-#searchresults a:hover span { color:#f1f1f1; }
-#searchresults span.category { background-color:#4C213D; font-size:11px; margin:5px; display:block; color:#ffffff; }
-#searchresults span.seperator { background-color:#4C213D; float:right; padding-right:15px; margin-right:5px;
-			background-image:url(../images/shortcuts_arrow.gif); background-repeat:no-repeat; background-position:right; }
-#searchresults span.seperator a { background-color:transparent; display:block; margin:5px; height:auto; color:#ffffff; }
+/* the whole search results box */
+#searchresults {
+    background-color:#f2cae2;
+    border-width:1px;
+    border-color:#461b37;
+    border-style:solid;
+    width:320px;
+    text-align:left;
+    font-size:12px;
+    line-height:14px;
+}
+/* all images in the search results */
+#searchresults a img {
+    float:left;
+    padding:5px 10px;
+}
+/* all links within the search results */
+#searchresults a {
+    font-style: normal;
+    font-size: 12px;
+    text-decoration:none;
+}
+
+/* whole rows in the search results */
+#searchresults a {
+    display:block;
+    background-color:#f2cae2;
+    color:#ffffff;
+    clear:left;
+    padding:2px;
+}
+/* whole rows in the search results when hovered over */
+#searchresults a:hover {
+    background-color:#f9e4f0;
+    color:#461b37;
+}
+/* generic text within those rows e.g. product descriptions */
+#searchresults a span {
+    display:block;
+    padding-top:2px;
+}
+/* title text within those rows e.g. product names */
+#searchresults a span.searchheading {
+    color:#191919;
+}
+
+/* category headers */
+#searchresults span.category {
+    background-color:#4C213D;
+    font-size:14px;
+    margin:0px;
+    display:block;
+    color:#ffffff;
+    padding: 5px;
+}
+
+/* the "alternative" row at the bottom e.g. to sitemap/browse page */
+#searchresults span.alternative {
+    background-color:#4C213D;
+    margin:0px;
+}
+/* link within the "alternative" row */
+#searchresults span.alternative a {
+    display:block;
+    color:#ffffff;
+    background-color:#4C213D;
+    height:auto;
+    margin:0px;
+    text-align: center;
+}

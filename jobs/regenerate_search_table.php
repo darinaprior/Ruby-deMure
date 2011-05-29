@@ -1,13 +1,13 @@
 <?php
 /*
-* THIS SCRIPT DELETED EVERYTHING IN THE search TABLE AND ADDS EVERYTHING FRESH
+* THIS SCRIPT DELETES EVERYTHING IN THE search TABLE AND ADDS EVERYTHING FRESH
 * USED FOR THE SEARCH BOX ON THE WEBSITE
 * NOTE IT'S PROBABLY VERY INEFFICIENT!  BUT IT'LL DO FOR NOW
 */
 
-$db = new mysqli('localhost', 'rubydemu_ruby', 'thangi8F', 'rubydemu_dbRubydemure');
+require_once '../Include/connection.php';
 
-if(!$db) {
+if(!$mysqli) {
 	// Show error if we cannot connect.
 	echo 'ERROR: Failed to connect to DB';
 } else {
@@ -23,7 +23,7 @@ if(!$db) {
 		FROM Product p 
 		LEFT JOIN ProductImage pi on p.DefaultImageID = pi.ProdImageID
 		WHERE p.Priority is not null';
-	$stmt = $db->prepare($sql);
+	$stmt = $mysqli->prepare($sql);
 	if ($stmt) {
 		$stmt->bind_result($id, $title, $desc, $img);
 		$stmt->execute();
@@ -51,7 +51,7 @@ if(!$db) {
 			c.Description
 		FROM Collection c 
 		WHERE c.Current is not null';
-	$stmt = $db->prepare($sql);
+	$stmt = $mysqli->prepare($sql);
 	if ($stmt) {
 		$stmt->bind_result($id, $title, $desc);
 		$stmt->execute();
@@ -77,7 +77,7 @@ if(!$db) {
 		INNER JOIN ProductMaterial pm on m.MaterialID = pm.MaterialID
 		INNER JOIN Product p on pm.ProdID = p.ProdID
 		WHERE p.Priority is not null';
-	$stmt = $db->prepare($sql);
+	$stmt = $mysqli->prepare($sql);
 	if ($stmt) {
 		$stmt->bind_result($id, $title, $desc);
 		$stmt->execute();
@@ -96,7 +96,7 @@ if(!$db) {
 	
 	// If we have any data to put in, delete whatever's already in the search table first
 	$sql = 'DELETE FROM search;';
-	$stmt = $db->prepare($sql);
+	$stmt = $mysqli->prepare($sql);
 	if ($stmt) {
 		$stmt->execute();
 		$stmt->close();
@@ -106,21 +106,21 @@ if(!$db) {
 	foreach ($searchContents as $search) {
 		$sql = 'INSERT INTO search (category_id, title, description, url, image_filepath)
 			VALUES (?, ?, ?, ?, ?);';
-		$stmt = $db->prepare($sql);
+		$stmt = $mysqli->prepare($sql);
 		if ($stmt) {
 			$stmt->bind_param(
 				'issss',
-				$db->real_escape_string($search['category_id']),
-				$db->real_escape_string($search['title']),
-				$db->real_escape_string($search['description']),
-				$db->real_escape_string($search['url']),
-				$db->real_escape_string($search['image_filepath'])
+				$mysqli->real_escape_string($search['category_id']),
+				$mysqli->real_escape_string($search['title']),
+				$mysqli->real_escape_string($search['description']),
+				$mysqli->real_escape_string($search['url']),
+				$mysqli->real_escape_string($search['image_filepath'])
 			);
 			$stmt->execute();
 			$stmt->close();
 		}//if $stmt
 	}//foreach
 	
-}//if $db
+}//if $mysqli
 
 echo 'DONE';

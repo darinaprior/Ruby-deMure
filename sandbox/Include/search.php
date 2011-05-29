@@ -2,9 +2,10 @@
 
 <p id="searchresults">
 <?php
-$db = new mysqli('localhost', 'rubydemu_ruby', 'thangi8F', 'rubydemu_dbRubydemure');
+require_once '../Include/connection.php';
+$mysqli = new mysqli('localhost', 'rubydemu_ruby', 'thangi8F', 'rubydemu_dbRubydemure');
 
-if(!$db) {
+if(!$mysqli) {
 	// Show error if we cannot connect.
 	echo 'ERROR: We apologise for the inconvenience.  Please try again later.';
 } else {
@@ -22,11 +23,11 @@ if(!$db) {
 				WHERE s.title LIKE ?
 				ORDER BY sc.name, s.title
 				LIMIT 6';
-			$stmt = $db->prepare($sql);
+			$stmt = $mysqli->prepare($sql);
 			if ($stmt) {
 				$stmt->bind_param(
 					's',
-					$db->real_escape_string('%'.$_POST['queryString'].'%')
+					$mysqli->real_escape_string('%'.$_POST['queryString'].'%')
 				);
 				$stmt->bind_result($category, $title, $desc, $url, $img);
 				$stmt->execute();
@@ -38,7 +39,7 @@ if(!$db) {
 					}
 					
 		 			echo '<a href="'.$url.'">';
-		 			echo '<img src="'.$image_filepath.'" alt="" />';
+		 			echo '<img src="http://rubydemure.com/'.$img.'" alt="" />';
 		 			
 		 			$name = $title;
 		 			if(strlen($name) > 35) { 
@@ -54,12 +55,12 @@ if(!$db) {
 		 			echo '<span>'.$description.'</span></a>';
 				}//while
 				$stmt->close();
-		 		echo '<span class="seperator"><a href="http://www.rubydemure.com/browse.php?type=1&val=1" title="Browse products">Didn\'t find what you were looking for?<br/>Try browsing - click here.</a></span><br class="break" />';
+		 		echo '<span class="alternative"><a href="http://www.rubydemure.com/browse.php?type=1&val=1" title="Browse products">Didn\'t find what you were looking for?<br/>Try browsing - click here.</a></span><br class="break" />';
 			} else {
 				echo 'ERROR: There was a problem with the query.';
 			}//if $stmt
 		}//if strlen($_POST['queryString'])
 	}//if $_POST['queryString']
-}//if $db
+}//if $mysqli
 ?>
 </p>
