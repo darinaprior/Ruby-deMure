@@ -118,117 +118,134 @@
 			}
 			?>
 			
-			<table class="tblNav">
+			<table class="tblStdFull">
 				<tr>
-					<td align="center" class="tdNav">
-						<ul id="nav">
-							<li><a href="/">Home</a></li>
-							<li>
-								<a href="#">Shop</a>
-								<ul>
-									<li><a href="bespoke.php">Bespoke Work</a></li>
-									<li><a href="off-the-rack.php">Ready-Made</a>
-										<ul>
-											<li><a href="off-the-rack.php">All Collections</a></li>
-											<?php 
-											foreach ($aCollections as $colId => $colTitle)
-											{
-												?><li><a href="collection.php?cid=<?php echo $colId ?>"><?php echo $colTitle ?></a></li><?php 
-											}
-											?>
-										</ul>
-									</li>
-									<li><a href="vouchers.php">Gift Vouchers</a></li>
-									<li>
-										<a href="off-the-rack.php">Browse by</a>
-										<ul>
-											<li><a href="#">Product Type</a>
-												<ul>
-													<?php 
-													foreach ($aProdTypes as $id => $name)
-													{
-														?><li><a href="browse.php?type=1&val=<?php echo $id ?>"><?php echo $name ?></a></li><?php 
-													}
-													?>
-												</ul>
-											</li>
-											<li><a href="#">Colour</a>
-												<ul>
-													<?php 
-													foreach ($aColours as $id => $name)
-													{
-														?><li><a href="browse.php?type=2&val=<?php echo $id ?>"><?php echo $name ?></a></li><?php 
-													}
-													?>
-												</ul>
-											</li>
-											<li><a href="#">Shape</a>
-												<ul>
-													<?php 
-													foreach ($aShapes as $id => $name)
-													{
-														?><li><a href="browse.php?type=3&val=<?php echo $id ?>"><?php echo $name ?></a></li><?php 
-													}
-													?>
-												</ul>
-											</li>
-											<li><a href="#">Size</a>
-												<ul>
-													<?php 
-													foreach ($aSizes as $id => $name)
-													{
-														?><li><a href="browse.php?type=4&val=<?php echo $id ?>"><?php echo $name ?></a></li><?php 
-													}
-													?>
-												</ul>
-											</li>
-											<li><a href="#">Material</a>
-												<ul>
-													<?php 
-													foreach ($aMaterials as $id => $name)
-													{
-														?><li><a href="browse.php?type=5&val=<?php echo $id ?>"><?php echo $name ?></a></li><?php 
-													}
-													?>
-												</ul>
-											</li>
-										</ul>
-									</li>
-								</ul>
-							</li>
-							<li>
-								<a href="press.php">Publicity</a>
-								<ul>
-									<?php 
-									foreach ($publicityTypes as $publicityTypeId => $publicityType)
-									{
-										?><li><a href="press.php?typeid=<?php echo $publicityTypeId ?>"><?php echo $publicityType ?></a></li><?php 
-									}
-									?>
-								</ul>
-							</li>
-							<li>
-								<a href="links.php">Community</a>
-								<ul>
-									<?php 
-									foreach ($aLinkCategories as $catId => $catName)
-									{
-										?><li><a href="links.php?catid=<?php echo $catId ?>"><?php echo $catName ?></a></li><?php 
-									}
-									?>
-								</ul>
-							</li>
-							<li>
-								<a href="#">Information</a>
-								<ul>
-									<li><a href="faq.php">FAQ</a></li>
-									<li><a href="testimonials.php">Testimonials</a></li>
-									<li><a href="sizing.php">Sizing Chart</a></li>
-									<li><a href="about.php">About Ruby</a></li>
-									<li><a href="contact.php">Contact</a></li>
-								</ul>
-							</li>
-						</ul>
+					<td width="100%">
+						<table class="tblStdFull">
+							<tr>
+								<td align="center" class="tdNav">
+									<ul id="nav">
+										<li><a href="/">Home</a></li>
+										<li>
+											<a href="#">Shop</a>
+											<ul>
+												<li><a href="bespoke.php">Bespoke Work</a></li>
+												<li><a href="off-the-rack.php">Ready-Made</a>
+													<ul>
+														<li><a href="off-the-rack.php">All Collections</a></li>
+														<?php 
+														foreach ($aCollections as $colId => $colTitle)
+														{
+															?><li><a href="collection.php?cid=<?php echo $colId ?>"><?php echo $colTitle ?></a></li><?php 
+														}
+														?>
+													</ul>
+												</li>
+												<li><a href="vouchers.php">Gift Vouchers</a></li>
+												<li>
+													<a href="off-the-rack.php">Browse by</a>
+													<ul>
+														<li><a href="#">Product Type</a>
+															<ul>
+																<?php 
+																foreach ($aProdTypes as $id => $name)
+																{
+																	?><li><a href="browse.php?type=1&val=<?php echo $id ?>"><?php echo $name ?></a></li><?php 
+																}
+																?>
+															</ul>
+														</li>
+														<li><a href="#">Colour</a>
+															<ul>
+																<?php 
+																foreach ($aColours as $id => $name)
+																{
+																	?><li><a href="browse.php?type=2&val=<?php echo $id ?>"><?php echo $name ?></a></li><?php 
+																}
+																?>
+															</ul>
+														</li>
+														<li><a href="#">Shape</a>
+															<ul>
+																<?php 
+																foreach ($aShapes as $id => $name)
+																{
+																	?><li><a href="browse.php?type=3&val=<?php echo $id ?>"><?php echo $name ?></a></li><?php 
+																}
+																?>
+															</ul>
+														</li>
+														<li><a href="#">Size</a>
+															<ul>
+																<?php 
+																foreach ($aSizes as $id => $name)
+																{
+																	?><li><a href="browse.php?type=4&val=<?php echo $id ?>"><?php echo $name ?></a></li><?php 
+																}
+																?>
+															</ul>
+														</li>
+														<li><a href="#">Material</a>
+															<ul>
+																<?php 
+																foreach ($aMaterials as $id => $name)
+																{
+																	?><li><a href="browse.php?type=5&val=<?php echo $id ?>"><?php echo $name ?></a></li><?php 
+																}
+																?>
+															</ul>
+														</li>
+													</ul>
+												</li>
+											</ul>
+										</li>
+										<li>
+											<a href="press.php">Publicity</a>
+											<ul>
+												<?php 
+												foreach ($publicityTypes as $publicityTypeId => $publicityType)
+												{
+													?><li><a href="press.php?typeid=<?php echo $publicityTypeId ?>"><?php echo $publicityType ?></a></li><?php 
+												}
+												?>
+											</ul>
+										</li>
+										<li>
+											<a href="links.php">Community</a>
+											<ul>
+												<?php 
+												foreach ($aLinkCategories as $catId => $catName)
+												{
+													?><li><a href="links.php?catid=<?php echo $catId ?>"><?php echo $catName ?></a></li><?php 
+												}
+												?>
+											</ul>
+										</li>
+										<li>
+											<a href="#">Information</a>
+											<ul>
+												<li><a href="faq.php">FAQ</a></li>
+												<li><a href="testimonials.php">Testimonials</a></li>
+												<li><a href="sizing.php">Sizing Chart</a></li>
+												<li><a href="about.php">About Ruby</a></li>
+												<li><a href="contact.php">Contact</a></li>
+											</ul>
+										</li>
+									</ul>
+								</td>
+								<td align="right">
+									<div>
+										<form id="searchform">
+											<div>
+												<p>Search</p>
+												<input id="inputString" type="text" size="15" value="" onkeyup="lookup(this.value);" />
+											</div>
+											<div id="suggestions"></div>
+										</form>
+									</div>
+								</td>
+							</tr>
+						</table>
 					</td>
 				</tr>
 			</table>
