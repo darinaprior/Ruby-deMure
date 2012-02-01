@@ -2,8 +2,9 @@
 $sPageTitle		= 'Ready-Made items';
 $sPageKeywords	= 'ready-made, stock, off-the-shelf';
 $bSlideshow		= true;	// set up jQuery Cycle slideshow
-include("Include/connection.php");
-include("Include/header.php");
+require_once 'Include/connection.php';
+require_once 'Include/header.php';
+require_once 'Include/functions.php';
 ?>
 
 <table class="tblBody" cellpadding="0">
@@ -51,27 +52,39 @@ include("Include/header.php");
 																?>
 								
 																<td class="tdTitleReadyMade" style="width:25%; margin:0px; padding-left:5px; vertical-align:top;">
-																	<?php //jQuery Cycle slideshow - see http://www.malsup.com/jquery/cycle/ ?>
-																	<div class="cycle" id="<?php echo $CollectionID; ?>" style="height: 90px;">
-																	
-																		<?php		
-																		// Get default images for all the products in the collection
-																		$qImages	= "select ProductImage.Filepath from ProductImage inner join Product on ProductImage.ProdImageID = Product.DefaultImageID where Product.CollectionID = ".$CollectionID." and Filepath <> 'img_not_avail.gif'";
-																		$rsImages	= mysql_query($qImages, $cnRuby);
+																	<a href="collection.php?cid=<?php echo $CollectionID; ?>">
+																		<?php //jQuery Cycle slideshow - see http://www.malsup.com/jquery/cycle/ ?>
+																		<div class="cycle" id="<?php echo $CollectionID; ?>" style="height: 90px;">
 																		
-																		// Add each image to the collection's slideshow
-																		while ($recImages = mysql_fetch_array($rsImages))
-																		{
-																			$Filepath	= $recImages['Filepath'];
-																			// we want the thumbnail
-																			$Filepath	= str_replace("images/", "images/thumbs/", $Filepath);
-																			?>
-																			<img src="<?=$Filepath?>" />
 																			<?php
-																		}
-																		?>
-																	</div>
-																	<a href="collection.php?cid=<?php echo $CollectionID; ?>"><?php echo $Title; ?></a>
+																			// Get just one image for each product in this collection
+																			$sql = 'SELECT
+																					MIN(pi.id),
+																					pi.filepath
+																				FROM product_image pi
+																				INNER JOIN Product p ON pi.product_id = p.ProdID
+																				WHERE p.CollectionID = ?
+																				AND pi.filepath IS NOT NULL
+																				GROUP BY p.ProdID
+																				ORDER BY pi.id';
+																			$stmt = $mysqli->prepare($sql);
+																			if ($stmt) {
+																				$stmt->bind_param('i', intval($CollectionID));
+																				$stmt->bind_result($id, $path);
+																				$stmt->execute();
+																				while ($stmt->fetch()) {
+																					// Get the full filepath
+																					$fullPath = getFullImagePath($path, 3/*stock*/, TRUE/*thumbnail*/);
+																					
+																					// Add each image to the collection's slideshow																				
+																					echo '<img src="'.$fullPath.'" />';
+																				}
+																				$stmt->close();
+																			}
+																			?>
+																		</div>
+																		<?php echo $Title; ?>
+																	</a>
 																</td>
 																<?php
 																if ($iCol == 4)	// 4 collections per row
@@ -93,75 +106,6 @@ include("Include/header.php");
 													</table>
 												</td>
 											</tr>
-											<?php
-											// Get older collection details
-											$qCollection	= "select * from Collection where Current = 0 order by Priority desc";
-											$rsCollection	= mysql_query($qCollection, $cnRuby);
-											$numRows		= mysql_num_rows($rsCollection);
-											if ($numRows > 0)
-											{
-												?>
-												<tr>
-													<td align="center">
-														<table class="tblStdFull" cellspacing="0" cellpadding="0">
-															<tr><td colspan="6" align="left">And here is a selection of previous collections - limited stock available.</td></tr>
-															<tr><td>&nbsp;</td></tr>
-															<tr>
-																<?php
-																// Get current collection details
-																$iCol = 1;
-																while ($recCollection = mysql_fetch_array($rsCollection))
-																{
-																	$CollectionID	= $recCollection['CollectionID'];
-																	$Title			= $recCollection['Title'];
-																	?>
-								
-																	<td class="tdTitleReadyMade" style="width:25%; margin:0px; padding-left:5px; vertical-align:top;">
-																		<?php //jQuery Cycle slideshow - see http://www.malsup.com/jquery/cycle/ ?>
-																		<div class="cycle" id="<?php echo $CollectionID; ?>" style="height: 90px;">
-																	
-																			<?php		
-																			// Get default images for all the products in the collection
-																			$qImages	= "select ProductImage.Filepath from ProductImage inner join Product on ProductImage.ProdImageID = Product.DefaultImageID where Product.CollectionID = ".$CollectionID." and Filepath <> 'img_not_avail.gif'";
-																			$rsImages	= mysql_query($qImages, $cnRuby);
-																		
-																			// Add each image to the collection's slideshow
-																			while ($recImages = mysql_fetch_array($rsImages))
-																			{
-																				$Filepath	= $recImages['Filepath'];
-																				// we want the thumbnail
-																				$Filepath	= str_replace("images/", "images/thumbs/", $Filepath);
-																				?>
-																				<img src="<?php echo $Filepath; ?>" />
-																				<?php
-																			}
-																			?>
-																		</div>
-																		<a href="collection.php?cid=<?php echo $CollectionID; ?>"><?php echo $Title; ?></a>
-																	</td>
-																	<?php
-																	if ($iCol == 4)	// 4 collections per row
-																	{
-																		echo '</tr><tr>';
-																		$iCol = 1;
-																	}
-																	$iCol++;
-																}//while
-																
-																// Fill out the row, if necessary
-																while ($iCol <= 4)
-																{
-																	echo '<td>&nbsp;</td>';
-																	$iCol++;
-																}
-																?>
-															</tr>
-														</table>
-													</td>
-												</tr>
-												<?php
-											}//if $numRows
-											?>		
 										</table>											
 									</td>
 									
@@ -193,7 +137,7 @@ include("Include/header.php");
 	</tr>
 			
 </table>
-<?php include("Include/footer.php"); ?>
+<?php require_once 'Include/footer.php'; ?>
 
 <?php
 if ($cnRuby)

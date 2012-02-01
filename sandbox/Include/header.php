@@ -9,7 +9,7 @@ include 'check_status.php';
 	<title>Ruby deMure - <?php echo $sPageTitle ?></title>
 	<meta name="DESCRIPTION" content="Ruby deMure Luxury Burlesque Accessories - <?php echo $sPageTitle ?>" />
 	<meta name="KEYWORDS" content="Ruby deMure, Ruby de Mure, burlesque, tassels, nipple tassels, pasties, <?php echo $sPageKeywords ?>, ireland, hand made, hand-made, dublin" />
-	<link rel="SHORTCUT ICON" href="images/favicon.ico">
+	<link rel="SHORTCUT ICON" href="/images/favicon.ico">
 	<link rel="STYLESHEET" href="css/styles.css">
 	<?php
 	// Add the "tabs" stylesheet if necessary
@@ -195,7 +195,7 @@ include 'check_status.php';
 		<td class="tdR1C1">&nbsp;</td>
 		<td class="tdR1C2">
 			<a href="/">
-				<img src="images/blank_logo.gif" width="200px" height="100px" />
+				<img src="/images/blank_logo.gif" width="200px" height="100px" />
 			</a>
 		</td>
 		<td class="tdR1C3">&nbsp;</td>

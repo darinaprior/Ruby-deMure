@@ -4,7 +4,7 @@ if ($_GET['pid'] != "")
 else
 	$g_iProdID = -1;
 
-require_once('Include/connection.php');
+require_once 'Include/connection.php';
 
 if ($g_iProdID == -1)
 {
@@ -21,8 +21,8 @@ else
 	$sPageTitle		= $Title;
 	$sPageKeywords	= $Title.', product';
 	$has_tabs = TRUE;	// this page contains tabs
-	require_once('Include/header.php');
-	require_once('Include/functions.php');
+	require_once 'Include/header.php';
+	require_once 'Include/functions.php';
 	?>
 	
 		<table class="tblBody" cellpadding="0">
@@ -49,7 +49,6 @@ else
 								$CategoryID		= $recProduct['CategoryID'];
 								$CollectionID	= $recProduct['CollectionID'];
 								$HasTassel		= $recProduct['HasTassel'];
-								$DefaultImageID	= $recProduct['DefaultImageID'];
 								$otherDetails	= $recProduct['OtherDetails'];
 								$CustID			= $recProduct['CustID'];
 								$NumRemaining	= $recProduct['NumRemaining'];
@@ -260,58 +259,38 @@ else
 										<td valign="top" width="40%">
 											<table class="tblStdFullCentre">
 												<?php
-												// Get default product image
-												if ($DefaultImageID == null)
-												{
-													$Filepath		= "images/img_not_avail_300.gif";
-												}
-												else
-												{
-													$qDefImage		= "select * from ProductImage where ProdImageID = ".$DefaultImageID." limit 1";
-													$rsDefImage		= mysql_query($qDefImage, $cnRuby);
-													$recDefImage	= mysql_fetch_array($rsDefImage);
-													$ProdImageID	= $recDefImage['ProdImageID'];
-													$Filepath		= $recDefImage['Filepath'];
+												// Get the first 3 images for this product
+												$images = array();
+												$sql = 'SELECT DISTINCT filepath
+													FROM product_image
+													WHERE product_id = ?
+													AND filepath IS NOT NULL
+													ORDER BY id
+													LIMIT 3';
+												$stmt = $mysqli->prepare($sql);
+												if ($stmt) {
+													$stmt->bind_param('i', intval($g_iProdID));
+													$stmt->bind_result($path);
+													$stmt->execute();
+													while ($stmt->fetch()) {
+														// Get the full filepath
+														$fullPathThumb = getFullImagePath($path, $CategoryID, TRUE/*thumbnail*/);
+														$images[] = $fullPathThumb;
+													}
+													$stmt->close();
 												}
 												
-												// Get all product images (thumbnails)
-												if ($DefaultImageID != null)
-												{
-													$qImages	= "select * from ProductImage where ProdID = ".$g_iProdID." order by ProdImageID limit 3";
-													$rsImages	= mysql_query($qImages, $cnRuby);
-													$iCount		= 1;
+												foreach ($images as $path) {
 													?>
-													<tr>
-														<?php
-														while ($recImage = mysql_fetch_array($rsImages))
-														{
-															$ProdImageID	= $recImage['ProdImageID'];
-															$Filepath		= $recImage['Filepath'];
-															// The following code re: img_not_avail is prob not needed!
-															if (is_numeric( stripos($Filepath,"img_not_avail") ))
-																$FilepathThumb	= str_replace("images/img_not_avail.gif", "images/thumbs/img_not_avail_90.gif", $Filepath);
-															else
-																$FilepathThumb	= str_replace("images/", "images/thumbs/", $Filepath);
-															?>
-															<td align="center">
-																<div style="width:90px; height:90px;">
-																	<a href="gallery.php?pid=<?=$g_iProdID?>">
-																		<img src="<?=$FilepathThumb?>" alt="More images" border="0" />
-																	</a>
-																</div>
-															</td>
-															<?php
-															if ($iCount == 3)
-															{
-																?></tr><tr><?php
-																$iCount = 1;
-															}
-															else
-															{
-																$iCount++;
-															}
-														}
-													}
+													<td align="center">
+														<div style="width:90px; height:90px;">
+															<a href="gallery.php?pid=<?php echo $g_iProdID; ?>">
+																<img src="<?php echo $path; ?>" alt="More images" border="0" />
+															</a>
+														</div>
+													</td>
+													<?php
+												}//foreach
 												?>
 												</tr>
 												<tr><td colspan="3"><a href="gallery.php?pid=<?=$g_iProdID?>"><b>Click for image gallery &raquo;</b></a></td></tr>
@@ -718,7 +697,7 @@ else
 			
 	</table>
 	<?php
-	include("Include/footer.php");
+	require_once 'Include/footer.php';
 
 }//if $g_iProdID
 

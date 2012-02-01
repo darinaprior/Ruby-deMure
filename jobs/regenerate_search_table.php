@@ -16,18 +16,20 @@ if(!$mysqli) {
 	// Get all the details we want to store and save them to one big array
 	$searchContents = array();
 	
-	// Products
+	// Products, along with one image for each
 	$sql = 'SELECT 
 			p.ProdID, 
+			p.CategoryID, 
 			p.Title, 
 			p.Description, 
-			pi.Filepath
+			MIN(pi.filepath)
 		FROM Product p 
-		LEFT JOIN ProductImage pi on p.DefaultImageID = pi.ProdImageID
-		WHERE p.Priority is not null';
+		LEFT JOIN product_image pi on p.ProdID = pi.product_id
+		WHERE p.Priority is not null
+		GROUP BY p.ProdID';
 	$stmt = $mysqli->prepare($sql);
 	if ($stmt) {
-		$stmt->bind_result($id, $title, $desc, $img);
+		$stmt->bind_result($id, $productCategoryId, $title, $desc, $img);
 		$stmt->execute();
 		while ($result = $stmt->fetch()) {
 		
@@ -37,6 +39,7 @@ if(!$mysqli) {
 			// Add to array
 			$searchContents[] = array(
 				'category_id' => 1, /* products */
+				'product_category_id' => $productCategoryId,
 				'title' => $title,
 				'description' => $desc,
 				'url' => '/product.php?pid='.$id,
@@ -61,6 +64,7 @@ if(!$mysqli) {
 			// Add to array
 			$searchContents[] = array(
 				'category_id' => 2, /* collections */
+				'product_category_id' => NULL,
 				'title' => $title,
 				'description' => $desc,
 				'url' => '/collection.php?cid='.$id,
@@ -87,6 +91,7 @@ if(!$mysqli) {
 			// Add to array
 			$searchContents[] = array(
 				'category_id' => 3, /* materials */
+				'product_category_id' => NULL,
 				'title' => $title,
 				'description' => $desc,
 				'url' => '/browse.php?type=5&val='.$id,
@@ -112,6 +117,7 @@ if(!$mysqli) {
 			// Add to array
 			$searchContents[] = array(
 				'category_id' => 4, /* colours */
+				'product_category_id' => NULL,
 				'title' => $title,
 				'description' => NULL,
 				'url' => '/browse.php?type=2&val='.$id,
@@ -136,6 +142,7 @@ if(!$mysqli) {
 			// Add to array
 			$searchContents[] = array(
 				'category_id' => 6, /* sizes */
+				'product_category_id' => NULL,
 				'title' => $title,
 				'description' => NULL,
 				'url' => '/browse.php?type=4&val='.$id,
@@ -159,6 +166,7 @@ if(!$mysqli) {
 			// Add to array
 			$searchContents[] = array(
 				'category_id' => 7, /* product types */
+				'product_category_id' => NULL,
 				'title' => $title,
 				'description' => NULL,
 				'url' => '/browse.php?type=1&val='.$id,
@@ -182,6 +190,7 @@ if(!$mysqli) {
 			// Add to array
 			$searchContents[] = array(
 				'category_id' => 8, /* shapes */
+				'product_category_id' => NULL,
 				'title' => $title,
 				'description' => NULL,
 				'url' => '/browse.php?type=3&val='.$id,
@@ -208,6 +217,7 @@ if(!$mysqli) {
 			// Add to array
 			$searchContents[] = array(
 				'category_id' => 9, /* reviews */
+				'product_category_id' => NULL,
 				'title' => $title,
 				'description' => $description,
 				'url' => '/testimonials.php',
@@ -231,13 +241,14 @@ if(!$mysqli) {
 	
 	// Now go through our whole array and add everything to the search table
 	foreach ($searchContents as $search) {
-		$sql = 'INSERT INTO search (category_id, title, description, url, image_filepath)
-			VALUES (?, ?, ?, ?, ?);';
+		$sql = 'INSERT INTO search (category_id, product_category_id, title, description, url, image_filepath)
+			VALUES (?, ?, ?, ?, ?, ?);';
 		$stmt = $mysqli->prepare($sql);
 		if ($stmt) {
 			$stmt->bind_param(
-				'issss',
+				'iissss',
 				$mysqli->real_escape_string($search['category_id']),
+				$mysqli->real_escape_string($search['product_category_id']),
 				$mysqli->real_escape_string($search['title']),
 				$mysqli->real_escape_string($search['description']),
 				$mysqli->real_escape_string($search['url']),

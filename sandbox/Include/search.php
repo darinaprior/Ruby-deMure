@@ -2,7 +2,8 @@
 
 <p id="searchresults">
 <?php
-require_once '../Include/connection.php';
+require_once 'connection.php';
+require_once 'functions.php';
 
 if(!$mysqli) {
 	// Show error if we cannot connect.
@@ -50,6 +51,8 @@ if(!$mysqli) {
                             $sql = 'SELECT
                                         COUNT(*) AS NumKeywordsMatched,
                                         sc.name,
+                                        s.category_id,
+                                        s.product_category_id,
                                         s.title,
                                         s.description,
                                         s.url,
@@ -77,7 +80,16 @@ if(!$mysqli) {
                                 }
                                 $return = call_user_func_array(array($stmt,'bind_param'),$bind_names);
 
-                                $stmt->bind_result($numKeywordsMatched, $category, $title, $desc, $url, $img);
+                                $stmt->bind_result(
+                                	$numKeywordsMatched,
+                                	$category,
+                                	$categoryId,
+                                	$productCategoryId,
+                                	$title,
+                                	$desc,
+                                	$url,
+                                	$img
+                                );
                                 $stmt->execute();
                                 // Loop through the results
                                 while ($result = $stmt->fetch()) {
@@ -88,7 +100,12 @@ if(!$mysqli) {
                                         }
 
                                         echo '<a href="'.$url.'">';
-                                        echo '<img src="http://rubydemure.com/'.$img.'" alt="" />';
+                                        
+					// Get the root-relative filepath for the search image
+					if (isset($img) && $img != '') {
+						$fullPath = getSearchImagePath($img, $categoryId, $productCategoryId);
+						echo '<img src="http://rubydemure.com'.$fullPath.'" alt="" />';
+					}
 
                                         $name = $title;
                                         if(strlen($name) > 35) { 

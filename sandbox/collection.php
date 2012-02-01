@@ -10,7 +10,7 @@ if ($g_iCollectID == -1)
 }
 else
 {
-	include("Include/connection.php");
+	require_once 'Include/connection.php';
 
 	// Get collection details from main [Collection] table
 	$qCollection	= "select * from Collection where CollectionID = ".$g_iCollectID." limit 1";
@@ -22,7 +22,8 @@ else
 	
 	$sPageTitle		= $Title;
 	$sPageKeywords	= 'collection, '.$Title.', ready-made, off the shelf, stock';
-	include("Include/header.php");
+	require_once 'Include/header.php';
+	require_once 'Include/functions.php';
 	?>
 
 	<table class="tblBody" cellpadding="0">
@@ -60,8 +61,7 @@ else
 										?>
 										<tr>
 											<td>
-												Below are the pieces in my Valentine Collection. I also have other items that are perfect for Valentine's day.
-												<br/>Check out these links:
+												Check out these links:
 												&nbsp;&nbsp;&nbsp;&nbsp;<a href="browse.php?type=3&val=2"><b/>See all Hearts&raquo;</b></a>
 												&nbsp;&nbsp;&nbsp;&nbsp;<a href="browse.php?type=2&val=3"><b/>See all Red products&raquo;</b></a>
 												&nbsp;&nbsp;&nbsp;&nbsp;<a href="browse.php?type=2&val=7"><b/>See all Pink products&raquo;</b></a>
@@ -92,26 +92,24 @@ else
 														$ProdID			= $recProduct['ProdID'];
 														$Title			= $recProduct['Title'];
 														$TotalCost		= $recProduct['TotalCost'];
-														$DefaultImageID	= $recProduct['DefaultImageID'];
 														$numRemaining	= $recProduct['NumRemaining'];
 										
-														// Get default product image
-														if ($DefaultImageID == null)
-														{
-															$Filepath		= "images/img_not_avail_300.gif";
-															$FilepathThumb	= "images/img_not_avail_90.gif";
-														}
-														else
-														{
-															$qDefImage		= "select * from ProductImage where ProdImageID = ".$DefaultImageID." limit 1";
-															$rsDefImage		= mysql_query($qDefImage, $cnRuby);
-															$recDefImage	= mysql_fetch_array($rsDefImage);
-															$Filepath		= $recDefImage['Filepath'];
-															// The following code re: img_not_avail is prob not needed!
-															if (is_numeric( stripos($Filepath,"img_not_avail") ))
-																$FilepathThumb	= str_replace("images/img_not_avail.gif", "images/thumbs/img_not_avail_90.gif", $Filepath);
-															else
-																$FilepathThumb	= str_replace("images/", "images/thumbs/", $Filepath);
+														// Get just one product image
+														$sql = 'SELECT DISTINCT filepath
+															FROM product_image
+															WHERE product_id = ?
+															ORDER BY id
+															LIMIT 1';
+														$stmt = $mysqli->prepare($sql);
+														if ($stmt) {
+															$stmt->bind_param('i', intval($ProdID));
+															$stmt->bind_result($path);
+															$stmt->execute();
+															$stmt->fetch();
+															
+															// Get the full filepath
+															$fullPath = getFullImagePath($path, 3/*stock*/, TRUE/*thumbnail*/);
+															$stmt->close();
 														}
 											
 														// Get the sizes available
@@ -136,7 +134,7 @@ else
 														?>
 														<td align="center" style="cursor:pointer;">
 															<a href="product.php?pid=<?=$ProdID?>" style="color:#330000;" class="aNoBold">
-																<img src="<?=$FilepathThumb?>" title="<?=$Title?>" border="0">
+																<img src="<?php echo $fullPath; ?>" title="<?=$Title?>" border="0">
 																<br/><b><?=$Title?></b>
 																<?php
 																if ($numRemaining > 0)
@@ -177,7 +175,7 @@ else
 			
 	</table>
 	<?php
-	include("Include/footer.php");
+	require_once 'Include/footer.php';
 	
 	if ($cnRuby)
 		mysql_close($cnRuby);
