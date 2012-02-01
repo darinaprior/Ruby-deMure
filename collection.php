@@ -60,8 +60,7 @@ else
 										?>
 										<tr>
 											<td>
-												Below are the pieces in my Valentine Collection. I also have other items that are perfect for Valentine's day.
-												<br/>Check out these links:
+												Check out these links:
 												&nbsp;&nbsp;&nbsp;&nbsp;<a href="browse.php?type=3&val=2"><b/>See all Hearts&raquo;</b></a>
 												&nbsp;&nbsp;&nbsp;&nbsp;<a href="browse.php?type=2&val=3"><b/>See all Red products&raquo;</b></a>
 												&nbsp;&nbsp;&nbsp;&nbsp;<a href="browse.php?type=2&val=7"><b/>See all Pink products&raquo;</b></a>

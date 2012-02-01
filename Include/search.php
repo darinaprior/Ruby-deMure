@@ -3,7 +3,6 @@
 <p id="searchresults">
 <?php
 require_once '../Include/connection.php';
-$mysqli = new mysqli('localhost', 'rubydemu_ruby', 'thangi8F', 'rubydemu_dbRubydemure');
 
 if(!$mysqli) {
 	// Show error if we cannot connect.
@@ -61,10 +60,11 @@ if(!$mysqli) {
                                     (
                                         '.$sqlUnionBlock.'
                                     ) tKeys
-                                    ON s.title LIKE tKeys.CompareKey
+                                    ON (s.title LIKE tKeys.CompareKey OR s.description LIKE tKeys.CompareKey)
                                     GROUP BY s.id
                                     ORDER BY sc.name, NumKeywordsMatched desc, s.title
-                                    LIMIT 6';
+                                    LIMIT 6';                                    
+                                    
                             // Prepare the statement
                             $stmt = $mysqli->prepare($sql);
                             if ($stmt) {

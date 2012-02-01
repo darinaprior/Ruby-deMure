@@ -2,7 +2,7 @@
 include("Include/connection.php");
 
 $sPageTitle	= 'Testimonials';
-$sPageKeywords	= 'Testimonials, Comments';
+$sPageKeywords	= 'Testimonials, Comments, Reviews';
 include("Include/header.php");
 ?>
 
@@ -39,28 +39,40 @@ include("Include/header.php");
 													<table class="tblStdFull">
 														<center>What are people saying about their Ruby deMure purchases?</center>
 														<?php
-														// Get the testimonials to show
+														// Get the testimonials (reviews) to show
 														$qTestimonials	= 'select * 
-																from Testimonial 
-																where Status = 1 
-																and MainPage = 1
-																order by date desc, TestimonialID desc;';
+																from review 
+																where status = 1 
+																and main_page = 1
+																order by priority desc, date desc, id desc;';
 														$rsTestimonials	= mysql_query($qTestimonials, $cnRuby);
 														while ($recTestimonials = mysql_fetch_array($rsTestimonials)) {
-															$testId		= $recTestimonials['TestimonialID'];
-															$testName	= $recTestimonials['Name'];
-															$testComment	= $recTestimonials['Comment'];
+															$testId		= $recTestimonials['id'];
+															$testName	= $recTestimonials['name'];
+															$testComment	= $recTestimonials['comment'];
 															
 															if ($testName == '') {
 																$testName = 'anonymous';
 															}
 															
-															// Print it out
-															echo '<tr>
+															// Print it out in a styled box
+															?>
+															<tr>
 																<td>
-																	<br/>"'.$testComment.'" - <i>'.$testName.'</i>
+																	<br/>
+																	<div class="testimonial" width="100%">
+																		<table class="tblStdFull">
+																			<tr>
+																				<td width="7%"><img src="/images/quote_open.png" /></td>
+																				<td width="60%"><?php echo $testComment; ?></td>
+																				<td width="26%"><?php echo '- <i>'.$testName.'</i>'; ?></td>
+																				<td width="7%" align="right"><img src="/images/quote_close.png" /></td>
+																			</tr>
+																		</table>
+																	</div>
 																</td>
-															</tr>';
+															</tr>
+															<?php
 														}//while $recTestimonials
 														?>
 													</table>

@@ -11,6 +11,8 @@ if(!$mysqli) {
 	// Show error if we cannot connect.
 	echo 'ERROR: Failed to connect to DB';
 } else {
+	// STEP 1: GET DATA...
+	
 	// Get all the details we want to store and save them to one big array
 	$searchContents = array();
 	
@@ -93,6 +95,131 @@ if(!$mysqli) {
 		}//while
 		$stmt->close();
 	}//if $stmt
+	
+	// Colours
+	$sql = 'SELECT DISTINCT
+			c.ColourID, 
+			c.Description
+		FROM Colour c
+		INNER JOIN product_option_colour poc ON c.ColourID = poc.colour_id
+		INNER JOIN product_option po ON poc.option_id = po.id
+		INNER JOIN Product p on po.product_id = p.ProdID';
+	$stmt = $mysqli->prepare($sql);
+	if ($stmt) {
+		$stmt->bind_result($id, $title);
+		$stmt->execute();
+		while ($result = $stmt->fetch()) {
+			// Add to array
+			$searchContents[] = array(
+				'category_id' => 4, /* colours */
+				'title' => $title,
+				'description' => NULL,
+				'url' => '/browse.php?type=2&val='.$id,
+				'image_filepath' => NULL
+			);
+		}//while
+		$stmt->close();
+	}//if $stmt
+	
+	// Sizes
+	$sql = 'SELECT DISTINCT
+			s.SizeID, 
+			s.Name
+		FROM Size s
+		INNER JOIN product_option_size pos ON s.SizeID = pos.size_id
+		INNER JOIN Product p on pos.product_id = p.ProdID';
+	$stmt = $mysqli->prepare($sql);
+	if ($stmt) {
+		$stmt->bind_result($id, $title);
+		$stmt->execute();
+		while ($result = $stmt->fetch()) {
+			// Add to array
+			$searchContents[] = array(
+				'category_id' => 6, /* sizes */
+				'title' => $title,
+				'description' => NULL,
+				'url' => '/browse.php?type=4&val='.$id,
+				'image_filepath' => NULL
+			);
+		}//while
+		$stmt->close();
+	}//if $stmt
+	
+	// Product types
+	$sql = 'SELECT DISTINCT
+			pt.ProdTypeID,
+			IFNULL(pt.NavName, pt.Description)
+		FROM ProductType pt
+		INNER JOIN Product p on pt.ProdTypeID = p.ProductTypeID';
+	$stmt = $mysqli->prepare($sql);
+	if ($stmt) {
+		$stmt->bind_result($id, $title);
+		$stmt->execute();
+		while ($result = $stmt->fetch()) {
+			// Add to array
+			$searchContents[] = array(
+				'category_id' => 7, /* product types */
+				'title' => $title,
+				'description' => NULL,
+				'url' => '/browse.php?type=1&val='.$id,
+				'image_filepath' => NULL
+			);
+		}//while
+		$stmt->close();
+	}//if $stmt
+	
+	// Shapes
+	$sql = 'SELECT DISTINCT
+			s.ShapeID,
+			s.Description
+		FROM Shape s
+		INNER JOIN Product p on s.ShapeID = p.ProductTypeID';
+	$stmt = $mysqli->prepare($sql);
+	if ($stmt) {
+		$stmt->bind_result($id, $title);
+		$stmt->execute();
+		while ($result = $stmt->fetch()) {
+			// Add to array
+			$searchContents[] = array(
+				'category_id' => 8, /* shapes */
+				'title' => $title,
+				'description' => NULL,
+				'url' => '/browse.php?type=3&val='.$id,
+				'image_filepath' => NULL
+			);
+		}//while
+		$stmt->close();
+	}//if $stmt
+	
+	// Reviews
+	$sql = 'SELECT
+			r.id,
+			IFNULL(r.name, \'anonymous\'),
+			r.comment
+		FROM review r
+		INNER JOIN Product p ON r.product_id = p.ProdID
+		WHERE r.status = 1 /* approved */
+		AND r.main_page = 1 /* show on main page */';
+	$stmt = $mysqli->prepare($sql);
+	if ($stmt) {
+		$stmt->bind_result($id, $title, $description);
+		$stmt->execute();
+		while ($result = $stmt->fetch()) {
+			// Add to array
+			$searchContents[] = array(
+				'category_id' => 9, /* reviews */
+				'title' => $title,
+				'description' => $description,
+				'url' => '/testimonials.php',
+				'image_filepath' => NULL
+			);
+		}//while
+		$stmt->close();
+	}//if $stmt
+	
+	
+	
+	// STEP 2: PROCESS DATA...
 	
 	// If we have any data to put in, delete whatever's already in the search table first
 	$sql = 'DELETE FROM search;';

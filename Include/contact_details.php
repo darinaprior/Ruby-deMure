@@ -1,5 +1,5 @@
 <?
-$g_sAddressMain				= "Ruby deMure<br/>505 Howth Road<br/>Raheny<br/>Dublin 5<br/>Ireland";
+$g_sAddressMain				= "Ruby deMure<br/>4A Richmond Avenue<br/>Monkstown<br/>Co. Dublin<br/>Ireland";
 $g_sPhoneMain				= "+353 87 997 9323";
 $g_sEmailMain				= "info@rubydemure.com";
 

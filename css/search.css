@@ -4,7 +4,10 @@
 .break { clear:both; }
 
 /* SEARCH FORM */
-#searchform { margin:0px 0px; }
+#searchform {
+margin:0px 0px;
+position: relative; /* this is required so we can "absolute" position the results later on */
+}
 #searchform div { color:#0F050D; }	/* the whole visible div */
 #searchform p {	/* the visible paragraph that says "Search" */
 	display:inline;
@@ -22,9 +25,9 @@
 	/* ORIGINAL VALUES: font-size:18px; padding:5px; width:320px; */
 }
 #suggestions{	/* this box that gets shown/hidden and contains the search results */
-	position:absolute;
-	right:100px;
-	top: 143px;
+	position:absolute; /* relative to the #searchform container */
+	right:0px;
+	top: 21px;
 	z-index: 9999;
 	width:320px;
 	line-height:0;

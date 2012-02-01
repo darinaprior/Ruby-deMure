@@ -1,3 +1,29 @@
+<!-- Christmas modal -->
+<div id="christmas_modal" style="display:none;">
+	<div id="dialog" class="window">
+		<table class="tblStdFullCentre" bgcolor="#fff" cellpadding="5">
+			<tr>
+				<td colspan="2">
+					<a href="collection.php?cid=4">
+						<img src="images/flyer_xmas_08.jpg" 
+							title="The Christmas Collection" 
+							width="221" height="450" border="0" />
+					</a>
+				</td>
+			</tr>
+			<tr>
+				<td align="left">
+					<a href="collection.php?cid=4"><b>Go to Christmas Collection &raquo;</b></a>
+				</td>
+				<td align="right">
+					<a href="#" class="close"><b>Close X</b></a>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="mask"></div>
+</div>
+
 <?php
 $sPageTitle = 'Home Page';
 $sPageKeywords = 'home, index';
@@ -89,3 +115,66 @@ include("Include/header.php");
 	</tr>
 </table>
 <?php include("Include/footer.php"); ?>
+
+<style>
+/* Z-index of #mask must lower than #christmas_modal .window */
+#mask {
+  position:absolute;
+  z-index:9000;
+  background-color:#461B37;
+  display:none;
+}
+#christmas_modal .window {
+  position:absolute;
+  width:231px;
+  height:500px;
+  display:none;
+  z-index:9999;
+  padding:20px;
+} 
+</style>
+
+<script type="text/javascript">
+	$jq(document).ready(function(){	
+		<!--
+		var id = '#dialog';
+		
+		$jq('#christmas_modal').show();
+		
+		//Get the screen height and width
+		var maskHeight = $jq(document).height();
+		var maskWidth = $jq(window).width();
+		
+		//Set height and width to mask to fill up the whole screen
+		$jq('#mask').css({'width':maskWidth,'height':maskHeight});
+		
+		//transition effect     
+		$jq('#mask').fadeIn(1000);    
+		$jq('#mask').fadeTo("slow",0.8);  
+		
+		//Get the window height and width
+		var winH = $jq(window).height();
+		var winW = $jq(window).width();
+		
+		//Set the popup window to center
+		$jq('#dialog').css('top',  winH/2-$jq('#dialog').height()/2);
+		$jq('#dialog').css('left', winW/2-$jq('#dialog').width()/2);
+		
+		//transition effect
+		$jq('#dialog').fadeIn(2000);
+		
+		//if close button is clicked
+		$jq('.window .close').click(function (e) {
+			//Cancel the link behavior
+			e.preventDefault();
+			$jq('#mask, .window').fadeOut(1000);
+		});
+		
+		//if mask is clicked
+		$jq('#mask').click(function () {
+			$jq(this).fadeOut(1000);
+			$jq('.window').fadeOut(1000);
+		});
+		-->
+	});//ready
+</script>

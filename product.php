@@ -87,24 +87,22 @@ else
 								$sColours = substr($sColours, 0, -2);	// strip trailing comma and space
 				
 								// Get the sizes available
-                                                                $sSizes		= "";
-								if ($ProductTypeID != 4 && $ProductTypeID != 9) {	// not for stocking toppers or brooches
-								  $qSizes		= "select Size.Name from ProductSize inner join Size on ProductSize.SizeID = Size.SizeID where ProductSize.ProdID = ".$g_iProdID;
-								  $rsSizes	= mysql_query($qSizes, $cnRuby);
-								  while ($recSize = mysql_fetch_array($rsSizes))
-								  {
+								$sSizes		= "";
+								$qSizes		= "select Size.Name from ProductSize inner join Size on ProductSize.SizeID = Size.SizeID where ProductSize.ProdID = ".$g_iProdID;
+								$rsSizes	= mysql_query($qSizes, $cnRuby);
+								while ($recSize = mysql_fetch_array($rsSizes))
+								{
 									$sSizes = $sSizes.$recSize['Name'].", ";
-								  }
-								  $sSizes = substr($sSizes, 0, -2);	// strip trailing comma and space
-                                                                }//if $ProductTypeID
+								}
+								$sSizes = substr($sSizes, 0, -2);	// strip trailing comma and space
 				
-								// Get any testimonials
+								// Get any reviews
 								$sComment	= "<ul>";
-								$qComment	= "select Comment, Name from Testimonial where ProdID = ".$g_iProdID." and Status = 1";
+								$qComment	= "SELECT comment, name FROM review WHERE product_id = ".$g_iProdID." and status = 1";
 								$rsComment	= mysql_query($qComment, $cnRuby);
 								while ($recComment = mysql_fetch_array($rsComment))
 								{
-									$sComment = $sComment."<li>'".$recComment['Comment']."' - <i>".$recComment['Name']."</i></li>";
+									$sComment = $sComment."<li>'".$recComment['comment']."' - <i>".$recComment['name']."</i></li>";
 								}
 								if ($sComment != "<ul>")
 									$sComment = $sComment."</ul>";
@@ -318,8 +316,8 @@ else
 														</td>
 													</tr>
 													<?php
-												}//if // stocking toppers
-												if ($ProductTypeID == 5)	// eye-patch
+												}//if stocking toppers
+												else if ($ProductTypeID == 5)	// eye-patch
 												{
 													?>
 													<tr>
@@ -333,6 +331,27 @@ else
 																<li>are attached with adjustable elastic</li>
 																<li>come in a lovely giftbox</li>
 															</ul>
+														</td>
+													</tr>
+													<?php
+												}//if eye-patch
+												else if ($ProductTypeID == 10)	// bow-tie
+												{
+													?>
+													<tr>
+														<td width="100%" colspan="3" 
+															style="font-size:10px; text-align:left;">
+															All of my bow-ties:
+															<ul>
+																<li>are hand-made with an emphasis on quality and finish</li>
+																<li>can be made to fit your neck size</li>
+																<li>can be made to match other items</li>
+																<li>come in a lovely giftbox</li>
+
+															</ul>
+															<a href="/sizing.php#bowties">Click here for sizing details</a>
+															<br/><a href="http://www.videojug.com/film/how-to-tie-a-bow-tie" class="external" target="_blank">And here for video instructions on how to tie your bow tie</a
+															<br/><br/>
 														</td>
 													</tr>
 													<?php
@@ -415,14 +434,10 @@ else
 												}
 												?>
 												<tr>
-													<td valign="top">Basic Details:</td>
+													<td valign="top" style="white-space:nowrap;">Basic Details:</td>
 													<td>
+														<?=$Shape?>-shaped 
 														<?php
-														echo $Shape;
-														if ($ShapeID != 1 && $ShapeID != 5 && $ShapeID != 10) {
-															echo '-shaped';
-														}
-														echo '&nbsp;';
 														if ($HasTassel == 1)
 														{
 															?>tasseled <?php
@@ -450,7 +465,7 @@ else
 												<?php
 												if ($sComment != "")
 												{
-													?><tr><td valign="top">Testimonials:</td><td><?=$sComment?></td></tr><?php
+													?><tr><td valign="top">Reviews:</td><td><?=$sComment?></td></tr><?php
 												}
 												?>
 								
