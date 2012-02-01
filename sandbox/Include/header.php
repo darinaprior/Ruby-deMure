@@ -11,6 +11,12 @@ include 'check_status.php';
 	<meta name="KEYWORDS" content="Ruby deMure, Ruby de Mure, burlesque, tassels, nipple tassels, pasties, <?php echo $sPageKeywords ?>, ireland, hand made, hand-made, dublin" />
 	<link rel="SHORTCUT ICON" href="images/favicon.ico">
 	<link rel="STYLESHEET" href="css/styles.css">
+	<?php
+	// Add the "tabs" stylesheet if necessary
+	if ($has_tabs) {
+		echo '<link rel="STYLESHEET" href="css/tabs.css">';
+	}
+	?>
 
 	<!-- Search box styles and scripts -->
 	<link rel="stylesheet" type="text/css" href="css/search.css" />
@@ -23,7 +29,10 @@ include 'check_status.php';
 	define("MSIE", strpos($browser, "MSIE") !== false);
 	if (MSIE)
 	{
-		?><link rel="STYLESHEET" href="css/styles_ie.css"><?php
+		echo '<link rel="STYLESHEET" href="css/styles_ie.css">';
+		if ($has_tabs) {
+			echo '<link rel="STYLESHEET" href="css/tabs_ie.css">';
+		}
 	}
 	?>
 	
@@ -155,6 +164,13 @@ include 'check_status.php';
 		</script>
 		<?php
 	}//if $bModal
+	?>
+	
+	<?php
+	// Add the "tabs" jQuery if necessary
+	if ($has_tabs) {
+		echo '<script type="text/javascript" src="js/tabs.js"></script>';
+	}
 	?>
 	
 	<?php // Set up my custom tooltips ?>

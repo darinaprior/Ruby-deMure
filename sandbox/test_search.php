@@ -17,9 +17,9 @@ include 'Include/check_status.php';
 	<meta name="KEYWORDS" content="Ruby deMure, Ruby de Mure, burlesque, tassels, nipple tassels, pasties, <?php echo $sPageKeywords ?>, ireland, hand made, hand-made, dublin" />
 	<link rel="SHORTCUT ICON" href="images/favicon.ico">
 	<link rel="STYLESHEET" href="css/styles.css">
-
-	<!-- Search box styles and scripts -->
 	<link rel="stylesheet" type="text/css" href="css/search.css" />
+
+	<!-- Scripts for search box -->
 	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 	<script type="text/javascript" src="js/search.js"></script>
 	
