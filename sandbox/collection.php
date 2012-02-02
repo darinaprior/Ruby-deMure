@@ -120,6 +120,7 @@ else
 													foreach ($products as $id => $details) {
 															
 														// Get just one product image
+														$path = '';
 														$sql = 'SELECT DISTINCT filepath
 															FROM product_image
 															WHERE product_id = ?
