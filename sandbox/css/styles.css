@@ -262,6 +262,11 @@ td.tdTitleReadyMade
 	font-size:		16px;
 	text-decoration:none;
 }
+td.colour_block_collection {
+	height:20px;
+	width:20px;
+	border:solid 1px #0F050D;
+}
 
 /* divs */
 div.dvMainScroll
@@ -332,6 +337,18 @@ a.aLight
 	padding: 2px 7px;
 }
 
+/* blocks using the "hand" image */
+.hand_collection {
+	background-image: url('/images/hand_collection.jpg');
+	background-repeat:	no-repeat;
+	background-color:	#F1C9E1;
+	text-align:		left;
+	width:		139px;
+	height:		74px;
+	font-size:	10px;
+	padding-left:	90px;
+}
+
 /* misc */
 img
 {
@@ -349,3 +366,8 @@ div.testimonial {
 	-khtml-border-radius: 10px; /* for old Konqueror browsers */
 	padding: 5px;
 }
+span.heading
+{
+	font-family:	Verdana, Arial, Helvetica, sans-serif;
+	font-size:	16px;
+	font-weight:	bold;

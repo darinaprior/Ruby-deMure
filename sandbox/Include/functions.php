@@ -135,3 +135,44 @@ function getSearchImagePath($path, $searchCategoryId, $productCategoryId)
 	// Return the full path
 	return $fullPath;
 }
+
+/**
+ * Formats the styled tooltip for a product on the collection page
+ * 
+ * @param	string	$path			- bulk of filepath as stored in the DB (without "/images/bespoke" etc.)
+ * @param	int	$searchCategoryId	- ID of search result category e.g. 2=collections
+ * @param	int	$productCategoryId	- ID of product category e.g. 1=bespoke 
+ * @return	string	$fullPath	- the full filepath from the root directory (starting with "/")
+ * @author	Darina Prior
+ */
+function formatCollectionTooltip($name, $cost, $colours, $sizes)
+{
+	// N.B. Nothing can be in double quotes as this whole string will later go in double quotes
+	// Attributes must all be inside escaped single quotes e.g. class=\'myclass\'
+	
+	// Also deal with any quotes that might be in the title or in the sizes e.g. 17" meaning 17inch
+	$name = str_replace('"', '\'\'', $name);
+	foreach ($sizes as $key => $size) {
+		$sizes[$key] = str_replace('"', '\'\'', $size);
+	}
+	
+	// Start with the name and price
+	$tt = '';
+	$tt = '<table class=\'tblStd\' cellpadding=\'2\'>';
+	$tt .= '<tr><td colspan=\'2\' align=\'center\'><b>'.$name.'</b></td></tr>';
+	$tt .= '<tr><td colspan=\'2\' align=\'center\'>'.$cost.'</td></tr>';
+	
+	// Then colours (little colour blocks)
+	$tt .= '<tr><td>Colours:</td><td><table class=\'tblStd\' cellpadding=\'0\'><tr>';
+	foreach ($colours as $hex) {
+		$tt .= '<td class=\'colour_block_collection\' style=\'background-color:#'.$hex.';\'></td>';
+	}
+	$tt .= '</tr></table></td></tr>';
+	
+	// Then sizes
+	$tt .= '<tr><td>Sizes:</td><td>'.implode(' / ', $sizes).'</td></tr>';
+	$tt .= '</table>';
+	
+	// Return the formatted string
+	return $tt;
+}
