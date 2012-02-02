@@ -17,31 +17,31 @@ else
 		case 1:	// product type
 			$browseType		= 'Product Type';
 			$sqlBrowseValue	= "select IfNull(NavName, Description) as Description from ProductType where ProdTypeID = $browseValueId limit 1";
-			$sqlMain		= "select ProdID, Title, TotalCost, DefaultImageID, CategoryID from Product where ProductTypeID = $browseValueId order by Priority desc";
+			$sqlMain		= "select ProdID, Title, TotalCost, CategoryID from Product where ProductTypeID = $browseValueId order by Priority desc";
 			break;
 		case 2:	// colour
 			$browseType		= 'Colour';
 			$sqlBrowseValue	= "select Description from Colour where ColourID = $browseValueId limit 1";
-			$sqlMain		= "select p.ProdID, Title, TotalCost, DefaultImageID, CategoryID from Product p inner join ProductColour pc on p.ProdID = pc.ProdID where pc.ColourID = $browseValueId order by pc.Order asc, p.Priority desc";
+			$sqlMain		= "select p.ProdID, Title, TotalCost, CategoryID from Product p inner join ProductColour pc on p.ProdID = pc.ProdID where pc.ColourID = $browseValueId order by pc.Order asc, p.Priority desc";
 			break;
 		case 3:	// shape
 			$browseType		= 'Shape';
 			$sqlBrowseValue	= "select Description from Shape where ShapeID = $browseValueId limit 1";
-			$sqlMain		= "select ProdID, Title, TotalCost, DefaultImageID, CategoryID from Product where ShapeID = $browseValueId order by Priority desc";
+			$sqlMain		= "select ProdID, Title, TotalCost, CategoryID from Product where ShapeID = $browseValueId order by Priority desc";
 			break;
 		case 4:	// size
 			$browseType		= 'Size';
 			$sqlBrowseValue	= "select Name as Description from Size where SizeID = $browseValueId limit 1";
-			$sqlMain		= "select p.ProdID, Title, TotalCost, DefaultImageID, CategoryID from Product p inner join ProductSize ps on p.ProdID = ps.ProdID where ps.SizeID = $browseValueId order by p.Priority desc";
+			$sqlMain		= "select p.ProdID, Title, TotalCost, CategoryID from Product p inner join ProductSize ps on p.ProdID = ps.ProdID where ps.SizeID = $browseValueId order by p.Priority desc";
 			break;
 		case 5:	// materials
 			$browseType		= 'Material';
 			$sqlBrowseValue	= "select Name as Description from Material where MaterialID = $browseValueId limit 1";
-			$sqlMain		= "select p.ProdID, Title, TotalCost, DefaultImageID, CategoryID from Product p inner join ProductMaterial pm on p.ProdID = pm.ProdID where pm.MaterialID = $browseValueId order by pm.Order asc, p.Priority desc";
+			$sqlMain		= "select p.ProdID, Title, TotalCost, CategoryID from Product p inner join ProductMaterial pm on p.ProdID = pm.ProdID where pm.MaterialID = $browseValueId order by pm.Order asc, p.Priority desc";
 			break;
 	}
 	
-	include("Include/connection.php");
+	require_once 'Include/connection.php';
 	$rset	= mysql_query($sqlBrowseValue, $cnRuby);
 	while ($record = mysql_fetch_array($rset))
 	{
@@ -52,7 +52,8 @@ else
 	
 	$sPageTitle		= $title;
 	$sPageKeywords	= $title;
-	include("Include/header.php");
+	require_once 'Include/header.php';
+	require_once 'Include/functions.php';
 	?>
 
 	<table class="tblBody" cellpadding="0">
@@ -101,28 +102,26 @@ else
 														$ProdID			= $record['ProdID'];
 														$title			= $record['Title'];
 														$TotalCost		= $record['TotalCost'];
-														$DefaultImageID	= $record['DefaultImageID'];
 														$categoryId		= $record['CategoryID'];
 										
-														// Get default product image
-														if ($DefaultImageID == null)
-														{
-															$Filepath		= "images/img_not_avail_300.gif";
-															$FilepathThumb	= "images/img_not_avail_90.gif";
+														// Get just one product image
+														$sql = 'SELECT DISTINCT filepath
+															FROM product_image
+															WHERE product_id = ?
+															ORDER BY id
+															LIMIT 1';
+														$stmt = $mysqli->prepare($sql);
+														if ($stmt) {
+															$stmt->bind_param('i', intval($ProdID));
+															$stmt->bind_result($path);
+															$stmt->execute();
+															$stmt->fetch();
+															
+															// Get the full filepath
+															$fullPath = getFullImagePath($path, $categoryId, TRUE/*thumbnail*/);
+															$stmt->close();
 														}
-														else
-														{
-															$qDefImage		= "select * from ProductImage where ProdImageID = ".$DefaultImageID." limit 1";
-															$rsDefImage		= mysql_query($qDefImage, $cnRuby);
-															$recDefImage	= mysql_fetch_array($rsDefImage);
-															$Filepath		= $recDefImage['Filepath'];
-															// The following code re: img_not_avail is prob not needed!
-															if (is_numeric( stripos($Filepath,"img_not_avail") ))
-																$FilepathThumb	= str_replace("images/img_not_avail.gif", "images/thumbs/img_not_avail_90.gif", $Filepath);
-															else
-																$FilepathThumb	= str_replace("images/", "images/thumbs/", $Filepath);
-														}
-											
+														
 														// Get the sizes available
 														$sSizes		= "";
 														$qSizes		= "select Size.Name from ProductSize inner join Size on ProductSize.SizeID = Size.SizeID WHERE ProductSize.ProdID = ".$ProdID;
@@ -135,17 +134,15 @@ else
 														?>
 														<td align="center" style="cursor:pointer;">
 															<a href="product.php?pid=<?=$ProdID?>" style="color:#330000;" class="aNoBold">
-																<img src="<?=$FilepathThumb?>" title="<?=$title?>" border="0">
-																<br/><b><?=$title?></b>
+																<img src="<?php echo $fullPath; ?>" title="<?php echo $title; ?>" border="0">
+																<br/><b><?php echo $title; ?></b>
 																<?php
-																if ($categoryId != 1)	// don't show prices for bespoke
-																{
+																// don't show prices for bespoke
+																if ($categoryId != 1) {
 																	?><br/>&euro;<? echo $TotalCost ?><?php
 																	if ($sSizes != '')
 																		echo " ($sSizes)";
-																}
-																else
-																{
+																} else {
 																	?><br/>(bespoke)<?php
 																}
 																?>
@@ -183,7 +180,7 @@ else
 			
 	</table>
 	<?php
-	include("Include/footer.php");
+	require_once 'Include/footer.php';
 	
 	if ($cnRuby)
 		mysql_close($cnRuby);

@@ -11,22 +11,22 @@
 					<tr>
 						<td width="50" align="center">
 							<a href="contact.php">
-								<img class="tt" src="images/blank_icon.gif" width="25px" height="25px" title="Contact Ruby" />
+								<img class="tt" src="/images/blank_icon.gif" width="25px" height="25px" title="Contact Ruby" />
 							</a>
 						</td>
 						<td width="45" align="center">
 							<a href="javascript:addbookmark();">
-								<img class="tt" src="images/blank_icon.gif" width="25px" height="25px" title="Add to Bookmarks/Favourites" />
+								<img class="tt" src="/images/blank_icon.gif" width="25px" height="25px" title="Add to Bookmarks/Favourites" />
 							</a>
 						</td>
 						<td width="47" align="center">
 							<a href="http://www.acornhost.com/green-web-hosting.html" target="_blank">
-								<img class="tt" src="images/blank_icon.gif" width="25px" height="25px" title="Powered by Green Energy" />
+								<img class="tt" src="/images/blank_icon.gif" width="25px" height="25px" title="Powered by Green Energy" />
 							</a>
 						</td>
 						<td width="45" align="center">
 							<a href="about.php">
-								<img class="tt" src="images/blank_icon.gif" width="25px" height="25px" title="Woman-Owned" />
+								<img class="tt" src="/images/blank_icon.gif" width="25px" height="25px" title="Woman-Owned" />
 							</a>
 						</td>
 						<td align="right" style="padding-right:10px;">

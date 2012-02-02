@@ -9,8 +9,14 @@ include 'check_status.php';
 	<title>Ruby deMure - <?php echo $sPageTitle ?></title>
 	<meta name="DESCRIPTION" content="Ruby deMure Luxury Burlesque Accessories - <?php echo $sPageTitle ?>" />
 	<meta name="KEYWORDS" content="Ruby deMure, Ruby de Mure, burlesque, tassels, nipple tassels, pasties, <?php echo $sPageKeywords ?>, ireland, hand made, hand-made, dublin" />
-	<link rel="SHORTCUT ICON" href="images/favicon.ico">
+	<link rel="SHORTCUT ICON" href="/images/favicon.ico">
 	<link rel="STYLESHEET" href="css/styles.css">
+	<?php
+	// Add the "tabs" stylesheet if necessary
+	if ($has_tabs) {
+		echo '<link rel="STYLESHEET" href="css/tabs.css">';
+	}
+	?>
 
 	<!-- Search box styles and scripts -->
 	<link rel="stylesheet" type="text/css" href="css/search.css" />
@@ -23,7 +29,10 @@ include 'check_status.php';
 	define("MSIE", strpos($browser, "MSIE") !== false);
 	if (MSIE)
 	{
-		?><link rel="STYLESHEET" href="css/styles_ie.css"><?php
+		echo '<link rel="STYLESHEET" href="css/styles_ie.css">';
+		if ($has_tabs) {
+			echo '<link rel="STYLESHEET" href="css/tabs_ie.css">';
+		}
 	}
 	?>
 	
@@ -107,6 +116,12 @@ include 'check_status.php';
 						,timeout:	3000	// 3 secs
 						,speed:		1500	// 1.5 secs
 						,delay:  -delayMs
+						/*
+					        ,after:     function() {
+					        	/* If the image has a title, print it in the cycle_caption element *
+					        	$jq('#cycle_caption').html(this.title);
+					        }
+					        */
 					});
 				}//function createCycleSlideshow
 				
@@ -151,6 +166,13 @@ include 'check_status.php';
 	}//if $bModal
 	?>
 	
+	<?php
+	// Add the "tabs" jQuery if necessary
+	if ($has_tabs) {
+		echo '<script type="text/javascript" src="js/tabs.js"></script>';
+	}
+	?>
+	
 	<?php // Set up my custom tooltips ?>
 	<script type="text/javascript" src="js/tt.js"></script>
 	<script type="text/javascript">
@@ -173,7 +195,7 @@ include 'check_status.php';
 		<td class="tdR1C1">&nbsp;</td>
 		<td class="tdR1C2">
 			<a href="/">
-				<img src="images/blank_logo.gif" width="200px" height="100px" />
+				<img src="/images/blank_logo.gif" width="200px" height="100px" />
 			</a>
 		</td>
 		<td class="tdR1C3">&nbsp;</td>

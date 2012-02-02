@@ -10,8 +10,9 @@ else
 <?php
 $sPageTitle		= 'Bespoke work';
 $sPageKeywords	= 'bespoke, tailored, personalised';
-include("Include/connection.php");
-include("Include/header.php");
+require_once 'Include/connection.php';
+require_once 'Include/header.php';
+require_once 'Include/functions.php';
 ?>
 
 <table class="tblBody" cellpadding="0">
@@ -70,32 +71,36 @@ include("Include/header.php");
 													$Date		= $recProduct['DateCreated'];
 													$CustID		= $recProduct['CustID'];
 													$Priority	= $recProduct['Priority'];
-													$DefImgID	= $recProduct['DefaultImageID'];
 													?>
-													<tr class="cursor" onClick="window.location='product.php?pid=<?=$ProductID?>'">
+													<tr>
 														<td style="vertical-align:middle;">
-															<?php
-															// Get default image for this product plus one other
-															$qDefImg	= "select ProductImage.Filepath from ProductImage where ProductImage.ProdImageID = ".$DefImgID." limit 1";
-															$rsDefImg	= mysql_query($qDefImg, $cnRuby);
-															while ($recDefImg = mysql_fetch_array($rsDefImg))
-															{
-																$DefImgPath	= $recDefImg['Filepath'];
-																$DefImgPath	= str_replace("images/", "images/thumbs/", $DefImgPath);	// we want the thumbnail
-															}
-															$qOtherImg	= "select ProductImage.Filepath from ProductImage where ProdID = ".$ProductID." and ProdImageID != ".$DefImgID." limit 1";
-															$rsOtherImg	= mysql_query($qOtherImg, $cnRuby);
-															while ($recOtherImg = mysql_fetch_array($rsOtherImg))
-															{
-																$OtherImgPath	= $recOtherImg['Filepath'];
-																$OtherImgPath	= str_replace("images/", "images/thumbs/", $OtherImgPath);	// we want the thumbnail
-															}
-															?>
-															<img src="<?=$DefImgPath?>" />
-															<img src="<?=$OtherImgPath?>" />
+															<a href="product.php?pid=<?php echo $ProductID; ?>">
+																<?php
+																// Get first 2 images for this product
+																$sql = 'SELECT DISTINCT filepath
+																	FROM product_image
+																	WHERE product_id = ?
+																	ORDER BY id
+																	LIMIT 2';
+																$stmt = $mysqli->prepare($sql);
+																if ($stmt) {
+																	$stmt->bind_param('i', intval($ProductID));
+																	$stmt->bind_result($path);
+																	$stmt->execute();
+																	while ($stmt->fetch()) {
+																		// Get the full filepath
+																		$fullPath = getFullImagePath($path, 1/*bespoke*/, TRUE/*thumbnail*/);
+																		echo '<img src="'.$fullPath.'" />';
+																	}
+																	$stmt->close();
+																}
+																?>
+															</a>
 														</td>
 														<td  class="tdTitleBespoke">
-															&nbsp;<?=$Title?>
+															<a class="aNoBold" href="product.php?pid=<?php echo $ProductID; ?>">
+																&nbsp;<?=$Title?>
+															</a>
 														</td>
 													<tr/>
 													<?php
@@ -109,31 +114,45 @@ include("Include/header.php");
 										<table class="tblStd" width="50%">
 											<tr style="font-weight:bold;">
 												<?php
-												if ($g_iCurrPage > 1)
-												{
-													?><td><table class="tblStd" cellspacing="5" cellpadding="0"><tr><td class="tdPagingOn" onClick="window.location='bespoke.php?currpage=<?php echo ($g_iCurrPage-1) ?>'">&laquo;</td></tr></table></td><?php
-												}
-												else
-												{
+												// "Previous" block
+												if ($g_iCurrPage > 1) {
+													?>
+													<td>
+														<a href="bespoke.php?currpage=<?php echo ($g_iCurrPage-1); ?>">
+															<table class="tblStd" cellspacing="5" cellpadding="0"><tr><td class="tdPagingOn">&laquo;</td></tr></table>
+														</a>
+													</td>
+													<?php
+												} else {
 													?><td><table class="tblStd" cellspacing="5" cellpadding="0"><tr><td class="tdPagingOff">&laquo;</td></tr></table></td><?php
 												}
-												for ($i = 1; $i < ($iNumProds/$g_iNumPerPage)+1; $i++)
-												{
-													if ($i == $g_iCurrPage)
-													{
+												
+												// Block for each page
+												for ($i = 1; $i < ($iNumProds/$g_iNumPerPage)+1; $i++) {
+													if ($i == $g_iCurrPage) {
 														?><td><table class="tblStd" cellspacing="5" cellpadding="0"><tr><td class="tdPagingOff"><?=$i?></td></tr></table></td><?php
-													}
-													else
-													{
-														?><td><table class="tblStd" cellspacing="5" cellpadding="0"><tr><td class="tdPagingOn" onClick="window.location='bespoke.php?currpage=<?=$i?>'"><?=$i?></td></tr></table></td><?php
+													} else {
+														?>
+														<td>
+															<a href="bespoke.php?currpage=<?php echo $i; ?>">
+																<table class="tblStd" cellspacing="5" cellpadding="0"><tr><td class="tdPagingOn"><?=$i?></td></tr></table>
+															</a>
+														</td>
+														<?php
 													}
 												}
-												if ($g_iCurrPage < ($iNumProds/$g_iNumPerPage))
-												{
-													?><td><table class="tblStd" cellspacing="5" cellpadding="0"><tr><td class="tdPagingOn" onClick="window.location='bespoke.php?currpage=<?php echo ($g_iCurrPage+1) ?>'">&raquo;</td></tr></table></td><?php
-												}
-												else
-												{
+												echo '<td>';
+												
+												// "Next" block
+												if ($g_iCurrPage < ($iNumProds/$g_iNumPerPage)) {
+													?>
+													<td>
+														<a href="bespoke.php?currpage=<?php echo ($g_iCurrPage+1); ?>">
+															<table class="tblStd" cellspacing="5" cellpadding="0"><tr><td class="tdPagingOn">&raquo;</td></tr></table>
+														</a>
+													</td>
+													<?php
+												} else {
 													?><td><table class="tblStd" cellspacing="5" cellpadding="0"><tr><td class="tdPagingOff">&raquo;</td></tr></table></td><?php
 												}
 												?>
@@ -150,7 +169,7 @@ include("Include/header.php");
 													<table width="295" cellspacing="0" cellpadding="0">
 														<tr>
 															<td style="
-																background-image: url('images/hand_bespoke.jpg');
+																background-image: url('/images/hand_bespoke.jpg');
 																background-repeat:	no-repeat;
 																background-color:	#0F050D;
 																text-align:		left;
@@ -198,7 +217,7 @@ include("Include/header.php");
 	</tr>
 			
 </table>
-<?php include("Include/footer.php"); ?>
+<?php require_once 'Include/footer.php'; ?>
 
 <?php
 if ($cnRuby)

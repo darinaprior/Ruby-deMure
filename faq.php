@@ -50,7 +50,6 @@ include("Include/header.php");
 	}
 	-->
 </script>
-	
 
 <table class="tblBody" cellpadding="0">
 	<tr>

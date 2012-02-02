@@ -7,8 +7,9 @@ else
 $sPageTitle		= 'Image Gallery';
 $sPageKeywords	= 'photos, images, gallery';
 $bGallery		= true;
-include("Include/connection.php");
-include("Include/header.php");
+require_once 'Include/connection.php';
+require_once 'Include/header.php';
+require_once 'Include/functions.php';
 ?>
 
 <table class="tblBody" cellpadding="0">
@@ -84,28 +85,30 @@ include("Include/header.php");
 								<ul id="pikame">
 									<?php
 									// Get all product images
-									$qImages	= "select * from ProductImage where ProdID = ".$g_iProdID." order by ProdImageID";
-									$rsImages	= mysql_query($qImages, $cnRuby);
-								
-									while ($recImage = mysql_fetch_array($rsImages))
-									{
-										$ProdImageID	= $recImage['ProdImageID'];
-										$Filepath		= $recImage['Filepath'];
-										$caption		= $recImage['Caption'];
-										// The following code re: img_not_avail is prob not needed!
-										if (is_numeric( stripos($Filepath,"img_not_avail") ))
-											$FilepathThumb	= str_replace("images/img_not_avail.gif", "images/thumbs/img_not_avail_90.gif", $Filepath);
-										else
-											$FilepathThumb	= str_replace("images/", "images/thumbs/", $Filepath);
-										?>
-										<li>
-											<img src="<?=$Filepath?>"/>
-											<?php
-											if ($caption)
-												echo '<span><div class="pikaCaption">'.$caption.'</div></span>';
+									$sql = 'SELECT filepath, caption
+										FROM product_image
+										WHERE product_id = ?
+										ORDER BY id';
+									$stmt = $mysqli->prepare($sql);
+									if ($stmt) {
+										$stmt->bind_param('i', intval($g_iProdID));
+										$stmt->bind_result($path, $caption);
+										$stmt->execute();
+										while ($stmt->fetch()) {
+											// Get the full filepath
+											$fullPath = getFullImagePath($path, $CategoryID);
 											?>
-										</li>
-										<?php
+											<li>
+												<img src="<?php echo $fullPath; ?>"/>
+												<?php
+												if (isset($caption) && $caption != '') {
+													echo '<span><div class="pikaCaption">'.$caption.'</div></span>';
+												}
+												?>
+											</li>
+											<?php
+										}
+										$stmt->close();
 									}
 									?>
 								</ul>
@@ -125,4 +128,4 @@ include("Include/header.php");
 	</tr>
 			
 </table>
-<?php include("Include/footer.php"); ?>
+<?php require_once 'Include/footer.php'; ?>

@@ -10,7 +10,7 @@ if ($g_iCollectID == -1)
 }
 else
 {
-	include("Include/connection.php");
+	require_once 'Include/connection.php';
 
 	// Get collection details from main [Collection] table
 	$qCollection	= "select * from Collection where CollectionID = ".$g_iCollectID." limit 1";
@@ -22,7 +22,8 @@ else
 	
 	$sPageTitle		= $Title;
 	$sPageKeywords	= 'collection, '.$Title.', ready-made, off the shelf, stock';
-	include("Include/header.php");
+	require_once 'Include/header.php';
+	require_once 'Include/functions.php';
 	?>
 
 	<table class="tblBody" cellpadding="0">
@@ -46,116 +47,170 @@ else
 											You are here:&nbsp;
 											<a href="/">Home</a> &gt;
 											<a href="off-the-rack.php">Ready-Made</a> &gt;
-											<?=$Title?>
+											<?php echo $Title; ?>
 										</td>
 									</tr>
 								</table>
 
 								<table class="tblStdFullCentre" cellspacing="0">
-									<tr><td colspan="3" class="tdHeading"><?=$Title?></td></tr>
-									<tr><td colspan="3"><?=$Description?></td></tr>
-									<?php
-									if ($g_iCollectID == 2)	// Valentine's
-									{
-										?>
-										<tr>
-											<td>
-												Check out these links:
-												&nbsp;&nbsp;&nbsp;&nbsp;<a href="browse.php?type=3&val=2"><b/>See all Hearts&raquo;</b></a>
-												&nbsp;&nbsp;&nbsp;&nbsp;<a href="browse.php?type=2&val=3"><b/>See all Red products&raquo;</b></a>
-												&nbsp;&nbsp;&nbsp;&nbsp;<a href="browse.php?type=2&val=7"><b/>See all Pink products&raquo;</b></a>
-											</td>
-										</tr>
-										<tr><td><br/></td></tr>
-										<?php
-									}
-									?>
 									<tr>
-										<td colspan="3">
+										<td class="hand_collection">
+											<b>HOVER</b> over images
+											<br/>for quick-view
+											<br/><br/><b>CLICK</b> images for full details
+										</td>
+										<td>
+											<span class="heading"><?php echo $Title; ?></span>
+											<br/><br/><?php echo $Description; ?>
+											<?php
+											if ($g_iCollectID == 2) {
+												// Valentine's
+												?>
+												<table class="tblStdFullCentre" cellspacing="0">
+													<tr>
+														<td>
+															Check out these links:
+															&nbsp;&nbsp;&nbsp;&nbsp;<a href="browse.php?type=3&val=2"><b/>See all Hearts&raquo;</b></a>
+															&nbsp;&nbsp;&nbsp;&nbsp;<a href="browse.php?type=2&val=3"><b/>See all Red products&raquo;</b></a>
+															&nbsp;&nbsp;&nbsp;&nbsp;<a href="browse.php?type=2&val=7"><b/>See all Pink products&raquo;</b></a>
+														</td>
+													</tr>
+												</table>
+												<?php
+											}
+											?>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2">
 											<table class="tblStdFullCentre" style="padding:5px;">
-												<tr>
-													<td colspan="8">
-														Click on the pictures to see more details and larger images.
-														<!--<br/><a href="sizing.html" target="_blank">Click here for sizing details.</a><br/><br/>-->
-													</td>
-												</tr>
 												<tr>
 													<?php
 													// Get the products in this collection
+													$products = array();
 													$iCount = 1;
-													$iRow	= 1;
-													$qProducts	= "select *, case when NumRemaining < 1 then 1 else 0 end as OutOfStock from Product where CollectionID = ".$g_iCollectID." and Priority is not null order by OutOfStock, Priority desc";
-													$rsProducts	= mysql_query($qProducts, $cnRuby);
-													while ($recProduct = mysql_fetch_array($rsProducts))
-													{
-														$ProdID			= $recProduct['ProdID'];
-														$Title			= $recProduct['Title'];
-														$TotalCost		= $recProduct['TotalCost'];
-														$DefaultImageID	= $recProduct['DefaultImageID'];
-														$numRemaining	= $recProduct['NumRemaining'];
-										
-														// Get default product image
-														if ($DefaultImageID == null)
-														{
-															$Filepath		= "images/img_not_avail_300.gif";
-															$FilepathThumb	= "images/img_not_avail_90.gif";
+													$sql = 'SELECT
+															p.ProdID,
+															p.Title,
+															p.TotalCost,
+															MAX(pos.num_in_stock) AS MaxStock
+														FROM Product p
+														LEFT JOIN product_option_size pos ON p.ProdID = pos.product_id
+														WHERE p.CollectionID = ?
+														AND p.Priority IS NOT NULL
+														GROUP BY p.ProdID
+														ORDER BY MaxStock DESC, p.Priority DESC';
+													$stmt = $mysqli->prepare($sql);
+													if ($stmt) {
+														$stmt->bind_param('i', intval($g_iCollectID));
+														$stmt->bind_result($productId, $productTitle, $totalCost, $maxStock);
+														$stmt->execute();
+														while ($stmt->fetch()) {
+															// Store the main product details
+															$products[$productId] = array(
+																'Title' => $productTitle,
+																'Cost' => $totalCost,
+																'MaxStock' => $maxStock,
+															);
+														}//while
+														$stmt->close();
+													}//if $stmt
+													
+													// Loop through the products
+													foreach ($products as $id => $details) {
+															
+														// Get just one product image
+														$sql = 'SELECT DISTINCT filepath
+															FROM product_image
+															WHERE product_id = ?
+															ORDER BY id
+															LIMIT 1';
+														$stmt = $mysqli->prepare($sql);
+														if ($stmt) {
+															$stmt->bind_param('i', intval($id));
+															$stmt->bind_result($path);
+															$stmt->execute();
+															$stmt->fetch();
+															
+															// Get the full filepath and add it back to the products array
+															$fullPath = getFullImagePath($path, 3/*stock*/, TRUE/*thumbnail*/);
+															$stmt->close();
 														}
-														else
-														{
-															$qDefImage		= "select * from ProductImage where ProdImageID = ".$DefaultImageID." limit 1";
-															$rsDefImage		= mysql_query($qDefImage, $cnRuby);
-															$recDefImage	= mysql_fetch_array($rsDefImage);
-															$Filepath		= $recDefImage['Filepath'];
-															// The following code re: img_not_avail is prob not needed!
-															if (is_numeric( stripos($Filepath,"img_not_avail") ))
-																$FilepathThumb	= str_replace("images/img_not_avail.gif", "images/thumbs/img_not_avail_90.gif", $Filepath);
-															else
-																$FilepathThumb	= str_replace("images/", "images/thumbs/", $Filepath);
+															
+														// Get the colours available, but only the first colour in each "option"
+														// e.g. if it's available in "red and white" and "black and white" then we'll
+														// just display "red" and "black" as the available colours
+														$colourValues = array();
+														$sql = 'SELECT DISTINCT
+																c.HexValue
+															FROM product_option_colour poc
+															INNER JOIN product_option po ON poc.option_id = po.id
+															INNER JOIN Colour c ON poc.colour_id = c.ColourID
+															WHERE po.product_id = ?
+															AND poc.priority = 0';
+														$stmt = $mysqli->prepare($sql);
+														if ($stmt) {
+															$stmt->bind_param('i', intval($id));
+															$stmt->bind_result($colourValue);
+															$stmt->execute();
+															while ($stmt->fetch()) {
+																$colourValues[] = $colourValue;
+															}
+															$stmt->close();
 														}
-											
+															
 														// Get the sizes available
-														$sSizes		= "";
-														$qSizes		= "select Size.Name from ProductSize inner join Size on ProductSize.SizeID = Size.SizeID WHERE ProductSize.ProdID = ".$ProdID;
-														$rsSizes	= mysql_query($qSizes, $cnRuby);
-														while ($recSize = mysql_fetch_array($rsSizes))
-														{
-															$sSizes = $sSizes.$recSize['Name'].", ";
+														$sizes = array();
+														$sql = 'SELECT DISTINCT s.NameAbbrev
+															FROM product_option_size pos
+															INNER JOIN Size s ON pos.size_id = s.SizeID
+															WHERE pos.product_id = ?
+															ORDER BY s.SizeID';
+														$stmt = $mysqli->prepare($sql);
+														if ($stmt) {
+															$stmt->bind_param('i', intval($id));
+															$stmt->bind_result($size);
+															$stmt->execute();
+															while ($stmt->fetch()) {
+																$sizes[] = $size;
+															}
+															$stmt->close();
 														}
-														$sSizes = substr($sSizes, 0, -2);	// strip trailing comma and space
 														
-														if ($iCount > 4)
-														{
-															$iCount = 2;
-															echo '</tr><tr><td><br/></td></tr><tr>';
-														}
-														else
-														{
-															$iCount++;
+														// Now print out the image and price or "OUT OF STOCK" and add
+														// a styled tooltip with the colours and sizes available
+														$productName = $details['Title'];
+														if ($details['MaxStock'] > 0) {
+															$cost = '&euro;'.$details['Cost'];
+														} else {
+															$cost = 'OUT OF STOCK';
 														}
 														?>
 														<td align="center" style="cursor:pointer;">
-															<a href="product.php?pid=<?=$ProdID?>" style="color:#330000;" class="aNoBold">
-																<img src="<?=$FilepathThumb?>" title="<?=$Title?>" border="0">
-																<br/><b><?=$Title?></b>
+															<a href="product.php?pid=<?php echo $id; ?>" style="color:#330000;" class="aNoBold">
 																<?php
-																if ($numRemaining > 0)
-																{
-																	?>
-																	<br/>&euro;<?php echo str_replace('.00', '', number_format($TotalCost, 2) ); ?>
-																	<?php
-																	if ($sSizes != '')
-																		echo " ($sSizes)	";
-																}
-																else
-																{
-																	?><br/>OUT OF STOCK<?php
-																}
+																// Format the styled tooltip
+																$quickView = formatCollectionTooltip($productName, $cost, $colourValues, $sizes);
+																
+																// Put it on the image itself
+																echo '<img class="tt" src="'.$fullPath.'" border="0" title="'.$quickView.'" />';
+																
+																// Follow with the title and price
+																echo '<br/><b>'.$productName.'</b>';
+																echo '<br/>'.$cost;
 																?>
 															</a>
 														</td>
 														<td width="5"></td>
 														<?php
-													}
+														// Show 5 products per row
+														if ($iCount % 5 == 0) {
+															$iCount = 1;
+															echo '</tr><tr>';
+														} else {
+															$iCount++;
+														}
+													}//foreach $products
 													?>
 												</tr>
 											</table>
@@ -176,7 +231,7 @@ else
 			
 	</table>
 	<?php
-	include("Include/footer.php");
+	require_once 'Include/footer.php';
 	
 	if ($cnRuby)
 		mysql_close($cnRuby);
