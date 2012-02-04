@@ -51,7 +51,6 @@ else
 								$HasTassel		= $recProduct['HasTassel'];
 								$otherDetails	= $recProduct['OtherDetails'];
 								$CustID			= $recProduct['CustID'];
-								$NumRemaining	= $recProduct['NumRemaining'];
 			
 								// Get associated details from other tables
 								$qType		= "select Description from ProductType where ProdTypeID = ".$ProductTypeID." limit 1";
@@ -125,7 +124,9 @@ else
 									$stmt->close();
 								}
 								
-								// Now do the same for the sizes along with the associated numbers available							
+								// Now do the same for the sizes along with the associated numbers available
+								// Also take note if this product is completely out of stock
+								$allOutOfStock = TRUE;
 								$sql = 'SELECT DISTINCT 
 										s.Name,
 										pos.num_in_stock
@@ -140,6 +141,9 @@ else
 										$stmt->bind_param('i', intval($optionId));
 										$stmt->execute();
 										while ($stmt->fetch()) {
+											if ($numInStock > 0) {
+												$allOutOfStock = FALSE;
+											}
 											$options[$optionId]['Sizes'][] = array(
 												'Size' => $sizeName,
 												'NumInStock' => $numInStock,
@@ -424,13 +428,10 @@ else
 															<font size="1">
 															<a href="mailto:info@rubydemure.com">
 																<?php
-																if ($NumRemaining > 0)
-																{
-																	?>Online shopping isn't quite set up yet - click here to put in an order!<?php
-																}
-																else
-																{
+																if ($allOutOfStock) {
 																	?>OUT OF STOCK - click here to order (please give at least 14 days notice)<?php
+																} else {
+																	?>Online shopping isn't quite set up yet - click here to put in an order!<?php
 																}
 																?>
 															</a>
