@@ -249,7 +249,7 @@ else
 											<?=$Title?>
 											<?php
 											if ($CategoryID != 1) {
-												echo '&nbsp;&nbsp;&euro;'.number_format($TotalCost, 2);
+												echo '&nbsp;&nbsp;&euro;'.formatPrice($TotalCost);
 											}
 											?>
 											</h2>

@@ -137,12 +137,30 @@ function getSearchImagePath($path, $searchCategoryId, $productCategoryId)
 }
 
 /**
+ * Formats the given cost to EITHER no decimal places (if integer number) OR 2 decimal places
+ * 
+ * @param	float	$cost		- a product cost
+ * @return	string	$formatted	- the formatted cost
+ * @author	Darina Prior
+ */
+function formatPrice($cost)
+{
+	if(floor($cost) == $cost) {
+		return number_format($cost, 0); // 0 decimal places
+	}
+	return number_format($cost, 2); 	// 2 decimal places
+}
+
+/**
  * Formats the styled tooltip for a product on the collection page
  * 
- * @param	string	$path			- bulk of filepath as stored in the DB (without "/images/bespoke" etc.)
- * @param	int	$searchCategoryId	- ID of search result category e.g. 2=collections
- * @param	int	$productCategoryId	- ID of product category e.g. 1=bespoke 
- * @return	string	$fullPath	- the full filepath from the root directory (starting with "/")
+ * @param	string	$name		- name of the product
+ * @param	string	$cost		- the formatted cost along with the currency
+ * @param	array	$colours	- array of available hex colour values
+ * @param	array	$sizes		- array of available sizes
+ * 
+ * @return	string	$tt	- the styled tooltip as a HTML string
+ * 
  * @author	Darina Prior
  */
 function formatCollectionTooltip($name, $cost, $colours, $sizes)

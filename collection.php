@@ -181,24 +181,27 @@ else
 														// Now print out the image and price or "OUT OF STOCK" and add
 														// a styled tooltip with the colours and sizes available
 														$productName = $details['Title'];
-														if ($details['MaxStock'] > 0) {
-															$cost = '&euro;'.$details['Cost'];
+														$cost = '&euro;'.formatPrice($details['Cost']);
+														if ($details['MaxStock'] == 0) {
+															$costString = 'OUT OF STOCK';
+															$quickViewCost = $cost.' (OUT OF STOCK)';
 														} else {
-															$cost = 'OUT OF STOCK';
+															$costString = $cost;
+															$quickViewCost = $cost;
 														}
 														?>
 														<td align="center" style="cursor:pointer;">
 															<a href="product.php?pid=<?php echo $id; ?>" style="color:#330000;" class="aNoBold">
 																<?php
 																// Format the styled tooltip
-																$quickView = formatCollectionTooltip($productName, $cost, $colourValues, $sizes);
+																$quickView = formatCollectionTooltip($productName, $quickViewCost, $colourValues, $sizes);
 																
 																// Put it on the image itself
 																echo '<img class="tt" src="'.$fullPath.'" border="0" title="'.$quickView.'" />';
 																
 																// Follow with the title and price
 																echo '<br/><b>'.$productName.'</b>';
-																echo '<br/>'.$cost;
+																echo '<br/>'.$costString;
 																?>
 															</a>
 														</td>
