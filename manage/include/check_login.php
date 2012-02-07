@@ -22,6 +22,9 @@ else
 			<td>
 				<a href="index_sort.php">Sort Orders</a>
 			</td>
+			<td>
+				<a href="index_images.php">Images</a>
+			</td>
 			<td>&nbsp;</td>
 			<td>
 				<a href="edit_website_mode.php"><font color="red">CHANGE WEBSITE MODE</font></a>
