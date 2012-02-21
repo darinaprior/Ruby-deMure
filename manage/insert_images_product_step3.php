@@ -27,7 +27,7 @@ if (isset($_REQUEST['cap']) && $_REQUEST['cap'] != '') {
  * Get the full path to the TEMP directory under the user's specified directory
  * (relative to current directory)
  */
-$fullPathTemp = '../images/products/'.$directory.'/temp/';
+$fullPathTemp = '../images/products/full/'.$directory.'/temp/';
 
 /** 
  * Get all the images in the TEMP directory inside the user's specified directory
@@ -46,8 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	try {
 		// Source and destination filepaths MUST BE relative to the current directory
 		$sourceFile = $images[0];
-		$destMainFile = str_replace('temp/', '', $sourceFile);
-		$destThumbFile = str_replace('images/', 'images/thumbs/', $destMainFile);
+		$destLargeFile = str_replace('temp/', '', $sourceFile);
+		$destMediumFile = str_replace('/full/', '/medium/', $destLargeFile);
+		$destSmallFile = str_replace('/full/', '/small/', $destLargeFile);
+		$destThumbFile = str_replace('/full/', '/thumb/', $destLargeFile);
 		
 		// Specify the width and height and the X and Y coords of the SOURCE image
 		$sourceWidth = intval($_POST['w']);
@@ -56,12 +58,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$sourceY = intval($_POST['y']);
 		
 		// Specify the width and height and the X and Y coords of the DESTINATION images
-		$destMainWidth = 300;
-		$destMainHeight = 300;
-		$destMainX = 0;
-		$destMainY = 0;
-		$destThumbWidth = 90;
-		$destThumbHeight = 90;
+		$destLargeWidth = 300;/** @todo - CHANGE TO 700PX */
+		$destLargeHeight = 300;/** @todo - CHANGE TO 700PX */
+		$destMediumWidth = 200;
+		$destMediumHeight = 200;
+		$destSmallWidth = 90;
+		$destSmallHeight = 90;
+		$destThumbWidth = 50;
+		$destThumbHeight = 50;
+		$destLargeX = 0;
+		$destLargeY = 0;
+		$destMediumX = 0;
+		$destMediumY = 0;
+		$destSmallX = 0;
+		$destSmallY = 0;
 		$destThumbX = 0;
 		$destThumbY = 0;
 		
@@ -70,22 +80,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		
 		// Create the DESTINATION image resource with the correct height and width
 		// Use truecolor to avoid problems when resampling
-		$destMainImage = ImageCreateTrueColor($destMainWidth, $destMainHeight);
+		$destLargeImage = ImageCreateTrueColor($destLargeWidth, $destLargeHeight);
+		$destMediumImage = ImageCreateTrueColor($destMediumWidth, $destMediumHeight);
+		$destSmallImage = ImageCreateTrueColor($destSmallWidth, $destSmallHeight);
 		$destThumbImage = ImageCreateTrueColor($destThumbWidth, $destThumbHeight);
 				
-		// Copy and resize the selected part of the source image with resampling
+		// Copy and resize the selected part of the source image with resampling to...
+		// ...the large image
 		imagecopyresampled(
-			$destMainImage,
+			$destLargeImage,
 			$sourceImage,
-			$destMainX,
-			$destMainY,
+			$destLargeX,
+			$destLargeY,
 			$sourceX,
 			$sourceY,
-			$destMainWidth,
-			$destMainHeight,
+			$destLargeWidth,
+			$destLargeHeight,
 			$sourceWidth,
 			$sourceHeight
 		);
+		// ...the medium image
+		imagecopyresampled(
+			$destMediumImage,
+			$sourceImage,
+			$destMediumX,
+			$destMediumY,
+			$sourceX,
+			$sourceY,
+			$destMediumWidth,
+			$destMediumHeight,
+			$sourceWidth,
+			$sourceHeight
+		);
+		// ...the small image
+		imagecopyresampled(
+			$destSmallImage,
+			$sourceImage,
+			$destSmallX,
+			$destSmallY,
+			$sourceX,
+			$sourceY,
+			$destSmallWidth,
+			$destSmallHeight,
+			$sourceWidth,
+			$sourceHeight
+		);
+		// ...the thumb image
 		imagecopyresampled(
 			$destThumbImage,
 			$sourceImage,
@@ -100,7 +140,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		);
 		
 		// Output to the destination image files
-		imagejpeg($destMainImage,  $destMainFile, 100/*quality*/);
+		imagejpeg($destLargeImage,  $destLargeFile, 100/*quality*/);
+		imagejpeg($destMediumImage,  $destMediumFile, 100/*quality*/);
+		imagejpeg($destSmallImage,  $destSmallFile, 100/*quality*/);
 		imagejpeg($destThumbImage,  $destThumbFile, 100/*quality*/);
 		
 		// Finally, delete the source file from the temp directory
@@ -126,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// Handle empty captions
 		$formatCaption = ($caption != '') ? $caption : NULL;
 		
-		/** @todo CHECK FIRST THAT THIS RECORD DOESN'T ALREADY EXIST! */
+		/** @todo CHECK FIRST THAT THIS RECORD DOESN'T ALREADY EXIST! *
 		// Insert into the database
 		$sql = 'INSERT INTO product_image (product_id, filepath, caption)
 			VALUES (?, ?, ?)';
@@ -144,6 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		} else {
 			$error .= '<br/>ERROR: could not prepare MySQL statement - '.$mysqli->error;
 		}//if $stmt
+		DEBUG*/
 		
 	} catch (Exception $e) {
 		$processedImages = TRUE;
@@ -278,8 +321,8 @@ $imageName = $parts[COUNT($parts)-1];
 					<input type="submit" value="Crop, resize and save" />
 				</form>
 				The image will be automatically resized to the correct dimensions for 
-				the main and thumbnail images.  It will be saved to the appropriate directories
-				and added to the database.
+				the full, medium, small and thumbnail images.  It will be saved to the 
+				appropriate directories and added to the database.
 			</div>
 			</div>
 			</div>
