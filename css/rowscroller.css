@@ -1,0 +1,47 @@
+/*
+THE CSS FOR THE "ROWSCROLLER" JQUERY USED ON THE PRODUCT PAGE
+I.E. WHERE WE CAN SCROLL THROUGH THUMBNAIL IMAGES
+*/
+
+/* The main scroller content area (where the thumbnails are) */
+.scroller-content {
+	width: 270px;
+}
+
+/* each row */
+.scroller-row {
+	margin-bottom: 3px;
+}
+
+/* each item in a row */
+.scroller-item {
+	width: 50px;
+	float: left;
+	text-align: center;
+	line-height: 50px;
+	padding-right: 3px;
+}
+	
+/* Navigation (prev and next) */
+.scroller-nav {
+	overflow: hidden;
+	padding: 0px;
+	margin-bottom: 25px;
+	margin-left: -3px; /* counteract the right-most .scroller-item padding */
+}
+.scroller-nav a {
+	display: block;
+	text-align: center;
+	line-height: 20px;
+	height: 20px;
+	width: 20px;
+	background-color: #461b37;
+	color: #F1C9E1;
+	padding: 0px;
+}
+.scroller-nav a.disabled {
+	background-color: #F1C9E1;
+	color: #0F050D;
+	cursor: none;
+	text-decoration: none;
+}

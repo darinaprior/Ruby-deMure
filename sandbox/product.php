@@ -21,11 +21,37 @@ else
 	$sPageTitle		= $Title;
 	$sPageKeywords	= $Title.', product';
 	$has_tabs = TRUE;	// this page contains tabs
+	$hasZoom = TRUE;	// this page contains image zoom functionality
+	$hasRowScroller = TRUE;	// this page contains image scrolling functionality
 	require_once 'Include/header.php';
 	require_once 'Include/functions.php';
 	?>
 	
-		<table class="tblBody" cellpadding="0">
+	<script type="text/javascript">
+		$jq(document).ready(function(){
+			// Initialise the image zoom functionality
+			var options = {
+				zoomWidth: 250,
+				zoomHeight: 250,
+				title: true,
+				showEffect: 'fadein',
+				hideEffect: 'fadeout'
+			};
+			$jq('.jqz_anchor').jqzoom(options);
+			
+			// Initialise the thumbnail scroller
+			$jq('.scroller').rowscroller({
+				navUp: '#scroller-up',
+				navDown: '#scroller-down',
+				visibleRows: 2,
+				rowsToScroll: 2,
+				itemsPerRow: 5,
+				navDisabledClass: 'disabled'
+			});
+		});
+	</script>
+	
+	<table class="tblBody" cellpadding="0">
 
 		<tr>
 			<td class="tdR4C1">&nbsp;</td>
@@ -263,150 +289,85 @@ else
 										<td valign="top" width="40%">
 											<table class="tblStdFullCentre">
 												<?php
-												// Get the first 3 images for this product
+												// Get all the images for this product (3 sizes for each)
 												$images = array();
-												$sql = 'SELECT DISTINCT filepath
+												$sql = 'SELECT DISTINCT filepath, caption
 													FROM product_image
 													WHERE product_id = ?
 													AND filepath IS NOT NULL
-													ORDER BY id
-													LIMIT 3';
+													ORDER BY id';
 												$stmt = $mysqli->prepare($sql);
 												if ($stmt) {
 													$stmt->bind_param('i', intval($g_iProdID));
-													$stmt->bind_result($path);
+													$stmt->bind_result($path, $caption);
 													$stmt->execute();
 													while ($stmt->fetch()) {
-														// Get the full filepath
-														$fullPathThumb = getFullImagePath($path, $CategoryID, TRUE/*thumbnail*/);
-														$images[] = $fullPathThumb;
-													}
+														// Get the filepaths for the various image sizes
+														$images[] = array(
+															'Full' => getFullImagePath_TEMP($path, $CategoryID, 1/*full*/),
+															'Medium' => getFullImagePath_TEMP($path, $CategoryID, 2/*medium*/),
+															'Thumb' => getFullImagePath_TEMP($path, $CategoryID, 4/*thumb*/),
+															'Caption' => htmlspecialchars($caption),
+														);
+													}//while
 													$stmt->close();
 												}
 												
-												foreach ($images as $path) {
-													?>
-													<td align="center">
-														<div style="width:90px; height:90px;">
-															<a href="gallery.php?pid=<?php echo $g_iProdID; ?>">
-																<img src="<?php echo $path; ?>" alt="More images" border="0" />
-															</a>
-														</div>
-													</td>
-													<?php
-												}//foreach
+												// START - image gallery (using jQZoom and rowscroller)
 												?>
-												</tr>
-												<tr><td colspan="3"><a href="gallery.php?pid=<?=$g_iProdID?>"><b>Click for image gallery &raquo;</b></a></td></tr>
-
-												<tr><td><br/><br/></td></tr>
-												<?php
-												// General info about the product type
-												if ($ProductTypeID == 1)	// pasties
-												{
-													?>
-													<tr>
-														<td width="100%" colspan="3" style="font-size:10px; text-align:left;">
-															All of my 
-															<?php
-															if ($HasTassel == 1)
-															{
-																?>tasseled <?php
-															}
-															?>
-															pasties:
-															<ul>
-																<li>are hand-made with an emphasis on quality and finish</li>
-																<li>have sewn seams (not glued seams)</li>
-																<?php
-																if ($HasTassel == 1)
-																{
-																	?><li>have tassels that are handmade from hand-dyed fringe</li><?php
-																}
-																?>
-																<li>have comfortable and durable leatherette backing</li>
-																<li>come in a lovely giftbox with care card and tape to stick them on!</li>
-															</ul>
-														</td>
-													</tr>
-													<?php
-												}//if pasties
-												else if ($ProductTypeID == 4)	// stocking toppers
-												{
-													?>
-													<tr>
-														<td width="100%" colspan="3" style="font-size:10px; text-align:left;">
-															All of my stocking toppers:
-															<ul>
-																<li>are hand-made with an emphasis on quality and finish</li>
-																<li>can be used with both stockings and hold-ups</li>
-																<li>have comfortable felt backing</li>
-																<li>have metal garter grips (not plastic)</li>
-																<li>come in a lovely giftbox with care card and instructions</li>
-															</ul>
-														</td>
-													</tr>
-													<?php
-												}//if stocking toppers
-												else if ($ProductTypeID == 5)	// eye-patch
-												{
-													?>
-													<tr>
-														<td width="100%" colspan="3" 
-															style="font-size:10px; text-align:left;">
-															All of my eye-patches:
-															<ul>
-																<li>are hand-made with an emphasis on quality and finish</li>
-																<li>have sewn seams (not glued seams)</li>
-																<li>have comfortable and durable leatherette backing</li>
-																<li>are attached with adjustable elastic</li>
-																<li>come in a lovely giftbox</li>
-															</ul>
-														</td>
-													</tr>
-													<?php
-												}//if eye-patch
-												else if ($ProductTypeID == 10)	// bow-tie
-												{
-													?>
-													<tr>
-														<td width="100%" colspan="3" 
-															style="font-size:10px; text-align:left;">
-															All of my bow-ties:
-															<ul>
-																<li>are hand-made with an emphasis on quality and finish</li>
-																<li>can be made to fit your neck size</li>
-																<li>can be made to match other items</li>
-																<li>come in a lovely giftbox</li>
-
-															</ul>
-															<a href="/sizing.php#bowties">Click here for sizing details</a>
-															<br/><a href="http://www.videojug.com/film/how-to-tie-a-bow-tie" class="external" target="_blank">And here for video instructions on how to tie your bow tie</a
-															<br/><br/>
-														</td>
-													</tr>
-													<?php
-												}//if eye-patch
-												?>
-
 												<tr>
-													<td colspan="3" align="center">
-														<?php
-														if ($CategoryID == 1)
-														{
-															?>
-															<a href="bespoke.php">&lt;&nbsp;Back to <?=$Category?></a>
-															<?php
-														}
-														else if ($CategoryID == 3)
-														{
-															?>
-															<a href="collection.php?cid=<?=$CollectionID?>">&lt;&nbsp;Back to <?=$Collection?></a>
-															<?php
-														}
-														?>
+													<td style="text-align:center; height:200px; width:100%; padding-left:48px;">
+														<a href="<?php echo $images[0]['Full']; ?>" class="jqz_anchor" rel="jqz_gallery">
+														    <img src="<?php echo $images[0]['Medium']; ?>" title="<?php echo $images[0]['Caption']; ?>" />
+														</a>
 													</td>
 												</tr>
+												<tr><td>Hover above to zoom.  Click below to change the image.</td></tr>
+												<tr>
+													<td>
+														<table cellpadding="0" cellspacing="0">
+															<tr>
+																<td>
+																	<div class="scroller-nav">
+																		<a href="#" id="scroller-up">&laquo;</a>
+																	</div>
+																</td>
+																<td>
+																	<div class="scroller-content">
+																		<div class="scroller">
+																			<?php
+																			foreach ($images as $key => $paths) {
+																				?>
+																				<div>
+																					<a <?php if($key == 0) { echo 'class="zoomThumbActive"';} ?> 
+																						href="javascript:void(0);" 
+																						rel="{
+																							gallery: 'jqz_gallery', 
+																							smallimage: '<?php echo $paths['Medium']; ?>', 
+																							largeimage: '<?php echo $paths['Full']; ?>', 
+																							zoomWrapperTitle: '<?php echo $paths['Caption']; ?>'
+																						}">
+																					    <img src="<?php echo $paths['Thumb']; ?>" width="50" height="50">
+																					</a>
+																				</div>
+																				<?php
+																			}//foreach
+																			?>
+																		</div>
+																	</div>
+																</td>
+																<td>
+																	<div class="scroller-nav">
+																		<a href="#" id="scroller-down">&raquo;</a>
+																	</div>
+																</td>	
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<?php
+												// END - image gallery (using jQZoom and rowscroller)
+												?>
 											</table>
 										</td>
 										<td valign="top">
@@ -462,9 +423,14 @@ else
 														        	<li><a href="#tab3">Reviews</a></li>
 														        	<?php
 														        }
+														        if ($ProductTypeID == 1 || $ProductTypeID == 4 || $ProductTypeID == 5 || $ProductTypeID == 10) {
+														        	?>
+														        	<li><a href="#tab4">General Info</a></li>
+														        	<?php
+														        }
 														        ?>
-														        <li><a href="#tab4">Payment</a></li>
-														        <li><a href="#tab5">Shipping</a></li>
+														        <li><a href="#tab5">Payment</a></li>
+														        <li><a href="#tab6">Shipping</a></li>
 														    </ul>
 														</div>
 														<!-- END TAB HEADERS -->	
@@ -480,8 +446,6 @@ else
 																<?php
 																if ($CategoryID == 1) {
 																	?><tr><td>Made for:</td><td><?php echo $Customer; ?></td></tr><?php
-																} else {
-																	?><tr><td>Collection:</td><td><?php echo $Collection; ?></td></tr><?php
 																}
 																?>
 																<tr>
@@ -508,6 +472,7 @@ else
 																		?>
 																	</td>
 																</tr>
+													        		<tr><td><br/></td></tr>
 																<?php
 																if ($sMaterials != "") {
 																	?><tr><td valign="top">Materials:</td><td><?=$sMaterials?></td></tr><?php
@@ -626,8 +591,102 @@ else
 														    }//if $reviews
 														    ?>
 														    
-														    <!-- TAB 4: PAYMENT -->
+														    <!-- TAB 4: GENERAL INFO -->
 														    <div id="tab4" class="tab_content">
+													        	<table class="tblStdFull" cellpadding="2">
+													        		<?php
+																// General info about the product type
+																switch($ProductTypeID) {
+																	case 1:
+																		// pasties
+																		?>
+																		<tr>
+																			<td width="100%" colspan="3">
+																				All of my 
+																				<?php
+																				if ($HasTassel == 1)
+																				{
+																					?>tasseled <?php
+																				}
+																				?>
+																				pasties:
+																				<ul>
+																					<li>are hand-made with an emphasis on quality and finish</li>
+																					<li>have sewn seams (not glued seams)</li>
+																					<?php
+																					if ($HasTassel == 1)
+																					{
+																						?><li>have tassels that are handmade from hand-dyed fringe</li><?php
+																					}
+																					?>
+																					<li>have comfortable and durable leatherette backing</li>
+																					<li>come in a lovely giftbox with care card and tape to stick them on!</li>
+																				</ul>
+																			</td>
+																		</tr>
+																		<?php
+																		break;
+																	case 4:
+																		// stocking toppers
+																		?>
+																		<tr>
+																			<td width="100%" colspan="3">
+																				All of my stocking toppers:
+																				<ul>
+																					<li>are hand-made with an emphasis on quality and finish</li>
+																					<li>can be used with both stockings and hold-ups</li>
+																					<li>have comfortable felt backing</li>
+																					<li>have metal garter grips (not plastic)</li>
+																					<li>come in a lovely giftbox with care card and instructions</li>
+																				</ul>
+																			</td>
+																		</tr>
+																		<?php
+																		break;
+																	case 5:
+																		// eye-patch
+																		?>
+																		<tr>
+																			<td width="100%" colspan="3">
+																				All of my eye-patches:
+																				<ul>
+																					<li>are hand-made with an emphasis on quality and finish</li>
+																					<li>have sewn seams (not glued seams)</li>
+																					<li>have comfortable and durable leatherette backing</li>
+																					<li>are attached with adjustable elastic</li>
+																					<li>come in a lovely giftbox</li>
+																				</ul>
+																			</td>
+																		</tr>
+																		<?php
+																		break;
+																	case 10:
+																		// bow-tie
+																		?>
+																		<tr>
+																			<td width="100%" colspan="3">
+																				All of my bow-ties:
+																				<ul>
+																					<li>are hand-made with an emphasis on quality and finish</li>
+																					<li>can be made to fit your neck size</li>
+																					<li>can be made to match other items</li>
+																					<li>come in a lovely giftbox</li>
+					
+																				</ul>
+																				<a href="/sizing.php#bowties">Click here for sizing details</a>
+																				<br/><a href="http://www.videojug.com/film/how-to-tie-a-bow-tie" class="external" target="_blank">And here for video instructions on how to tie your bow tie</a
+																				<br/><br/>
+																			</td>
+																		</tr>
+																		<?php
+																		break;
+																}//switch
+																?>
+															</table>	
+														    </div>
+														    
+														    <!-- TAB 5: PAYMENT -->
+														    <div id="tab5" class="tab_content">
 													        	<table class="tblStdFull" cellpadding="2">
 													        		<tr>
 													        			<td valign="top"><b>PAYPAL</b></td>
@@ -660,8 +719,8 @@ else
 															</table>	
 														    </div>
 														    
-														    <!-- TAB 5: SHIPPING -->
-														    <div id="tab5" class="tab_content">
+														    <!-- TAB 6: SHIPPING -->
+														    <div id="tab6" class="tab_content">
 															<b>Where do you ship to?</b>
 															<br/>I ship to anywhere in the world.
 															

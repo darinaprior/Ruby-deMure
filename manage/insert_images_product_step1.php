@@ -10,7 +10,7 @@ if (isset($_REQUEST['path']) && $_REQUEST['path'] != '') {
 
 	try {
 		$directory = $_REQUEST['path'];
-		$fullPath = '../images/products/'.$directory;
+		$fullPath = '../images/products/full/'.$directory;
 		
 		// Check that the directory exists
 		if(!file_exists($fullPath) || !is_dir($fullPath)) {

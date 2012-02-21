@@ -90,6 +90,82 @@ function getFullImagePath($path, $categoryId, $isThumb=FALSE)
 	// Return the full path
 	return $fullPath;
 }
+function getFullImagePath_TEMP($path, $categoryId, $size=1)
+{
+	// Start with the basics
+	$fullPath = '/images';
+	
+	// Handle blank images
+	if (!isset($path) || $path == '') {
+		switch($size) {
+			case 1:
+				// Full size
+				$fullPath .= '/img_not_avail_700.gif';
+				break;
+			case 2:
+				// Medium size
+				$fullPath .= '/img_not_avail_200.gif';
+				break;
+			case 3:
+				// Small size
+				$fullPath .= '/img_not_avail_90.gif';
+				break;
+			case 4:
+				// Thumb size
+				$fullPath .= '/img_not_avail_50.gif';
+				break;
+			default:
+				// Default to medium
+				$fullPath .= '/img_not_avail_200.gif';
+		}//switch
+	} else {
+		$fullPath .= '/products';
+		
+		// Use the correct path for the image size we want
+		switch($size) {
+			case 1:
+				// Full size
+				$fullPath .= '/full';
+				break;
+			case 2:
+				// Medium size
+				$fullPath .= '/medium';
+				break;
+			case 3:
+				// Small size
+				$fullPath .= '/small';
+				break;
+			case 4:
+				// Thumb size
+				$fullPath .= '/thumb';
+				break;
+			default:
+				// Default to medium
+				$fullPath .= '/medium';
+		}//switch
+	
+		// Fill in the category bit
+		switch($categoryId) {
+			case 1:
+				$fullPath .= '/bespoke';
+				break;
+			case 2:
+				$fullPath .= '/pick_n_mix';
+				break;
+			case 3:
+				$fullPath .= '/stock';
+				break;
+			default:
+				// stay in the main images folder
+		}
+		
+		// Finally, add on whatever's in the database
+		$fullPath .= '/'.$path;
+	}
+	
+	// Return the full path
+	return $fullPath;
+}
 
 /**
  * Gets the root-relative filepath for a search results image given the path stored in the DB and

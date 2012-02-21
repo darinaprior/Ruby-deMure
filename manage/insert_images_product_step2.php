@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		
 		// We'll upload to a TEMP directory inside the requested directory
 		// Path must be relative to current directory
-		$tempDirectory = '../images/products/'.$directory.'/temp/';
+		$tempDirectory = '../images/products/full/'.$directory.'/temp/';
 		if(!file_exists($tempDirectory) || !is_dir($tempDirectory)) {
 			if (!mkdir($tempDirectory)) {
 				$error = 'ERROR: failed to create TEMP directory';
