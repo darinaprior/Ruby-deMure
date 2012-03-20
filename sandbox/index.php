@@ -1,7 +1,7 @@
 <?php
-$sPageTitle		= 'Home Page';
-$sPageKeywords	= 'home, index';
-$bSlideshow		= true;	// set up jQuery Cycle slideshow
+$sPageTitle = 'Home Page';
+$sPageKeywords = 'home, index';
+$bSlideshow = true;	// set up jQuery Cycle slideshow
 include("Include/connection.php");
 include("Include/header.php");
 ?>
@@ -79,8 +79,7 @@ include("Include/header.php");
 							<?php //<p id="cycle_caption"></p> ?>
 						</td>
 					</tr>
-				</table>
-				
+				</table>				
 				</div>
 			</div>
 			<!-- end of MAIN CONTENT -->

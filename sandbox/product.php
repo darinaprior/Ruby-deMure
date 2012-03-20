@@ -31,8 +31,8 @@ else
 		$jq(document).ready(function(){
 			// Initialise the image zoom functionality
 			var options = {
-				zoomWidth: 250,
-				zoomHeight: 250,
+				zoomWidth: 300,
+				zoomHeight: 300,
 				title: true,
 				showEffect: 'fadein',
 				hideEffect: 'fadeout'
@@ -291,22 +291,22 @@ else
 												<?php
 												// Get all the images for this product (3 sizes for each)
 												$images = array();
-												$sql = 'SELECT DISTINCT filepath, caption
-													FROM product_image
+												$sql = 'SELECT DISTINCT filename, caption
+													FROM product_image_TEMP
 													WHERE product_id = ?
-													AND filepath IS NOT NULL
-													ORDER BY id';
+													AND filename IS NOT NULL
+													ORDER BY IFNULL(priority, 1000), id';
 												$stmt = $mysqli->prepare($sql);
 												if ($stmt) {
 													$stmt->bind_param('i', intval($g_iProdID));
-													$stmt->bind_result($path, $caption);
+													$stmt->bind_result($name, $caption);
 													$stmt->execute();
 													while ($stmt->fetch()) {
 														// Get the filepaths for the various image sizes
 														$images[] = array(
-															'Full' => getFullImagePath_TEMP($path, $CategoryID, 1/*full*/),
-															'Medium' => getFullImagePath_TEMP($path, $CategoryID, 2/*medium*/),
-															'Thumb' => getFullImagePath_TEMP($path, $CategoryID, 4/*thumb*/),
+															'Full' => getProductImagePath($g_iProdID, $name, 1/*full*/),
+															'Medium' => getProductImagePath($g_iProdID, $name, 2/*medium*/),
+															'Thumb' => getProductImagePath($g_iProdID, $name, 4/*thumb*/),
 															'Caption' => htmlspecialchars($caption),
 														);
 													}//while
@@ -329,7 +329,7 @@ else
 															<tr>
 																<td>
 																	<div class="scroller-nav">
-																		<a href="#" id="scroller-up">&laquo;</a>
+																		<a href="#" id="scroller-up"></a>
 																	</div>
 																</td>
 																<td>
@@ -358,7 +358,7 @@ else
 																</td>
 																<td>
 																	<div class="scroller-nav">
-																		<a href="#" id="scroller-down">&raquo;</a>
+																		<a href="#" id="scroller-down"></a>
 																	</div>
 																</td>	
 															</tr>
@@ -387,15 +387,67 @@ else
 													<tr>
 														<td colspan="2" valign="top" align="center">
 															<font size="1">
-															<a href="mailto:info@rubydemure.com">
-																<?php
-																if ($allOutOfStock) {
-																	?>OUT OF STOCK - click here to order (please give at least 14 days notice)<?php
-																} else {
-																	?>Online shopping isn't quite set up yet - click here to put in an order!<?php
-																}
+															<?php
+															if ($allOutOfStock) {
 																?>
-															</a>
+																<a href="mailto:info@rubydemure.com">
+																	OUT OF STOCK - click here to order (please give at least 14 days notice)
+																</a>
+																<?php
+															} else {
+																?>
+																<a href="mailto:info@rubydemure.com">
+																	Online shopping isn't quite set up yet - click here to put in an order!
+																</a>
+																<?php
+																
+																/* DEBUG *
+																// START PAYPAL ADD-TO-CART FORM
+																?>
+																<form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+																	<input type="hidden" name="cmd" value="_s-xclick">
+																	<input type="hidden" name="hosted_button_id" value="48B3VTYAJFBTG">
+																	<table class="tblStdFull">
+																		<tr>
+																			<td>
+																				<input type="hidden" name="on0" value="Colour">Colour
+																			</td>
+																			<td>
+																				<select name="os0">
+																					<option value="Red and gold">Red and gold </option>
+																					<option value="Black and gold">Black and gold </option>
+																					<option value="Blue and gold">Blue and gold </option>
+																					<option value="Pink and gold">Pink and gold </option>
+																					<option value="Purple and gold">Purple and gold </option>
+																					<option value="White and gold">White and gold </option>
+																					<option value="Yellow and gold">Yellow and gold </option>
+																					<option value="Green and gold">Green and gold </option>
+																				</select>
+																			</td>
+																			<td>
+																				<input type="hidden" name="on1" value="Size">Size
+																			</td>
+																			<td>
+																				<select name="os1">
+																					<option value="Medium">Medium </option>
+																				</select>
+																			</td>
+																			<td>
+																				<input type="image" name="submit" border="0" 
+																					src="https://www.paypalobjects.com/en_US/i/btn/btn_cart_LG.gif" 
+																					alt="PayPal - The safer, easier way to pay online!" />
+																				<img alt="" border="0" width="1" height="1" 
+																					src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" />
+																			</td>
+																		</tr>
+																	</table>
+																</form>
+																<?php
+																// END PAYPAL ADD-TO-CART FORM
+																/* DEBUG */
+																
+															}//if $allOutOfStock
+															?>
 															</font>
 														</td>
 													</tr>
@@ -444,41 +496,48 @@ else
 													        		<tr><td colspan="2"><?php echo $Description; ?></td></tr>
 													        		<tr><td><br/></td></tr>
 																<?php
+																// Bespoke only:
 																if ($CategoryID == 1) {
 																	?><tr><td>Made for:</td><td><?php echo $Customer; ?></td></tr><?php
 																}
-																?>
-																<tr>
-																	<td valign="top" style="white-space:nowrap;">Basic Details:</td>
-																	<td>
-																		<?=$Shape?>-shaped 
-																		<?php
-																		if ($HasTassel == 1) {
-																			echo 'tasseled ';
-																		}
-																		echo strtolower($Type).' ('.strtolower($Category).')';
-																		
-																		// For bespoke only, show the colours (no separate colours tab)
-														        			// Split the colour names away from the hex values (we only need the names here)
-														        			$colours = array();
-														        			foreach ($options as $option) {
-																			foreach ($option['Colours'] as $colour) {
-																			    $colours[] = $colour['Name'];
+																// Don't show basic details for garters or collars
+																if ($ProductTypeID != 6 && $ProductTypeID != 11) {
+																	?>
+																	<tr>
+																		<td valign="top" style="white-space:nowrap;">Basic Details:</td>
+																		<td>
+																			<?=$Shape?>-shaped 
+																			<?php
+																			if ($HasTassel == 1) {
+																				echo 'tasseled ';
 																			}
-																		}
-																		if ($CategoryID == 1) {
-																			echo ' in '.formatColourString($colours, true/*suppress title case*/);
-																		}
-																		?>
-																	</td>
-																</tr>
+																			echo strtolower($Type).' ('.strtolower($Category).')';
+																			
+																			// For bespoke only, show the colours (no separate colours tab)
+															        			// Split the colour names away from the hex values (we only need the names here)
+															        			$colours = array();
+															        			foreach ($options as $option) {
+																				foreach ($option['Colours'] as $colour) {
+																				    $colours[] = $colour['Name'];
+																				}
+																			}
+																			if ($CategoryID == 1) {
+																				echo ' in '.formatColourString($colours, true/*suppress title case*/);
+																			}
+																			?>
+																		</td>
+																	</tr>
 													        		<tr><td><br/></td></tr>
-																<?php
-																if ($sMaterials != "") {
-																	?><tr><td valign="top">Materials:</td><td><?=$sMaterials?></td></tr><?php
+																	<?php
 																}
+																if (isset($sMaterials) && $sMaterials != '') {
+																	echo '<td valign="top">Materials:</td><td>'.$sMaterials.'</td></tr>';
+																}
+																if (isset($otherDetails) && $otherDetails != '') {
+																	echo '<tr><td><br/></td></tr>';
+																	echo '<tr><td colspan="2">'.$otherDetails.'</td></tr>';
+																}//if
 																?>
-																<tr><td colspan="2"><?=$otherDetails?></td></tr>
 															</table>
 														    </div>
 														    
