@@ -90,13 +90,26 @@ function getFullImagePath($path, $categoryId, $isThumb=FALSE)
 	// Return the full path
 	return $fullPath;
 }
-function getFullImagePath_TEMP($path, $categoryId, $size=1)
+
+/**
+ * Gets the root-relative filepath for a product image given the filename stored in the DB, the 
+ * product ID and what size we want e.g. medium
+ * 
+ * @param	int	$productId	- the ID of the category the product's in e.g. 1=bespoke
+ * @param	string	$filename	- the bulk of the filepath, as stored in the DB (without "/images/bespoke" etc.)
+ * @param	int	$size		- OPTIONAL(default:1) 1=full, 2=medium, 3=small, 4=thumbnail
+ * 
+ * @return	string	$fullPath	- the full filepath from the root directory (starting with "/")
+ * 
+ * @author	Darina Prior
+ */
+function getProductImagePath($productId, $filename, $size=1)
 {
 	// Start with the basics
 	$fullPath = '/images';
 	
 	// Handle blank images
-	if (!isset($path) || $path == '') {
+	if (!isset($filename) || $filename == '') {
 		switch($size) {
 			case 1:
 				// Full size
@@ -119,6 +132,7 @@ function getFullImagePath_TEMP($path, $categoryId, $size=1)
 				$fullPath .= '/img_not_avail_200.gif';
 		}//switch
 	} else {
+		// Product images are under the "products" directory
 		$fullPath .= '/products';
 		
 		// Use the correct path for the image size we want
@@ -143,24 +157,12 @@ function getFullImagePath_TEMP($path, $categoryId, $size=1)
 				// Default to medium
 				$fullPath .= '/medium';
 		}//switch
-	
-		// Fill in the category bit
-		switch($categoryId) {
-			case 1:
-				$fullPath .= '/bespoke';
-				break;
-			case 2:
-				$fullPath .= '/pick_n_mix';
-				break;
-			case 3:
-				$fullPath .= '/stock';
-				break;
-			default:
-				// stay in the main images folder
-		}
 		
-		// Finally, add on whatever's in the database
-		$fullPath .= '/'.$path;
+		// All the product images are in a subdirectory named with the product's ID
+		$fullPath .= '/'.$productId;
+		
+		// Finally, add on the filename
+		$fullPath .= '/'.$filename;
 	}
 	
 	// Return the full path
