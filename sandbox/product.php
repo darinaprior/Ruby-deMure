@@ -16,10 +16,15 @@ else
 	$qProduct		= "select * from Product where ProdID = ".$g_iProdID." limit 1";
 	$rsProduct		= mysql_query($qProduct, $cnRuby);
 	$recProduct		= mysql_fetch_array($rsProduct);
-	$Title			= $recProduct['Title'];
-								
-	$sPageTitle		= $Title;
-	$sPageKeywords	= $Title.', product';
+	$id			= $recProduct['ProdID'];
+	if ($g_iProdID != $id) {
+		?><a href="/">Product not found.  Please return to the home page by clicking here.</a><?php
+		exit;
+	}
+	
+	$Title = $recProduct['Title'];	
+	$sPageTitle = $Title;
+	$sPageKeywords = $Title.', product';
 	$has_tabs = TRUE;	// this page contains tabs
 	$hasZoom = TRUE;	// this page contains image zoom functionality
 	$hasRowScroller = TRUE;	// this page contains image scrolling functionality
@@ -313,6 +318,16 @@ else
 													$stmt->close();
 												}
 												
+												// Make sure we have at least one image
+												if (COUNT($images) == 0) {
+													$images[] = array(
+														'Full' => getProductImagePath($g_iProdID, '', 1/*full*/),
+														'Medium' => getProductImagePath($g_iProdID, '', 2/*medium*/),
+														'Thumb' => getProductImagePath($g_iProdID, '', 4/*thumb*/),
+														'Caption' => '',
+													);
+												}
+												
 												// START - image gallery (using jQZoom and rowscroller)
 												?>
 												<tr>
@@ -527,7 +542,6 @@ else
 																			?>
 																		</td>
 																	</tr>
-													        		<tr><td><br/></td></tr>
 																	<?php
 																}
 																if (isset($sMaterials) && $sMaterials != '') {
