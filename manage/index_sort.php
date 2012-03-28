@@ -23,6 +23,7 @@ require_once 'include/connection.php';
 			<tr><td><a href="sort_order_collections.php">Rearrange Collections</a></td></tr>
 			<tr><td><a href="sort_order_bespoke.php">Rearrange Bespoke Products</a></td></tr>
 			<tr><td><a href="sort_order_ready_made.php">Rearrange Ready-Made Products</a></td></tr>
+			<tr><td><a href="sort_order_product_images.php">Rearrange Product Images</a></td></tr>
 		</table>
 
 	<!-- end centering table -->	

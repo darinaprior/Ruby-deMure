@@ -6,31 +6,45 @@ $directory = '';
 if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
 	$productId = intval($_REQUEST['pid']);
 }
-if (isset($_REQUEST['path']) && $_REQUEST['path'] != '') {
+if (isset($_REQUEST['process']) && $_REQUEST['process'] == 1) {
 
 	try {
 		$directory = $_REQUEST['path'];
-		$fullPath = '../images/products/full/'.$directory;
+		$pathFull = '../images/products/full/'.$productId;
+		$pathMedium = '../images/products/medium/'.$productId;
+		$pathSmall = '../images/products/small/'.$productId;
+		$pathThumb = '../images/products/thumb/'.$productId;
 		
-		// Check that the directory exists
-		if(!file_exists($fullPath) || !is_dir($fullPath)) {
-			$error = 'ERROR: The directory does not exist';
+		// Create the directories if they don't exist
+		if (!is_dir($pathFull)) {
+			if (!mkdir($pathFull)) {
+				$error .= '<br/>ERROR: Unable to create FULL directory '.$pathFull;
+			}
 		}
-		/*
-		// Check that it's writable		
-		if (is_writable($fullPath)) {
-			$error = 'ERROR: The directory is not writable';
+		if (!is_dir($pathMedium)) {
+			if (!mkdir($pathMedium)) {
+				$error .= '<br/>ERROR: Unable to create MEDIUM directory '.$pathMedium;
+			}
 		}
-		*/
+		if (!is_dir($pathSmall)) {
+			if (!mkdir($pathSmall)) {
+				$error .= '<br/>ERROR: Unable to create SMALL directory '.$pathSmall;
+			}
+		}
+		if (!is_dir($pathThumb)) {
+			if (!mkdir($pathThumb)) {
+				$error .= '<br/>ERROR: Unable to create THUMB directory '.$pathThumb;
+			}
+		}
+		
 	} catch (Exception $e) {
-		$error = 'ERROR: '.$e->getMessage();
+		$error .= '<br/>ERROR: '.$e->getMessage();
 	}
 	
 	// If OK then redirect to step 2
 	if ($error == '') {
 		$redirect = 'insert_images_product_step2.php';
 		$redirect .= '?pid='.$productId;
-		$redirect .= '&path='.$directory;
 		header('Location: '.$redirect);
 	}
 }
@@ -88,17 +102,16 @@ echo $headerTable;
 	?>
 	<tr>
 		<td colspan="9" style="font-size:12px;">
-			<h3>Specify the MAIN image directory within the "products" directory</h3>
-			e.g. if the FULL SIZE images will go in
-			<b>"/images/products/stock/valentine/disco"</b>
-			<br/>then specify here 
-			<b>"stock/valentine/disco"</b>
-			<br/>All other sized image will sort themselves out e.g. thumbnails
-			<br/><br/>N.B.  The directory must already exist
+			<h4>The following steps will place images in these directories 
+			(and create them if necessary):</h4>
+			/images/products/full/<?php echo $productId;?>
+			<br/>/images/products/medium/<?php echo $productId;?>
+			<br/>/images/products/small/<?php echo $productId;?>
+			<br/>/images/products/thumb/<?php echo $productId;?>
 			<br/><br/>
 			<form method="get">
-				<input type="text" id="path" name="path" value="<?php echo $directory; ?>" />
 				<input type="hidden" id="pid" name="pid" value="<?php echo $productId; ?>" />
+				<input type="hidden" name="process" value="1" />
 				<input type="submit" value="Continue to step 2 >>" />
 			</form>
 		</td>

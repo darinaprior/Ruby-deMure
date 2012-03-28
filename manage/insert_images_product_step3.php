@@ -1,23 +1,17 @@
 <?php
 require_once 'include/check_login.php';
-/**
- * N.B. JS CROPPING CODE ADAPTED FROM...
- * 
- * Jcrop image cropping plugin for jQuery
- * Example cropping script
- * @copyright 2008-2009 Kelly Hallman
- * More info: http://deepliquid.com/content/Jcrop_Implementation_Theory.html
- */
+require_once 'include/connection.php';
+require_once 'include/functions.php';
 
-// Get the user inputs
+/** Get the user inputs */
 $productId = 0;
-$directory = '';
+$isLowRes = FALSE;
 $caption = '';
 if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
 	$productId = intval($_REQUEST['pid']);
 }
-if (isset($_REQUEST['path']) && $_REQUEST['path'] != '') {
-	$directory = $_REQUEST['path'];
+if (isset($_REQUEST['lowres']) && $_REQUEST['lowres'] == 'on') {
+	$isLowRes = TRUE;
 }
 if (isset($_REQUEST['cap']) && $_REQUEST['cap'] != '') {
 	$caption = $_REQUEST['cap'];
@@ -27,175 +21,128 @@ if (isset($_REQUEST['cap']) && $_REQUEST['cap'] != '') {
  * Get the full path to the TEMP directory under the user's specified directory
  * (relative to current directory)
  */
-$fullPathTemp = '../images/products/full/'.$directory.'/temp/';
+$fullPathTemp = '../images/products/full/'.$productId.'/temp/';
+
+/** Get all the images in there (only accept jpg, JPG, png and PNG) */
+$filetypes = '{*.jpg,*.JPG,*.png,*.PNG}';
+$images = glob($fullPathTemp.$filetypes, GLOB_BRACE);
+
+/** Did the user just post one of the forms? */
+$processingMain = FALSE;
+$processingThumbs = FALSE;
+$processingThumbsAuto = FALSE;
+$sourcePath = '';
+$sourceWidth = 0;
+$sourceHeight = 0;
+$sourceX = 0;
+$sourceY = 0;
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+	if ($_POST['action'] == 'main') {
+		$processingMain = TRUE;
+	} else if ($_POST['action'] == 'thumbs') {
+		$processingThumbs = TRUE;
+	}
+	
+	/** 
+	 * Get the full path (relative to current directory) for the SOURCE image
+	 * i.e. the FIRST image in the temp directory - we're processing one at a time
+	 */
+	$sourcePath = $images[0];
+	
+	/** Specify the width and height and the X and Y coords of the SOURCE image */
+	$sourceWidth = intval($_POST['w']);
+	$sourceHeight = intval($_POST['h']);
+	$sourceX = intval($_POST['x']);
+	$sourceY = intval($_POST['y']);
+}//if POST
 
 /** 
- * Get all the images in the TEMP directory inside the user's specified directory
- * Only accept jpg, JPG, png and PNG
+ * If the user just posted the "main" form, process the first image in the 
+ * directory to FULL and MEDIUM images
  */
-$filetypes = '{*.jpg,*.JPG,*.png,*.PNG}';
-$options = GLOB_BRACE;
-$images = glob($fullPathTemp.$filetypes, $options);
-
-// If the user just posted, process the FIRST image in the directory
-require_once 'include/connection.php';
-$processedImages = FALSE;
 $error = '';
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+$mainProcessed = FALSE;
+if ($processingMain) {
 
 	try {
-		// Source and destination filepaths MUST BE relative to the current directory
-		$sourceFile = $images[0];
-		$destLargeFile = str_replace('temp/', '', $sourceFile);
-		$destMediumFile = str_replace('/full/', '/medium/', $destLargeFile);
-		$destSmallFile = str_replace('/full/', '/small/', $destLargeFile);
-		$destThumbFile = str_replace('/full/', '/thumb/', $destLargeFile);
-		
-		// Specify the width and height and the X and Y coords of the SOURCE image
-		$sourceWidth = intval($_POST['w']);
-		$sourceHeight = intval($_POST['h']);
-		$sourceX = intval($_POST['x']);
-		$sourceY = intval($_POST['y']);
-		
-		// Specify the width and height and the X and Y coords of the DESTINATION images
-		$destLargeWidth = 300;/** @todo - CHANGE TO 700PX */
-		$destLargeHeight = 300;/** @todo - CHANGE TO 700PX */
-		$destMediumWidth = 200;
-		$destMediumHeight = 200;
-		$destSmallWidth = 90;
-		$destSmallHeight = 90;
-		$destThumbWidth = 50;
-		$destThumbHeight = 50;
-		$destLargeX = 0;
-		$destLargeY = 0;
-		$destMediumX = 0;
-		$destMediumY = 0;
-		$destSmallX = 0;
-		$destSmallY = 0;
-		$destThumbX = 0;
-		$destThumbY = 0;
-		
-		// Create the SOURCE image resource
-		$sourceImage = imagecreatefromjpeg($sourceFile);
-		
-		// Create the DESTINATION image resource with the correct height and width
-		// Use truecolor to avoid problems when resampling
-		$destLargeImage = ImageCreateTrueColor($destLargeWidth, $destLargeHeight);
-		$destMediumImage = ImageCreateTrueColor($destMediumWidth, $destMediumHeight);
-		$destSmallImage = ImageCreateTrueColor($destSmallWidth, $destSmallHeight);
-		$destThumbImage = ImageCreateTrueColor($destThumbWidth, $destThumbHeight);
-				
-		// Copy and resize the selected part of the source image with resampling to...
-		// ...the large image
-		imagecopyresampled(
-			$destLargeImage,
-			$sourceImage,
-			$destLargeX,
-			$destLargeY,
-			$sourceX,
-			$sourceY,
-			$destLargeWidth,
-			$destLargeHeight,
-			$sourceWidth,
-			$sourceHeight
+		/** Try to upload the FULL and MEDIUM images (exact dimensions selected) */
+		$uploaded = uploadProductImageExact(
+			$sourcePath, $sourceWidth, $sourceHeight, $sourceX, $sourceY, $isLowRes
 		);
-		// ...the medium image
-		imagecopyresampled(
-			$destMediumImage,
-			$sourceImage,
-			$destMediumX,
-			$destMediumY,
-			$sourceX,
-			$sourceY,
-			$destMediumWidth,
-			$destMediumHeight,
-			$sourceWidth,
-			$sourceHeight
-		);
-		// ...the small image
-		imagecopyresampled(
-			$destSmallImage,
-			$sourceImage,
-			$destSmallX,
-			$destSmallY,
-			$sourceX,
-			$sourceY,
-			$destSmallWidth,
-			$destSmallHeight,
-			$sourceWidth,
-			$sourceHeight
-		);
-		// ...the thumb image
-		imagecopyresampled(
-			$destThumbImage,
-			$sourceImage,
-			$destThumbX,
-			$destThumbY,
-			$sourceX,
-			$sourceY,
-			$destThumbWidth,
-			$destThumbHeight,
-			$sourceWidth,
-			$sourceHeight
-		);
+		if ($uploaded !== TRUE) {
+			$error .= $uploaded;
+		}
 		
-		// Output to the destination image files
-		imagejpeg($destLargeImage,  $destLargeFile, 100/*quality*/);
-		imagejpeg($destMediumImage,  $destMediumFile, 100/*quality*/);
-		imagejpeg($destSmallImage,  $destSmallFile, 100/*quality*/);
-		imagejpeg($destThumbImage,  $destThumbFile, 100/*quality*/);
+ 		/** Image processed (with or without errors) */
+		$mainProcessed = TRUE;
 		
-		// Finally, delete the source file from the temp directory
-		if (!unlink($sourceFile)) {
+		/** Map the filename and caption to the product (if not already mapped) */
+		$parts = explode('/', $sourcePath);
+		$filename = $parts[COUNT($parts)-1];
+		$mapped = mapImageToProduct($productId, $filename, $caption);
+		if ($mapped !== TRUE) {
+			$error .= $mapped;
+		}
+		
+		/** 
+		 * If the user selected a square area, we don't have to get their input for
+		 * the small images - just process them automatically 
+		 */
+		if ($sourceWidth == $sourceHeight) {
+			$processingThumbsAuto = TRUE;
+		}
+		
+	} catch (Exception $e) {
+		$mainProcessed = TRUE;
+		$error .= '<br/>ERROR: '.$e->getMessage();
+	}
+}
+
+/** 
+ * If the user just posted the "thumbs" form OR if we've just processed a SQUARE "main" image, 
+ * then process the first image in the directory to SMALL and THUMBNAIL images
+ */
+$thumbsProcessed = FALSE;
+if ($processingThumbs || $processingThumbsAuto) {
+
+	/** Turn off $mainProcessed so we don't mix up the forms later on */
+	$mainProcessed = FALSE;
+
+	try {
+		/** 
+		 * If we're processing automatically (i.e. it's a square selection) then
+		 * use the original "temp" file as the source image.
+		 * But if we're here because the user just submitted the "thumbs" form
+		 * then use the recently created LARGE file as the source image.
+		 */
+		if ($processingThumbsAuto) {
+			$sourcePathForThumbs = $sourcePath;
+		} else {
+			$sourcePathForThumbs = str_replace('/temp', '', $sourcePath);
+		}
+		
+		/** Try to upload the SMALL and THUMBNAIL images (always square) */
+		$uploaded = uploadProductImageSquare($sourcePathForThumbs, $sourceWidth, $sourceX, $sourceY);
+		if ($uploaded !== TRUE) {
+			$error .= $uploaded;
+		}
+		
+ 		/** Image processed (with or without errors) */
+		$thumbsProcessed = TRUE;
+		
+		/** Delete the original source file from the TEMP directory */
+		if (!unlink($sourcePath)) {
 			$error .= '<br/>ERROR: Unable to delete the source file from the temp directory';
 		}
 		
-		// Image processed (with or without errors)
-		$processedImages = TRUE;
-		
-		/** 
-		 * Now map the image to the product in the database
-		 * Source file is in format "../images/products/USER_PATH/temp/IMAGE_NAME"
-		 * We want to strip out "../images/products" AND the first part of 
-		 * the user path e.g. "stock" AND the "temp" part
-		 * So we'll end up with "USER_PATH_WITHOUT_FIRST_PART/IMAGE_NAME"
-		 */				
-		$parts = explode('/', $sourceFile);
-		$newParts = array_slice($parts, 4);	// dump the 1st 4 parts e.g."../images/products/stock"
-		$dbFilepath = implode('/', $newParts);
-		$dbFilepath = str_replace('temp/', '', $dbFilepath);	// get rid of the "temp/" part
-		
-		// Handle empty captions
-		$formatCaption = ($caption != '') ? $caption : NULL;
-		
-		/** @todo CHECK FIRST THAT THIS RECORD DOESN'T ALREADY EXIST! *
-		// Insert into the database
-		$sql = 'INSERT INTO product_image (product_id, filepath, caption)
-			VALUES (?, ?, ?)';
-		$stmt = $mysqli->prepare($sql);
-		if ($stmt) {
-			$stmt->bind_param(
-				'iss',
-				$productId,
-				$dbFilepath,
-				$formatCaption
-			);
-			if (!$stmt->execute()) {
-				$error .= '<br/>ERROR: could not insert record into database - '.$mysqli->error;
-			}
-		} else {
-			$error .= '<br/>ERROR: could not prepare MySQL statement - '.$mysqli->error;
-		}//if $stmt
-		DEBUG*/
-		
 	} catch (Exception $e) {
-		$processedImages = TRUE;
+		$thumbsProcessed = TRUE;
 		$error .= '<br/>ERROR: '.$e->getMessage();
 	}
 	
 	/** Get all the images again as one of them may have been deleted! */
 	$images = array();
-	$images = glob($fullPathTemp.$filetypes, $options);
+	$images = glob($fullPathTemp.$filetypes, GLOB_BRACE);
 	
 	/** If there are no images left, delete the TEMP directory */
 	if (COUNT($images) == 0) {
@@ -237,7 +184,7 @@ if ($stmt) {
 	<script src="/jcrop/js/jquery.Jcrop.js"></script>
 	<script language="Javascript">
 		$(function(){
-
+			// Initialise the Jcrop box and restrict to square selection by default
 			$('#cropbox').Jcrop({
 				aspectRatio: 1,
 				onSelect: updateCoords
@@ -257,6 +204,30 @@ if ($stmt) {
 			alert('Please select a crop region then press submit.');
 			return false;
 		};
+		
+		// Once the page has loaded, allow user to remove the "square" restriction
+		$(document).ready(function() {
+			$("#restrict_dimensions").click(function() {
+				
+				// Scrap the Jcrop box
+				$.Jcrop('#cropbox').destroy();
+				
+				// Re-initialise the Jcrop box...
+				if ($("#restrict_dimensions").is(":checked")) {
+					// ...with square restriction re-applied
+					$('#cropbox').Jcrop({
+						aspectRatio: 1,
+						onSelect: updateCoords
+					});
+				} else {
+					// ...with square restriction removed
+					$('#cropbox').Jcrop({
+						onSelect: updateCoords
+					});
+				}
+			});
+		});
+		
 	</script>
 </head>
 
@@ -294,40 +265,100 @@ $imageName = $parts[COUNT($parts)-1];
 ?>
 <table border="1">
 	<?php
-	if ($processedImages) {
+	if ($mainProcessed || $thumbsProcessed) {
 		if (isset($error) && $error != '') {
 			echo '<tr><td style="color:red;"><h2>'.$error.'</h2></td></tr>';
 		} else {
 			echo '<tr><td style="color:green;"><h2>DONE!</h2></td></tr>';
 		}//if $error
-	}//if $processedImages
+	}//if
+	
+	
+	if ($mainProcessed) {
+		/** 
+		 * THUMBS FORM
+		 * When selecting an area for the smaller images, we want to work from the
+		 * larger image we've just created rather than the original source file
+		 */
+		$url = str_replace('/temp', '', $url);
+		$action = 'thumbs';
+		$formTitle = 'SMALLER IMAGES';
+		$showInputRestrict = FALSE;
+		$showInputLowRes = FALSE;
+		$showInputCaption = FALSE;
+		$instructions = 'The image will be automatically resized to the correct dimensions for 
+				the SMALL and THUMBNAIL images.  It will be saved to the 
+				appropriate directories and the TEMP source file will be deleted.';
+	} else {
+		/** MAIN FORM */
+		$action = 'main';
+		$formTitle = 'MAIN IMAGES';
+		$showInputRestrict = TRUE;
+		$showInputLowRes = TRUE;
+		$showInputCaption = TRUE;
+		$instructions = 'The image will be automatically resized to the correct dimensions for 
+				the FULL and MEDIUM images.  It will be saved to the 
+				appropriate directories and added to the database.';
+		$instructions .= '<br/>For square selections, the SMALL and THUMBNAIL images will
+				also be created automatically.';
+		$instructions .= '<br/>For non-square selections, the next step will be for the
+				SMALL and THUMBNAIL images.';
+	}//if $mainProcessed
 	?>
 	<tr>
 		<td colspan="9" style="font-size:12px;">
 			<div id="outer" class="outer">
 			<div class="jcExample">
 			<div class="article">
-				<h3><?php echo $imageName; ?></h3>
-				<img src="<?php echo $url; ?>" id="cropbox" style="max-height:500px; max-width:500px;" />
+				<h3><?php echo $formTitle; ?> [<?php echo $imageName; ?>]</h3>
+				
+				<?php
+				if ($showInputRestrict) {
+					echo '<input type="checkbox" id="restrict_dimensions" checked="checked" />';
+					echo 'Restrict to square';
+				}
+				?>
+				
+				<img src="<?php echo $url; ?>" id="cropbox" />
 				<form method="post" onsubmit="return checkCoords();">
-					<input type="text" id="cap" name="cap" value="" />
+					<?php
+					if ($showInputRestrict) {
+						echo '<input type="checkbox" id="lowres" name="lowres" />';
+						echo 'LOW RES (MAX 300px)<br/>';
+					}
+					/** Only show the caption input for the "main" form */
+					if ($showInputCaption) {
+						echo 'Caption: <input type="text" id="cap" name="cap" value="" />';
+					}
+					?>
 					<br/>
 					<input type="hidden" id="x" name="x" />
 					<input type="hidden" id="y" name="y" />
 					<input type="hidden" id="w" name="w" />
 					<input type="hidden" id="h" name="h" />
 					<input type="hidden" id="pid" name="pid" value="<?php echo $productId; ?>" />
-					<input type="hidden" id="path" name="path" value="<?php echo $directory; ?>" />
+					<input type="hidden" name="action" value="<?php echo $action; ?>" />
 					<input type="submit" value="Crop, resize and save" />
+
 				</form>
-				The image will be automatically resized to the correct dimensions for 
-				the full, medium, small and thumbnail images.  It will be saved to the 
-				appropriate directories and added to the database.
+				<?php echo $instructions; ?>
 			</div>
 			</div>
 			</div>
 		</td>
-	</tr>		
+	</tr>
+	
+	<?php
+	/** Form to move on to the next step **/
+	?>
+	<tr>
+		<td colspan="9" style="font-size:12px;">
+			<form method="get" action="sort_order_product_images.php">
+				<input type="hidden" name="pid" value="<?php echo $productId; ?>" />
+				<input type="submit" value="Continue to sort order >>" />
+			</form>
+		</td>
+	</tr>
 </table>
 
 <!-- end of centering table -->	

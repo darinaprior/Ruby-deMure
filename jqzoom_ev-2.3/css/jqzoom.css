@@ -75,21 +75,21 @@
 }
 .zoomWrapperTitle{
 	display:block;
-	background:#999;
-	color:#FFF;
+	background:#fff;
+	color:#000;
 	height:18px;
 	line-height:18px;
 	width:100%;
-  overflow:hidden;
+	overflow:hidden;
 	text-align:center;
-	font-size:10px;
-  position:absolute;
-  top:0px;
-  left:0px;
-  z-index:120;
-  -moz-opacity:0.6;
-  opacity: 0.6;
-  filter: alpha(opacity = 60);
+	font-size:12px;
+	position:absolute;
+	top:0px;
+	left:0px;
+	z-index:120;
+	-moz-opacity:0.6;
+	opacity: 0.6;
+	filter: alpha(opacity = 60);
 }
 .zoomWrapperImage{
 	display:block;
