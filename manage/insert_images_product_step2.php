@@ -3,23 +3,21 @@
 $uploaded = FALSE;
 $error = '';
 $productId = 0;
-$directory = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	$productId = intval($_POST['pid']);
-	$directory = $_POST['path'];
 	
 	try {
 		// Get the details we'll need from the file the user selected
 		$fileName = $_FILES['userfile']['name'];
 		$fileTempName = $_FILES['userfile']['tmp_name'];
 		
-		// We'll upload to a TEMP directory inside the requested directory
+		// We'll upload to a TEMP directory inside the "full" directory
 		// Path must be relative to current directory
-		$tempDirectory = '../images/products/full/'.$directory.'/temp/';
+		$tempDirectory = '../images/products/full/'.$productId.'/temp/';
 		if(!file_exists($tempDirectory) || !is_dir($tempDirectory)) {
 			if (!mkdir($tempDirectory)) {
-				$error = 'ERROR: failed to create TEMP directory';
+				$error .= '<br/>ERROR: failed to create TEMP directory';
 			}
 		}
 		
@@ -28,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if ( move_uploaded_file($fileTempName, $uploadFile) ) {
 			$uploaded = TRUE;
 		} else {
-			$error = 'ERROR: failed to upload the file';
+			$error .= '<br/>ERROR: failed to upload the file';
 		}
 		
 	} catch (Exception $e) {
@@ -37,9 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else {
 	if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
 		$productId = intval($_REQUEST['pid']);
-	}
-	if (isset($_REQUEST['path']) && $_REQUEST['path'] != '') {
-		$directory = $_REQUEST['path'];
 	}
 }//if POST
 
@@ -106,13 +101,11 @@ echo $headerTable;
 				
 				<input type="hidden" name="MAX_FILE_SIZE" value="512000" />
 				<input type="hidden" name="pid" value="<?php echo $productId; ?>" />
-				<input type="hidden" name="path" value="<?php echo $directory; ?>" />
 				<input type="submit" value="Upload file" />
 			</form>
 			<br/><br/>
 			<form method="get" action="insert_images_product_step3.php">
 				<input type="hidden" name="pid" value="<?php echo $productId; ?>" />
-				<input type="hidden" name="path" value="<?php echo $directory; ?>" />
 				<input type="submit" value="Continue to step 3 >>" />
 			</form>
 		</td>
