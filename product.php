@@ -16,16 +16,47 @@ else
 	$qProduct		= "select * from Product where ProdID = ".$g_iProdID." limit 1";
 	$rsProduct		= mysql_query($qProduct, $cnRuby);
 	$recProduct		= mysql_fetch_array($rsProduct);
-	$Title			= $recProduct['Title'];
-								
-	$sPageTitle		= $Title;
-	$sPageKeywords	= $Title.', product';
+	$id			= $recProduct['ProdID'];
+	if ($g_iProdID != $id) {
+		?><a href="/">Product not found.  Please return to the home page by clicking here.</a><?php
+		exit;
+	}
+	
+	$Title = $recProduct['Title'];	
+	$sPageTitle = $Title;
+	$sPageKeywords = $Title.', product';
 	$has_tabs = TRUE;	// this page contains tabs
+	$hasZoom = TRUE;	// this page contains image zoom functionality
+	$hasRowScroller = TRUE;	// this page contains image scrolling functionality
 	require_once 'Include/header.php';
 	require_once 'Include/functions.php';
 	?>
 	
-		<table class="tblBody" cellpadding="0">
+	<script type="text/javascript">
+		$jq(document).ready(function(){
+			// Initialise the image zoom functionality
+			var options = {
+				zoomWidth: 300,
+				zoomHeight: 300,
+				title: true,
+				showEffect: 'fadein',
+				hideEffect: 'fadeout'
+			};
+			$jq('.jqz_anchor').jqzoom(options);
+			
+			// Initialise the thumbnail scroller
+			$jq('.scroller').rowscroller({
+				navUp: '#scroller-up',
+				navDown: '#scroller-down',
+				visibleRows: 2,
+				rowsToScroll: 2,
+				itemsPerRow: 5,
+				navDisabledClass: 'disabled'
+			});
+		});
+	</script>
+	
+	<table class="tblBody" cellpadding="0">
 
 		<tr>
 			<td class="tdR4C1">&nbsp;</td>
@@ -263,150 +294,95 @@ else
 										<td valign="top" width="40%">
 											<table class="tblStdFullCentre">
 												<?php
-												// Get the first 3 images for this product
+												// Get all the images for this product (3 sizes for each)
 												$images = array();
-												$sql = 'SELECT DISTINCT filepath
-													FROM product_image
+												$sql = 'SELECT DISTINCT filename, caption
+													FROM product_image_TEMP
 													WHERE product_id = ?
-													AND filepath IS NOT NULL
-													ORDER BY id
-													LIMIT 3';
+													AND filename IS NOT NULL
+													ORDER BY IFNULL(priority, 1000), id';
 												$stmt = $mysqli->prepare($sql);
 												if ($stmt) {
 													$stmt->bind_param('i', intval($g_iProdID));
-													$stmt->bind_result($path);
+													$stmt->bind_result($name, $caption);
 													$stmt->execute();
 													while ($stmt->fetch()) {
-														// Get the full filepath
-														$fullPathThumb = getFullImagePath($path, $CategoryID, TRUE/*thumbnail*/);
-														$images[] = $fullPathThumb;
-													}
+														// Get the filepaths for the various image sizes
+														$images[] = array(
+															'Full' => getProductImagePath($g_iProdID, $name, 1/*full*/),
+															'Medium' => getProductImagePath($g_iProdID, $name, 2/*medium*/),
+															'Thumb' => getProductImagePath($g_iProdID, $name, 4/*thumb*/),
+															'Caption' => htmlspecialchars($caption),
+														);
+													}//while
 													$stmt->close();
 												}
 												
-												foreach ($images as $path) {
-													?>
-													<td align="center">
-														<div style="width:90px; height:90px;">
-															<a href="gallery.php?pid=<?php echo $g_iProdID; ?>">
-																<img src="<?php echo $path; ?>" alt="More images" border="0" />
-															</a>
-														</div>
-													</td>
-													<?php
-												}//foreach
+												// Make sure we have at least one image
+												if (COUNT($images) == 0) {
+													$images[] = array(
+														'Full' => getProductImagePath($g_iProdID, '', 1/*full*/),
+														'Medium' => getProductImagePath($g_iProdID, '', 2/*medium*/),
+														'Thumb' => getProductImagePath($g_iProdID, '', 4/*thumb*/),
+														'Caption' => '',
+													);
+												}
+												
+												// START - image gallery (using jQZoom and rowscroller)
 												?>
-												</tr>
-												<tr><td colspan="3"><a href="gallery.php?pid=<?=$g_iProdID?>"><b>Click for image gallery &raquo;</b></a></td></tr>
-
-												<tr><td><br/><br/></td></tr>
-												<?php
-												// General info about the product type
-												if ($ProductTypeID == 1)	// pasties
-												{
-													?>
-													<tr>
-														<td width="100%" colspan="3" style="font-size:10px; text-align:left;">
-															All of my 
-															<?php
-															if ($HasTassel == 1)
-															{
-																?>tasseled <?php
-															}
-															?>
-															pasties:
-															<ul>
-																<li>are hand-made with an emphasis on quality and finish</li>
-																<li>have sewn seams (not glued seams)</li>
-																<?php
-																if ($HasTassel == 1)
-																{
-																	?><li>have tassels that are handmade from hand-dyed fringe</li><?php
-																}
-																?>
-																<li>have comfortable and durable leatherette backing</li>
-																<li>come in a lovely giftbox with care card and tape to stick them on!</li>
-															</ul>
-														</td>
-													</tr>
-													<?php
-												}//if pasties
-												else if ($ProductTypeID == 4)	// stocking toppers
-												{
-													?>
-													<tr>
-														<td width="100%" colspan="3" style="font-size:10px; text-align:left;">
-															All of my stocking toppers:
-															<ul>
-																<li>are hand-made with an emphasis on quality and finish</li>
-																<li>can be used with both stockings and hold-ups</li>
-																<li>have comfortable felt backing</li>
-																<li>have metal garter grips (not plastic)</li>
-																<li>come in a lovely giftbox with care card and instructions</li>
-															</ul>
-														</td>
-													</tr>
-													<?php
-												}//if stocking toppers
-												else if ($ProductTypeID == 5)	// eye-patch
-												{
-													?>
-													<tr>
-														<td width="100%" colspan="3" 
-															style="font-size:10px; text-align:left;">
-															All of my eye-patches:
-															<ul>
-																<li>are hand-made with an emphasis on quality and finish</li>
-																<li>have sewn seams (not glued seams)</li>
-																<li>have comfortable and durable leatherette backing</li>
-																<li>are attached with adjustable elastic</li>
-																<li>come in a lovely giftbox</li>
-															</ul>
-														</td>
-													</tr>
-													<?php
-												}//if eye-patch
-												else if ($ProductTypeID == 10)	// bow-tie
-												{
-													?>
-													<tr>
-														<td width="100%" colspan="3" 
-															style="font-size:10px; text-align:left;">
-															All of my bow-ties:
-															<ul>
-																<li>are hand-made with an emphasis on quality and finish</li>
-																<li>can be made to fit your neck size</li>
-																<li>can be made to match other items</li>
-																<li>come in a lovely giftbox</li>
-
-															</ul>
-															<a href="/sizing.php#bowties">Click here for sizing details</a>
-															<br/><a href="http://www.videojug.com/film/how-to-tie-a-bow-tie" class="external" target="_blank">And here for video instructions on how to tie your bow tie</a
-															<br/><br/>
-														</td>
-													</tr>
-													<?php
-												}//if eye-patch
-												?>
-
 												<tr>
-													<td colspan="3" align="center">
-														<?php
-														if ($CategoryID == 1)
-														{
-															?>
-															<a href="bespoke.php">&lt;&nbsp;Back to <?=$Category?></a>
-															<?php
-														}
-														else if ($CategoryID == 3)
-														{
-															?>
-															<a href="collection.php?cid=<?=$CollectionID?>">&lt;&nbsp;Back to <?=$Collection?></a>
-															<?php
-														}
-														?>
+													<td style="text-align:center; height:200px; width:100%; padding-left:48px;">
+														<a href="<?php echo $images[0]['Full']; ?>" class="jqz_anchor" rel="jqz_gallery">
+														    <img src="<?php echo $images[0]['Medium']; ?>" title="<?php echo $images[0]['Caption']; ?>" />
+														</a>
 													</td>
 												</tr>
+												<tr><td>Hover above to zoom.  Click below to change the image.</td></tr>
+												<tr>
+													<td>
+														<table cellpadding="0" cellspacing="0">
+															<tr>
+																<td>
+																	<div class="scroller-nav">
+																		<a href="#" id="scroller-up"></a>
+																	</div>
+																</td>
+																<td>
+																	<div class="scroller-content">
+																		<div class="scroller">
+																			<?php
+																			foreach ($images as $key => $paths) {
+																				?>
+																				<div>
+																					<a <?php if($key == 0) { echo 'class="zoomThumbActive"';} ?> 
+																						href="javascript:void(0);" 
+																						rel="{
+																							gallery: 'jqz_gallery', 
+																							smallimage: '<?php echo $paths['Medium']; ?>', 
+																							largeimage: '<?php echo $paths['Full']; ?>', 
+																							zoomWrapperTitle: '<?php echo $paths['Caption']; ?>'
+																						}">
+																					    <img src="<?php echo $paths['Thumb']; ?>" width="50" height="50">
+																					</a>
+																				</div>
+																				<?php
+																			}//foreach
+																			?>
+																		</div>
+																	</div>
+																</td>
+																<td>
+																	<div class="scroller-nav">
+																		<a href="#" id="scroller-down"></a>
+																	</div>
+																</td>	
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<?php
+												// END - image gallery (using jQZoom and rowscroller)
+												?>
 											</table>
 										</td>
 										<td valign="top">
@@ -426,15 +402,67 @@ else
 													<tr>
 														<td colspan="2" valign="top" align="center">
 															<font size="1">
-															<a href="mailto:info@rubydemure.com">
-																<?php
-																if ($allOutOfStock) {
-																	?>OUT OF STOCK - click here to order (please give at least 14 days notice)<?php
-																} else {
-																	?>Online shopping isn't quite set up yet - click here to put in an order!<?php
-																}
+															<?php
+															if ($allOutOfStock) {
 																?>
-															</a>
+																<a href="mailto:info@rubydemure.com">
+																	OUT OF STOCK - click here to order (please give at least 14 days notice)
+																</a>
+																<?php
+															} else {
+																?>
+																<a href="mailto:info@rubydemure.com">
+																	Online shopping isn't quite set up yet - click here to put in an order!
+																</a>
+																<?php
+																
+																/* DEBUG *
+																// START PAYPAL ADD-TO-CART FORM
+																?>
+																<form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+																	<input type="hidden" name="cmd" value="_s-xclick">
+																	<input type="hidden" name="hosted_button_id" value="48B3VTYAJFBTG">
+																	<table class="tblStdFull">
+																		<tr>
+																			<td>
+																				<input type="hidden" name="on0" value="Colour">Colour
+																			</td>
+																			<td>
+																				<select name="os0">
+																					<option value="Red and gold">Red and gold </option>
+																					<option value="Black and gold">Black and gold </option>
+																					<option value="Blue and gold">Blue and gold </option>
+																					<option value="Pink and gold">Pink and gold </option>
+																					<option value="Purple and gold">Purple and gold </option>
+																					<option value="White and gold">White and gold </option>
+																					<option value="Yellow and gold">Yellow and gold </option>
+																					<option value="Green and gold">Green and gold </option>
+																				</select>
+																			</td>
+																			<td>
+																				<input type="hidden" name="on1" value="Size">Size
+																			</td>
+																			<td>
+																				<select name="os1">
+																					<option value="Medium">Medium </option>
+																				</select>
+																			</td>
+																			<td>
+																				<input type="image" name="submit" border="0" 
+																					src="https://www.paypalobjects.com/en_US/i/btn/btn_cart_LG.gif" 
+																					alt="PayPal - The safer, easier way to pay online!" />
+																				<img alt="" border="0" width="1" height="1" 
+																					src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" />
+																			</td>
+																		</tr>
+																	</table>
+																</form>
+																<?php
+																// END PAYPAL ADD-TO-CART FORM
+																/* DEBUG */
+																
+															}//if $allOutOfStock
+															?>
 															</font>
 														</td>
 													</tr>
@@ -462,9 +490,14 @@ else
 														        	<li><a href="#tab3">Reviews</a></li>
 														        	<?php
 														        }
+														        if ($ProductTypeID == 1 || $ProductTypeID == 4 || $ProductTypeID == 5 || $ProductTypeID == 10) {
+														        	?>
+														        	<li><a href="#tab4">General Info</a></li>
+														        	<?php
+														        }
 														        ?>
-														        <li><a href="#tab4">Payment</a></li>
-														        <li><a href="#tab5">Shipping</a></li>
+														        <li><a href="#tab5">Payment</a></li>
+														        <li><a href="#tab6">Shipping</a></li>
 														    </ul>
 														</div>
 														<!-- END TAB HEADERS -->	
@@ -478,42 +511,47 @@ else
 													        		<tr><td colspan="2"><?php echo $Description; ?></td></tr>
 													        		<tr><td><br/></td></tr>
 																<?php
+																// Bespoke only:
 																if ($CategoryID == 1) {
 																	?><tr><td>Made for:</td><td><?php echo $Customer; ?></td></tr><?php
-																} else {
-																	?><tr><td>Collection:</td><td><?php echo $Collection; ?></td></tr><?php
 																}
-																?>
-																<tr>
-																	<td valign="top" style="white-space:nowrap;">Basic Details:</td>
-																	<td>
-																		<?=$Shape?>-shaped 
-																		<?php
-																		if ($HasTassel == 1) {
-																			echo 'tasseled ';
-																		}
-																		echo strtolower($Type).' ('.strtolower($Category).')';
-																		
-																		// For bespoke only, show the colours (no separate colours tab)
-														        			// Split the colour names away from the hex values (we only need the names here)
-														        			$colours = array();
-														        			foreach ($options as $option) {
-																			foreach ($option['Colours'] as $colour) {
-																			    $colours[] = $colour['Name'];
+																// Don't show basic details for garters or collars
+																if ($ProductTypeID != 6 && $ProductTypeID != 11) {
+																	?>
+																	<tr>
+																		<td valign="top" style="white-space:nowrap;">Basic Details:</td>
+																		<td>
+																			<?=$Shape?>-shaped 
+																			<?php
+																			if ($HasTassel == 1) {
+																				echo 'tasseled ';
 																			}
-																		}
-																		if ($CategoryID == 1) {
-																			echo ' in '.formatColourString($colours, true/*suppress title case*/);
-																		}
-																		?>
-																	</td>
-																</tr>
-																<?php
-																if ($sMaterials != "") {
-																	?><tr><td valign="top">Materials:</td><td><?=$sMaterials?></td></tr><?php
+																			echo strtolower($Type).' ('.strtolower($Category).')';
+																			
+																			// For bespoke only, show the colours (no separate colours tab)
+															        			// Split the colour names away from the hex values (we only need the names here)
+															        			$colours = array();
+															        			foreach ($options as $option) {
+																				foreach ($option['Colours'] as $colour) {
+																				    $colours[] = $colour['Name'];
+																				}
+																			}
+																			if ($CategoryID == 1) {
+																				echo ' in '.formatColourString($colours, true/*suppress title case*/);
+																			}
+																			?>
+																		</td>
+																	</tr>
+																	<?php
 																}
+																if (isset($sMaterials) && $sMaterials != '') {
+																	echo '<td valign="top">Materials:</td><td>'.$sMaterials.'</td></tr>';
+																}
+																if (isset($otherDetails) && $otherDetails != '') {
+																	echo '<tr><td><br/></td></tr>';
+																	echo '<tr><td colspan="2">'.$otherDetails.'</td></tr>';
+																}//if
 																?>
-																<tr><td colspan="2"><?=$otherDetails?></td></tr>
 															</table>
 														    </div>
 														    
@@ -626,8 +664,102 @@ else
 														    }//if $reviews
 														    ?>
 														    
-														    <!-- TAB 4: PAYMENT -->
+														    <!-- TAB 4: GENERAL INFO -->
 														    <div id="tab4" class="tab_content">
+													        	<table class="tblStdFull" cellpadding="2">
+													        		<?php
+																// General info about the product type
+																switch($ProductTypeID) {
+																	case 1:
+																		// pasties
+																		?>
+																		<tr>
+																			<td width="100%" colspan="3">
+																				All of my 
+																				<?php
+																				if ($HasTassel == 1)
+																				{
+																					?>tasseled <?php
+																				}
+																				?>
+																				pasties:
+																				<ul>
+																					<li>are hand-made with an emphasis on quality and finish</li>
+																					<li>have sewn seams (not glued seams)</li>
+																					<?php
+																					if ($HasTassel == 1)
+																					{
+																						?><li>have tassels that are handmade from hand-dyed fringe</li><?php
+																					}
+																					?>
+																					<li>have comfortable and durable leatherette backing</li>
+																					<li>come in a lovely giftbox with care card and tape to stick them on!</li>
+																				</ul>
+																			</td>
+																		</tr>
+																		<?php
+																		break;
+																	case 4:
+																		// stocking toppers
+																		?>
+																		<tr>
+																			<td width="100%" colspan="3">
+																				All of my stocking toppers:
+																				<ul>
+																					<li>are hand-made with an emphasis on quality and finish</li>
+																					<li>can be used with both stockings and hold-ups</li>
+																					<li>have comfortable felt backing</li>
+																					<li>have metal garter grips (not plastic)</li>
+																					<li>come in a lovely giftbox with care card and instructions</li>
+																				</ul>
+																			</td>
+																		</tr>
+																		<?php
+																		break;
+																	case 5:
+																		// eye-patch
+																		?>
+																		<tr>
+																			<td width="100%" colspan="3">
+																				All of my eye-patches:
+																				<ul>
+																					<li>are hand-made with an emphasis on quality and finish</li>
+																					<li>have sewn seams (not glued seams)</li>
+																					<li>have comfortable and durable leatherette backing</li>
+																					<li>are attached with adjustable elastic</li>
+																					<li>come in a lovely giftbox</li>
+																				</ul>
+																			</td>
+																		</tr>
+																		<?php
+																		break;
+																	case 10:
+																		// bow-tie
+																		?>
+																		<tr>
+																			<td width="100%" colspan="3">
+																				All of my bow-ties:
+																				<ul>
+																					<li>are hand-made with an emphasis on quality and finish</li>
+																					<li>can be made to fit your neck size</li>
+																					<li>can be made to match other items</li>
+																					<li>come in a lovely giftbox</li>
+					
+																				</ul>
+																				<a href="/sizing.php#bowties">Click here for sizing details</a>
+																				<br/><a href="http://www.videojug.com/film/how-to-tie-a-bow-tie" class="external" target="_blank">And here for video instructions on how to tie your bow tie</a
+																				<br/><br/>
+																			</td>
+																		</tr>
+																		<?php
+																		break;
+																}//switch
+																?>
+															</table>	
+														    </div>
+														    
+														    <!-- TAB 5: PAYMENT -->
+														    <div id="tab5" class="tab_content">
 													        	<table class="tblStdFull" cellpadding="2">
 													        		<tr>
 													        			<td valign="top"><b>PAYPAL</b></td>
@@ -660,8 +792,8 @@ else
 															</table>	
 														    </div>
 														    
-														    <!-- TAB 5: SHIPPING -->
-														    <div id="tab5" class="tab_content">
+														    <!-- TAB 6: SHIPPING -->
+														    <div id="tab6" class="tab_content">
 															<b>Where do you ship to?</b>
 															<br/>I ship to anywhere in the world.
 															

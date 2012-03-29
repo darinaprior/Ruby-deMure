@@ -16,6 +16,14 @@ include 'check_status.php';
 	if ($has_tabs) {
 		echo '<link rel="STYLESHEET" href="css/tabs.css">';
 	}
+	// Add the "image zoom" stylesheet if necessary
+	if ($hasZoom) {
+		echo '<link rel="STYLESHEET" href="/jqzoom_ev-2.3/css/jqzoom.css">';
+	}
+	// Add the "row scroller" stylesheet if necessary
+	if ($hasRowScroller) {
+		echo '<link rel="STYLESHEET" href="/css/rowscroller.css">';
+	}
 	?>
 
 	<!-- Search box styles and scripts -->
@@ -170,6 +178,17 @@ include 'check_status.php';
 	// Add the "tabs" jQuery if necessary
 	if ($has_tabs) {
 		echo '<script type="text/javascript" src="js/tabs.js"></script>';
+	}
+	
+	// Add the "image zoom" jQuery if necessary
+	if ($hasZoom) {
+		echo '<script type="text/javascript" src="/jqzoom_ev-2.3/js/jqzoom-core.js"></script>';
+	}
+	
+	// Add the "row scroller" jQuery if necessary
+	if ($hasRowScroller) {
+		echo '<script type="text/javascript" src="/js/rowscroller.js"></script>';
+		//echo '<script type="text/javascript" src="/js/rowscroller_horizontal.js"></script>';
 	}
 	?>
 	

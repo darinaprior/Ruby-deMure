@@ -92,6 +92,84 @@ function getFullImagePath($path, $categoryId, $isThumb=FALSE)
 }
 
 /**
+ * Gets the root-relative filepath for a product image given the filename stored in the DB, the 
+ * product ID and what size we want e.g. medium
+ * 
+ * @param	int	$productId	- the ID of the category the product's in e.g. 1=bespoke
+ * @param	string	$filename	- the bulk of the filepath, as stored in the DB (without "/images/bespoke" etc.)
+ * @param	int	$size		- OPTIONAL(default:1) 1=full, 2=medium, 3=small, 4=thumbnail
+ * 
+ * @return	string	$fullPath	- the full filepath from the root directory (starting with "/")
+ * 
+ * @author	Darina Prior
+ */
+function getProductImagePath($productId, $filename, $size=1)
+{
+	// Start with the basics
+	$fullPath = '/images';
+	
+	// Handle blank images
+	if (!isset($filename) || $filename == '') {
+		switch($size) {
+			case 1:
+				// Full size
+				$fullPath .= '/img_not_avail_700.gif';
+				break;
+			case 2:
+				// Medium size
+				$fullPath .= '/img_not_avail_200.gif';
+				break;
+			case 3:
+				// Small size
+				$fullPath .= '/img_not_avail_90.gif';
+				break;
+			case 4:
+				// Thumb size
+				$fullPath .= '/img_not_avail_50.gif';
+				break;
+			default:
+				// Default to medium
+				$fullPath .= '/img_not_avail_200.gif';
+		}//switch
+	} else {
+		// Product images are under the "products" directory
+		$fullPath .= '/products';
+		
+		// Use the correct path for the image size we want
+		switch($size) {
+			case 1:
+				// Full size
+				$fullPath .= '/full';
+				break;
+			case 2:
+				// Medium size
+				$fullPath .= '/medium';
+				break;
+			case 3:
+				// Small size
+				$fullPath .= '/small';
+				break;
+			case 4:
+				// Thumb size
+				$fullPath .= '/thumb';
+				break;
+			default:
+				// Default to medium
+				$fullPath .= '/medium';
+		}//switch
+		
+		// All the product images are in a subdirectory named with the product's ID
+		$fullPath .= '/'.$productId;
+		
+		// Finally, add on the filename
+		$fullPath .= '/'.$filename;
+	}
+	
+	// Return the full path
+	return $fullPath;
+}
+
+/**
  * Gets the root-relative filepath for a search results image given the path stored in the DB and
  * the search result category ID
  * 
