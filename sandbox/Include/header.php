@@ -188,7 +188,6 @@ include 'check_status.php';
 	// Add the "row scroller" jQuery if necessary
 	if ($hasRowScroller) {
 		echo '<script type="text/javascript" src="/js/rowscroller.js"></script>';
-		//echo '<script type="text/javascript" src="/js/rowscroller_horizontal.js"></script>';
 	}
 	?>
 	

@@ -390,3 +390,8 @@ span.heading
 	font-size:	16px;
 	font-weight:	bold;
 }
+input.button {
+	border: 1px solid #461b37;
+	background: #F1C9E1;
+	cursor: pointer;
+}

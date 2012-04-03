@@ -1,23 +1,25 @@
 <?php
-if ($_GET['pid'] != "")
-	$g_iProdID = $_GET['pid'];
-else
-	$g_iProdID = -1;
+// Get the user's selections
+$selectedProductId = -1;
+$selectedOptionId = -1;
+if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != "") {
+	$selectedProductId = $_REQUEST['pid'];
+}
+if (isset($_REQUEST['oid']) && $_REQUEST['oid'] != "") {
+	$selectedOptionId = $_REQUEST['oid'];
+}
 
 require_once 'Include/connection.php';
 
-if ($g_iProdID == -1)
-{
+if ($selectedProductId == -1) {
 	?><a href="/">No product ID supplied.  Please return to the home page by clicking here.</a><?php
-}
-else
-{
+} else {
 	// Get product details from main [Product] table
-	$qProduct		= "select * from Product where ProdID = ".$g_iProdID." limit 1";
+	$qProduct		= "select * from Product where ProdID = ".$selectedProductId." limit 1";
 	$rsProduct		= mysql_query($qProduct, $cnRuby);
 	$recProduct		= mysql_fetch_array($rsProduct);
 	$id			= $recProduct['ProdID'];
-	if ($g_iProdID != $id) {
+	if ($selectedProductId != $id) {
 		?><a href="/">Product not found.  Please return to the home page by clicking here.</a><?php
 		exit;
 	}
@@ -114,7 +116,7 @@ else
 									WHERE product_id = ?';
 								$stmt = $mysqli->prepare($sql);
 								if ($stmt) {
-									$stmt->bind_param('i', intval($g_iProdID));
+									$stmt->bind_param('i', intval($selectedProductId));
 									$stmt->bind_result($optionId, $leadTime, $purchaseInstructions);
 									$stmt->execute();
 									while ($stmt->fetch()) {
@@ -192,7 +194,7 @@ else
 									AND status = 1';
 								$stmt = $mysqli->prepare($sql);
 								if ($stmt) {
-									$stmt->bind_param('i', intval($g_iProdID));
+									$stmt->bind_param('i', intval($selectedProductId));
 									$stmt->bind_result($comment, $name);
 									$stmt->execute();
 									while ($stmt->fetch()) {
@@ -205,7 +207,7 @@ else
 								}
 				
 								// Get the materials used
-								$qMaterials	= "select Material.Name from ProductMaterial inner join Material on ProductMaterial.MaterialID = Material.MaterialID where ProductMaterial.ProdID = ".$g_iProdID." order by ProductMaterial.Order asc";
+								$qMaterials	= "select Material.Name from ProductMaterial inner join Material on ProductMaterial.MaterialID = Material.MaterialID where ProductMaterial.ProdID = ".$selectedProductId." order by ProductMaterial.Order asc";
 								$rsMaterials	= mysql_query($qMaterials, $cnRuby);	
 								$numMaterials	= mysql_num_rows($rsMaterials);
 								
@@ -296,22 +298,37 @@ else
 												<?php
 												// Get all the images for this product (3 sizes for each)
 												$images = array();
+												
+												// Filter on option ID if the user has selected one
+												$whereOption = '';
+												if ($selectedOptionId > 0) {
+													$whereOption = 'AND (option_id = ? OR option_id IS NULL) ';
+												}
 												$sql = 'SELECT DISTINCT filename, caption
 													FROM product_image_TEMP
 													WHERE product_id = ?
+													'.$whereOption.'
 													AND filename IS NOT NULL
 													ORDER BY IFNULL(priority, 1000), id';
 												$stmt = $mysqli->prepare($sql);
 												if ($stmt) {
-													$stmt->bind_param('i', intval($g_iProdID));
+													if ($selectedOptionId > 0) {
+														$stmt->bind_param(
+															'ii',
+															intval($selectedProductId),
+															intval($selectedOptionId)
+														);
+													} else {
+														$stmt->bind_param('i', intval($selectedProductId));
+													}
 													$stmt->bind_result($name, $caption);
 													$stmt->execute();
 													while ($stmt->fetch()) {
 														// Get the filepaths for the various image sizes
 														$images[] = array(
-															'Full' => getProductImagePath($g_iProdID, $name, 1/*full*/),
-															'Medium' => getProductImagePath($g_iProdID, $name, 2/*medium*/),
-															'Thumb' => getProductImagePath($g_iProdID, $name, 4/*thumb*/),
+															'Full' => getProductImagePath($selectedProductId, $name, 1/*full*/),
+															'Medium' => getProductImagePath($selectedProductId, $name, 2/*medium*/),
+															'Thumb' => getProductImagePath($selectedProductId, $name, 4/*thumb*/),
 															'Caption' => htmlspecialchars($caption),
 														);
 													}//while
@@ -321,9 +338,9 @@ else
 												// Make sure we have at least one image
 												if (COUNT($images) == 0) {
 													$images[] = array(
-														'Full' => getProductImagePath($g_iProdID, '', 1/*full*/),
-														'Medium' => getProductImagePath($g_iProdID, '', 2/*medium*/),
-														'Thumb' => getProductImagePath($g_iProdID, '', 4/*thumb*/),
+														'Full' => getProductImagePath($selectedProductId, '', 1/*full*/),
+														'Medium' => getProductImagePath($selectedProductId, '', 2/*medium*/),
+														'Thumb' => getProductImagePath($selectedProductId, '', 4/*thumb*/),
 														'Caption' => '',
 													);
 												}
@@ -561,12 +578,10 @@ else
 														    	?>
 															    <div id="tab2" class="tab_content">
 														        	<table class="tblStdFull" cellpadding="2">
-														        		<tr>
-														        			<td colspan="2">
-														        				<span id="colour_click_hidden"></span>
-														        				<span id="colour_click"></span>
-														        			</td>
-														        		</tr>
+												        				<form method="GET">
+												        					<input type="hidden" id="pid" name="pid" value="<?php echo $selectedProductId; ?>" />
+												        					<input type="submit" class="button" value="Show ALL photos" />
+												        				</form>
 														        		<?php
 														        		// Loop through the options...
 														        		foreach ($options as $optionId => $details) {
@@ -587,14 +602,28 @@ else
 														        			$purchaseInstructions = $details['PurchaseInstructions'];
 														        			
 														        			// LEFT: Print out little blocks of the colours, followed by the colour names
-														        			echo '<td style="border: solid 1px #0F050D; vertical-align: top;">';
-														        			echo '<table><tr>';
-														        			foreach ($hexValues as $hex) {
-														        				echo '<td style="height:20px; width:20px; background-color:#'.$hex.';"></td>';
-														        			}
-														        			echo '</tr></table>';
-														        			echo $colourString;
-														        			echo '</td>';
+														        			// At the right of the cell, show button to filter images to only this option id
+														        			?>
+														        			<td style="border: solid 1px #0F050D; vertical-align: top;">
+														        				<form method="GET">
+														        					<input type="hidden" id="pid" name="pid" value="<?php echo $selectedProductId; ?>" />
+														        					<input type="hidden" id="oid" name="oid" value="<?php echo $optionId; ?>" />
+														        					<span style="float:right;">
+														        						<input type="submit" class="button" value="Show photos">
+														        					</span>
+														        				</form>
+													        					<table>
+													        						<tr>
+															        					<?php
+																	        			foreach ($hexValues as $hex) {
+																	        				echo '<td style="height:20px; width:20px; background-color:#'.$hex.';"></td>';
+																	        			}
+																	        			?>
+																	        		</tr>
+																	        	</table>
+													        					<?php echo $colourString; ?>
+														        			</td>
+														        			<?php
 														        			
 														        			// RIGHT: Now loop through the sizes and print them with their
 														        			// availability (in an inner table)
@@ -832,7 +861,7 @@ else
 	<?php
 	require_once 'Include/footer.php';
 
-}//if $g_iProdID
+}//if $selectedProductId
 
 if ($cnRuby)
 	mysql_close($cnRuby);
