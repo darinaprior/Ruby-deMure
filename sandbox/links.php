@@ -7,28 +7,28 @@ else
 include("Include/connection.php");
 
 // Get category details from [LinkCategory] table
-if ($linkCategoryId == -1)
-{
-	$category		= 'Community';
-}
-else
-{
-	$qCategory		= "select * from LinkCategory where LinkCategoryID = ".$linkCategoryId." and Priority is not null limit 1";
-	$rsCategory		= mysql_query($qCategory, $cnRuby);
-	$recCategory	= mysql_fetch_array($rsCategory);
-	if ($recCategory['Category'])	// result found
-	{
-		$category	= $recCategory['Category'];
-	}
-	else
-	{
+$categoryName = 'Community';
+if ($linkCategoryId != -1) {
+	$sql = 'SELECT Category
+		FROM LinkCategory
+		WHERE LinkCategoryID = ?
+		AND Priority IS NOT NULL
+		LIMIT 1';
+	$stmt = $mysqli->prepare($sql);
+	if ($stmt) {
+		$stmt->bind_param('i', intval($linkCategoryId));
+		$stmt->bind_result($categoryName);
+		$stmt->execute();
+		$stmt->fetch();
+		$stmt->close();
+	} else {
+		// Default back to -1
 		$linkCategoryId = -1;
-		$category		= 'Community';
-	}//if $recCategory['Category']
+	}//if $stmt
 }//if $linkCategoryId
 
-$sPageTitle		= $category;
-$sPageKeywords	= $category.', Burlesque Community';
+$sPageTitle = $categoryName;
+$sPageKeywords = $categoryName.', Burlesque Community';
 include("Include/header.php");
 ?>
 
@@ -54,13 +54,13 @@ include("Include/header.php");
 										<?php
 										if ($linkCategoryId != -1)
 											echo '<a href="links.php">Community</a> &gt;';
-										echo $category
+										echo $categoryName
 										?>
 									</td>
 								</tr>
 							</table>
 							<table class="tblStdFull" align="center" cellspacing="0" cellpadding="0">
-								<tr><td colspan="2" class="tdHeading"><?php echo $category ?></td></tr>
+								<tr><td colspan="2" class="tdHeading"><?php echo $categoryName ?></td></tr>
 								<tr>
 									<td>
 										<table class="tblStd" cellspacing="10">
