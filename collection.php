@@ -12,13 +12,19 @@ else
 {
 	require_once 'Include/connection.php';
 
-	// Get collection details from main [Collection] table
-	$qCollection	= "select * from Collection where CollectionID = ".$g_iCollectID." limit 1";
-	$rsCollection	= mysql_query($qCollection, $cnRuby);
-	$recCollection	= mysql_fetch_array($rsCollection);
-	$Title			= $recCollection['Title'];
-	$Description	= $recCollection['Description'];
-	$Date			= $recCollection['Date'];
+	// Get main details of the collection
+	$sql = 'SELECT Title, Description, Date
+		FROM Collection c
+		WHERE CollectionID = ?
+		LIMIT 1';
+	$stmt = $mysqli->prepare($sql);
+	if ($stmt) {
+		$stmt->bind_param('i', intval($g_iCollectID));
+		$stmt->bind_result($Title, $Description, $Date);
+		$stmt->execute();
+		$stmt->fetch();
+		$stmt->close();
+	}
 	
 	$sPageTitle		= $Title;
 	$sPageKeywords	= 'collection, '.$Title.', ready-made, off the shelf, stock';
@@ -89,14 +95,15 @@ else
 													// Get the products in this collection
 													$products = array();
 													$iCount = 1;
-													$sql = 'SELECT
+													$sql = 'SELECT DISTINCT
 															p.ProdID,
 															p.Title,
 															p.TotalCost,
 															MAX(pos.num_in_stock) AS MaxStock
 														FROM Product p
+														INNER JOIN product_collection pc ON p.ProdID = pc.product_id
 														LEFT JOIN product_option_size pos ON p.ProdID = pos.product_id
-														WHERE p.CollectionID = ?
+														WHERE pc.collection_id = ?
 														AND p.Priority IS NOT NULL
 														GROUP BY p.ProdID
 														ORDER BY MaxStock DESC, p.Priority DESC';

@@ -33,13 +33,14 @@ if ($stmt) {
 /** Get one image for each product in each collection */
 foreach ($collections as $key => $collection) {
 	$images = array();
-	$sql = 'SELECT
+	$sql = 'SELECT DISTINCT
 			MIN(pi.id),
 			pi.filename,
 			p.ProdID
 		FROM product_image_TEMP pi
 		INNER JOIN Product p ON pi.product_id = p.ProdID
-		WHERE p.CollectionID = ?
+		INNER JOIN product_collection pc ON p.ProdID = pc.product_id
+		WHERE pc.collection_id = ?
 		AND pi.filename IS NOT NULL
 		GROUP BY p.ProdID
 		ORDER BY pi.id';

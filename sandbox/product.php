@@ -15,16 +15,49 @@ if ($selectedProductId == -1) {
 	?><a href="/">No product ID supplied.  Please return to the home page by clicking here.</a><?php
 } else {
 	// Get product details from main [Product] table
-	$qProduct		= "select * from Product where ProdID = ".$selectedProductId." limit 1";
-	$rsProduct		= mysql_query($qProduct, $cnRuby);
-	$recProduct		= mysql_fetch_array($rsProduct);
-	$id			= $recProduct['ProdID'];
+	$sql = 'SELECT 
+			ProdID, 
+			ProductTypeID, 
+			Title, 
+			Description, 
+			Cost, 
+			VAT, 
+			TotalCost, 
+			ShapeID, 
+			CategoryID, 
+			HasTassel, 
+			OtherDetails, 
+			CustID 
+		FROM Product 
+		WHERE ProdID = ?
+		LIMIT 1';
+	$stmt = $mysqli->prepare($sql);
+	if ($stmt) {
+		$stmt->bind_param('i', intval($selectedProductId));
+		$stmt->bind_result(
+			$id,
+			$ProductTypeID,
+			$Title,
+			$Description,
+			$Cost,
+			$VAT,
+			$TotalCost,
+			$ShapeID,
+			$CategoryID,
+			$HasTassel,
+			$otherDetails,
+			$CustID
+		);
+		$stmt->execute();
+		$stmt->fetch();
+		$stmt->close();
+	}
+	// Make sure we found the product OK
 	if ($selectedProductId != $id) {
 		?><a href="/">Product not found.  Please return to the home page by clicking here.</a><?php
 		exit;
 	}
-	
-	$Title = $recProduct['Title'];	
+		
 	$sPageTitle = $Title;
 	$sPageKeywords = $Title.', product';
 	$has_tabs = TRUE;	// this page contains tabs
@@ -73,18 +106,6 @@ if ($selectedProductId == -1) {
 						<tr>
 							<td valign="top">
 								<?php
-								$ProductTypeID	= $recProduct['ProductTypeID'];
-								$Description	= $recProduct['Description'];
-								$Cost			= $recProduct['Cost'];
-								$VAT			= $recProduct['VAT'];
-								$TotalCost		= $recProduct['TotalCost'];
-								$ShapeID		= $recProduct['ShapeID'];
-								$CategoryID		= $recProduct['CategoryID'];
-								$CollectionID	= $recProduct['CollectionID'];
-								$HasTassel		= $recProduct['HasTassel'];
-								$otherDetails	= $recProduct['OtherDetails'];
-								$CustID			= $recProduct['CustID'];
-			
 								// Get associated details from other tables
 								$qType		= "select Description from ProductType where ProdTypeID = ".$ProductTypeID." limit 1";
 								$rsType		= mysql_query($qType, $cnRuby);
@@ -100,13 +121,27 @@ if ($selectedProductId == -1) {
 								$rsCategory		= mysql_query($qCategory, $cnRuby);
 								$recCategory	= mysql_fetch_array($rsCategory);
 								$Category		= $recCategory['Description'];
-			
-								if ($CollectionID != null) {
-									$qCollection	= "select Title from Collection where CollectionID = ".$CollectionID." limit 1";
-									$rsCollection	= mysql_query($qCollection, $cnRuby);
-									$recCollection	= mysql_fetch_array($rsCollection);
-									$Collection		= $recCollection['Title'];
-								} 
+								
+								// Get all collections associated with it
+								$collectionNames = array();
+								$sql = 'SELECT c.CollectionID, c.Title 
+									FROM Collection c
+									INNER JOIN product_collection pc ON c.CollectionID = pc.collection_id
+									WHERE pc.product_id = ?
+									ORDER BY c.Priority DESC';
+								$stmt = $mysqli->prepare($sql);
+								if ($stmt) {
+									$stmt->bind_param(
+										'i', 
+										intval($selectedProductId)
+									);
+									$stmt->bind_result($id, $name);
+									$stmt->execute();
+									while ($stmt->fetch()) {
+										$collectionNames[$id] = $name;
+									}//while
+									$stmt->close();
+								}//if $stmt
 				
 								// Get the colour and size options, along with the associated numbers available
 								// First, get the option IDs for this product
@@ -260,21 +295,24 @@ if ($selectedProductId == -1) {
 											You are here:&nbsp;
 											<a href="/">Home</a> &gt;
 											<?php
-											if ($CategoryID == 1)
-											{
+											if ($CategoryID == 1) {
 												?>
 												<a href="bespoke.php"><?=$Category?></a> &gt;
 												<?php
-											}
-											else if ($CategoryID == 3)
-											{
-												?>
-												<a href="off-the-rack.php"><?=$Category?></a> &gt;
-												<a href="collection.php?cid=<?=$CollectionID?>"><?=$Collection?></a> &gt;
-												<?php
-											}
+											} else if ($CategoryID == 3) {
+												echo '<a href="off-the-rack.php">'.$Category.'</a> &gt;';
+												
+												// Format the collections as links
+												$links = array();
+												foreach ($collectionNames as $id => $name) {
+													$links[] = '<a href="collection.php?cid='.$id.'">'.$name.'</a>';
+												}//foreach
+												echo '&nbsp;';
+												echo implode(' / ', $links);
+												echo ' &gt; ';
+											}//if
+											echo $Title;
 											?>
-											<?=$Title?>
 										</td>
 									</tr>
 								</table>
