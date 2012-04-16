@@ -1,21 +1,7 @@
 <?php
 include("Include/connection.php");
-
-// Get all category ids into javascript arrays
-?>
-<script type="text/javascript">
-	var aCategoryIds = new Array();
-</script>
-<?php
-$qAllCats	= "select ID from FAQCategory";
-$rsAllCats	= mysql_query($qAllCats, $cnRuby);
-while ($recAllCats = mysql_fetch_array($rsAllCats))
-{
-	?><script type="text/javascript">aCategoryIds.push(<?php echo $recAllCats['ID']; ?>);</script><?php
-}
-
-$sPageTitle		= 'Frequently Asked Questions';
-$sPageKeywords	= 'faq, frequently asked questions';
+$sPageTitle = 'Frequently Asked Questions';
+$sPageKeywords = 'faq, frequently asked questions';
 include("Include/header.php");
 ?>
 
@@ -27,10 +13,7 @@ include("Include/header.php");
 	
 	function hideEverything()
 	{
-		for (var i=0; i < aCategoryIds.length; i++)
-		{
-			$jq("tr[name*=cid_"+aCategoryIds[i]+"]").hide();	// hide all questions AND answers in this category
-		}
+		$jq("tr[name*=cid_]").hide();	// hide all questions AND answers
 	}
 	function showHideQuestions(catId)
 	{
