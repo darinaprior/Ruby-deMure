@@ -283,6 +283,17 @@ div.pikaCaption
 	font-weight:	bold;
 	color:		#461b37;
 }
+div.sitemap_section {
+	border-top: solid 1px #0F050D;
+	padding: 2px 0px 2px 0px;
+}
+div.sitemap_subsection {
+	border-top: dashed 1px #0F050D;
+	padding: 1px 0px 1px 100px;
+}
+div.sitemap_item {
+	padding-left: 100px;
+}
 
 /* links */
 a:link
@@ -367,11 +378,18 @@ a[class ~="popup"] {
 	padding-left:	90px;
 }
 
-/* misc */
+/* images */
 img
 {
 	border:0px;
 }
+img.expand {
+	cursor:pointer;
+	height: 15px;
+	width: 15px;
+}
+
+/* misc */
 .cursor
 {
 	cursor:pointer;

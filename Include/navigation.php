@@ -270,6 +270,7 @@ if ($stmt) {
 									<li><a href="sizing.php">Sizing Chart</a></li>
 									<li><a href="about.php">About Ruby</a></li>
 									<li><a href="contact.php">Contact</a></li>
+									<li><a href="sitemap.php">Sitemap</a></li>
 								</ul>
 							</li>
 						</ul>
@@ -290,4 +291,3 @@ if ($stmt) {
 		</td>
 	</tr>
 </table>
-
