@@ -56,57 +56,61 @@ require_once 'Include/functions.php';
 										<table class="tblStd" cellspacing="0" cellpadding="0">
 											<tr><td><br/><br/></td></tr>
 											<?php					
-											// Get current product details
-											$qProduct	= "select * from Product where CategoryID = 1 and Priority is not null order by Priority desc limit ".($g_iCurrPage * $g_iNumPerPage);								
-											$rsProduct	= mysql_query($qProduct, $cnRuby);
-						
-											// Display results
-											while ($recProduct = mysql_fetch_array($rsProduct))
-											{
-												// Skip to correct "page" of results and don't go past last record
-												if ( ($iCurrRow > $iStartRow) && ($iCurrRow < $iNumProds) )	
-												{
-													$ProductID	= $recProduct['ProdID'];
-													$Title		= $recProduct['Title'];
-													$Date		= $recProduct['DateCreated'];
-													$CustID		= $recProduct['CustID'];
-													$Priority	= $recProduct['Priority'];
-													?>
-													<tr>
-														<td style="vertical-align:middle;">
-															<a href="product.php?pid=<?php echo $ProductID; ?>">
-																<?php
-																// Get first 2 images for this product
-																$sql = 'SELECT DISTINCT filepath
-																	FROM product_image
-																	WHERE product_id = ?
-																	ORDER BY id
-																	LIMIT 2';
-																$stmt = $mysqli->prepare($sql);
-																if ($stmt) {
-																	$stmt->bind_param('i', intval($ProductID));
-																	$stmt->bind_result($path);
-																	$stmt->execute();
-																	while ($stmt->fetch()) {
-																		// Get the full filepath
-																		$fullPath = getFullImagePath($path, 1/*bespoke*/, TRUE/*thumbnail*/);
-																		echo '<img src="'.$fullPath.'" />';
-																	}
-																	$stmt->close();
-																}
-																?>
-															</a>
-														</td>
-														<td  class="tdTitleBespoke">
-															<a class="aNoBold" href="product.php?pid=<?php echo $ProductID; ?>">
-																&nbsp;<?=$Title?>
-															</a>
-														</td>
-													<tr/>
-													<?php
-												}	// (if ($iCurrRow > $iStartRow))
-												$iCurrRow++;
-											}	// (while ($recProduct = mysql_fetch_array($rsProduct)))
+// Get current product details
+$qProduct	= "select * from Product where CategoryID = 1 and Priority is not null order by Priority desc limit ".($g_iCurrPage * $g_iNumPerPage);								
+$rsProduct	= mysql_query($qProduct, $cnRuby);
+
+// Display results
+while ($recProduct = mysql_fetch_array($rsProduct))
+{
+	// Skip to correct "page" of results and don't go past last record
+	if ( ($iCurrRow > $iStartRow) && ($iCurrRow < $iNumProds) )	
+	{
+		$ProductID	= $recProduct['ProdID'];
+		$Title		= $recProduct['Title'];
+		$Date		= $recProduct['DateCreated'];
+		$CustID		= $recProduct['CustID'];
+		$Priority	= $recProduct['Priority'];
+		?>
+		<tr>
+			<td style="vertical-align:middle;">
+				<a href="product.php?pid=<?php echo $ProductID; ?>">
+					<?php
+					// Get first 2 images for this product
+					$sql = 'SELECT DISTINCT filename
+						FROM product_image_TEMP
+						WHERE product_id = ?
+						AND filename IS NOT NULL
+						ORDER BY 
+							use_for_bespoke DESC, 
+							IFNULL(priority, 1000), 
+							id
+						LIMIT 2';
+					$stmt = $mysqli->prepare($sql);
+					if ($stmt) {
+						$stmt->bind_param('i', intval($ProductID));
+						$stmt->bind_result($imageName);
+						$stmt->execute();
+						while ($stmt->fetch()) {
+							// Get the full filepath
+							$fullPath = getProductImagePath($ProductID, $imageName, 3/*small*/);
+							echo '<img src="'.$fullPath.'" />';
+						}
+						$stmt->close();
+					}//if $stmt
+					?>
+				</a>
+			</td>
+			<td  class="tdTitleBespoke">
+				<a class="aNoBold" href="product.php?pid=<?php echo $ProductID; ?>">
+					&nbsp;<?=$Title?>
+				</a>
+			</td>
+		<tr/>
+		<?php
+	}	// (if ($iCurrRow > $iStartRow))
+	$iCurrRow++;
+}	// (while ($recProduct = mysql_fetch_array($rsProduct)))
 											?>
 										</table>
 										

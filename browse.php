@@ -166,78 +166,62 @@ if ( ($browseTypeId == -1) || ($browseValueId == -1) ) {
 												</tr>
 												<tr>
 													<?php
-													/** Loop through the products and print them out with one image and their price and sizes */
-													$iCount = 1;
-													foreach ($productsToDisplay as $product) {
-														$id = $product['Id'];
-														$title = $product['Title'];
-														$cost = $product['Cost'];
-														$categoryId = $product['CategoryId'];
-										
-														// Get just one product image
-														$path = '';
-														$sql = 'SELECT DISTINCT filepath
-															FROM product_image
-															WHERE product_id = ?
-															ORDER BY id
-															LIMIT 1';
-														$stmt = $mysqli->prepare($sql);
-														if ($stmt) {
-															$stmt->bind_param('i', intval($id));
-															$stmt->bind_result($path);
-															$stmt->execute();
-															$stmt->fetch();
-															
-															// Get the full filepath
-															$fullPath = getFullImagePath($path, $categoryId, TRUE/*thumbnail*/);
-															$stmt->close();
-														}
-														
-														// Get the sizes available
-														$sizes = array();
-														$sql = 'SELECT DISTINCT s.Name
-															FROM product_option_size pos
-															INNER JOIN Size s ON pos.size_id = s.SizeID
-															WHERE pos.product_id = ?
-															ORDER BY s.SizeID';
-														$stmt = $mysqli->prepare($sql);
-														if ($stmt) {
-															$stmt->bind_param('i', intval($id));
-															$stmt->bind_result($size);
-															$stmt->execute();
-															while ($stmt->fetch()) {
-																$sizes[] = $size;
-															}
-															$stmt->close();
-														}
-														// Put together in a string
-														$sizesString = implode(', ', $sizes);
-														?>
-														<td width="20%" align="center" style="cursor:pointer;">
-															<a href="product.php?pid=<?php echo $id; ?>" style="color:#330000;" class="aNoBold">
-																<img src="<?php echo $fullPath; ?>" title="<?php echo $title; ?>" border="0">
-																<br/><b><?php echo $title; ?></b>
-																<?php
-																// don't show prices for bespoke
-																if ($categoryId != 1) {
-																	?><br/>&euro;<? echo $cost ?><?php
-																	if ($sSizes != '')
-																		echo " ($sizesString)";
-																} else {
-																	?><br/>(bespoke)<?php
-																}
-																?>
-															</a>
-														</td>
-														<td width="5"></td>
-														<?php
-														if ($iCount == 5) {
-															?></tr><tr><td><br/></td></tr><tr><?php
-															$iCount = 1;
-														} else {
-															$iCount++;
-														}
-													}//foreach $productsToDisplay
+/** Loop through the products and print them out with one image and their price and sizes */
+$iCount = 1;
+foreach ($productsToDisplay as $product) {
+	$id = $product['Id'];
+	$title = $product['Title'];
+	$cost = $product['Cost'];
+	$categoryId = $product['CategoryId'];
+
+	// Get just one product image
+	$fullPath = getSingleImageForProduct($id, 3/*small*/);
+	
+	// Get the sizes available
+	$sizes = array();
+	$sql = 'SELECT DISTINCT s.Name
+		FROM product_option_size pos
+		INNER JOIN Size s ON pos.size_id = s.SizeID
+		WHERE pos.product_id = ?
+		ORDER BY s.SizeID';
+	$stmt = $mysqli->prepare($sql);
+	if ($stmt) {
+		$stmt->bind_param('i', intval($id));
+		$stmt->bind_result($size);
+		$stmt->execute();
+		while ($stmt->fetch()) {
+			$sizes[] = $size;
+		}
+		$stmt->close();
+	}
+	// Put together in a string
+	$sizesString = implode(', ', $sizes);
+	?>
+	<td width="20%" align="center" style="cursor:pointer;">
+		<a href="product.php?pid=<?php echo $id; ?>" style="color:#330000;" class="aNoBold">
+			<img src="<?php echo $fullPath; ?>" title="<?php echo $title; ?>" border="0">
+			<br/><b><?php echo $title; ?></b>
+			<?php
+			// don't show prices for bespoke
+			if ($categoryId != 1) {
+				?><br/>&euro;<? echo $cost ?><?php
+				if ($sSizes != '')
+					echo " ($sizesString)";
+			} else {
+				?><br/>(bespoke)<?php
+			}
+			?>
+		</a>
+	</td>
+	<td width="5"></td>
+	<?php
+	if ($iCount == 5) {
+		?></tr><tr><td><br/></td></tr><tr><?php
+		$iCount = 1;
+	} else {
+		$iCount++;
+	}
+}//foreach $productsToDisplay
 													?>
 												</tr>
 											</table>

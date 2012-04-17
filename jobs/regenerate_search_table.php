@@ -6,6 +6,7 @@
 */
 
 require_once '../Include/connection.php';
+require_once '../Include/functions.php';
 
 if(!$mysqli) {
 	// Show error if we cannot connect.
@@ -22,19 +23,28 @@ if(!$mysqli) {
 			p.CategoryID, 
 			p.Title, 
 			p.Description, 
-			MIN(pi.filepath)
+			MIN(IFNULL(pi.priority, 1000))/*get highest-priority image*/, 
+			pi.filename
 		FROM Product p 
-		LEFT JOIN product_image pi on p.ProdID = pi.product_id
+		LEFT JOIN product_image_TEMP pi on p.ProdID = pi.product_id
 		WHERE p.Priority is not null
+		AND pi.filename IS NOT NULL
 		GROUP BY p.ProdID';
 	$stmt = $mysqli->prepare($sql);
 	if ($stmt) {
-		$stmt->bind_result($id, $productCategoryId, $title, $desc, $img);
+		$stmt->bind_result(
+			$id,
+			$productCategoryId,
+			$title,
+			$desc,
+			$imgId,
+			$imgName
+		);
 		$stmt->execute();
 		while ($result = $stmt->fetch()) {
 		
 			// We want the thumbnail images
-			$imgThumb = str_replace("images/", "images/thumbs/", $img);
+			$imgThumb = getProductImagePath($id, $imgName, 4/*thumb*/);
 			
 			// Add to array
 			$searchContents[] = array(

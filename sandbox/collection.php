@@ -92,136 +92,123 @@ else
 											<table class="tblStdFullCentre" style="padding:5px;">
 												<tr>
 													<?php
-													// Get the products in this collection
-													$products = array();
-													$iCount = 1;
-													$sql = 'SELECT DISTINCT
-															p.ProdID,
-															p.Title,
-															p.TotalCost,
-															MAX(pos.num_in_stock) AS MaxStock
-														FROM Product p
-														INNER JOIN product_collection pc ON p.ProdID = pc.product_id
-														LEFT JOIN product_option_size pos ON p.ProdID = pos.product_id
-														WHERE pc.collection_id = ?
-														AND p.Priority IS NOT NULL
-														GROUP BY p.ProdID
-														ORDER BY MaxStock DESC, p.Priority DESC';
-													$stmt = $mysqli->prepare($sql);
-													if ($stmt) {
-														$stmt->bind_param('i', intval($g_iCollectID));
-														$stmt->bind_result($productId, $productTitle, $totalCost, $maxStock);
-														$stmt->execute();
-														while ($stmt->fetch()) {
-															// Store the main product details
-															$products[$productId] = array(
-																'Title' => $productTitle,
-																'Cost' => $totalCost,
-																'MaxStock' => $maxStock,
-															);
-														}//while
-														$stmt->close();
-													}//if $stmt
-													
-													// Loop through the products
-													foreach ($products as $id => $details) {
-															
-														// Get just one product image
-														$path = '';
-														$sql = 'SELECT DISTINCT filepath
-															FROM product_image
-															WHERE product_id = ?
-															ORDER BY id
-															LIMIT 1';
-														$stmt = $mysqli->prepare($sql);
-														if ($stmt) {
-															$stmt->bind_param('i', intval($id));
-															$stmt->bind_result($path);
-															$stmt->execute();
-															$stmt->fetch();
-															
-															// Get the full filepath and add it back to the products array
-															$fullPath = getFullImagePath($path, 3/*stock*/, TRUE/*thumbnail*/);
-															$stmt->close();
-														}
-															
-														// Get the colours available, but only the first colour in each "option"
-														// e.g. if it's available in "red and white" and "black and white" then we'll
-														// just display "red" and "black" as the available colours
-														$colourValues = array();
-														$sql = 'SELECT DISTINCT
-																c.HexValue
-															FROM product_option_colour poc
-															INNER JOIN product_option po ON poc.option_id = po.id
-															INNER JOIN Colour c ON poc.colour_id = c.ColourID
-															WHERE po.product_id = ?
-															AND poc.priority = 0';
-														$stmt = $mysqli->prepare($sql);
-														if ($stmt) {
-															$stmt->bind_param('i', intval($id));
-															$stmt->bind_result($colourValue);
-															$stmt->execute();
-															while ($stmt->fetch()) {
-																$colourValues[] = $colourValue;
-															}
-															$stmt->close();
-														}
-															
-														// Get the sizes available
-														$sizes = array();
-														$sql = 'SELECT DISTINCT s.NameAbbrev
-															FROM product_option_size pos
-															INNER JOIN Size s ON pos.size_id = s.SizeID
-															WHERE pos.product_id = ?
-															ORDER BY s.SizeID';
-														$stmt = $mysqli->prepare($sql);
-														if ($stmt) {
-															$stmt->bind_param('i', intval($id));
-															$stmt->bind_result($size);
-															$stmt->execute();
-															while ($stmt->fetch()) {
-																$sizes[] = $size;
-															}
-															$stmt->close();
-														}
-														
-														// Now print out the image and price or "OUT OF STOCK" and add
-														// a styled tooltip with the colours and sizes available
-														$productName = $details['Title'];
-														$cost = '&euro;'.formatPrice($details['Cost']);
-														if ($details['MaxStock'] == 0) {
-															$costString = 'OUT OF STOCK';
-															$quickViewCost = $cost.' (OUT OF STOCK)';
-														} else {
-															$costString = $cost;
-															$quickViewCost = $cost;
-														}
-														?>
-														<td align="center" style="cursor:pointer;">
-															<a href="product.php?pid=<?php echo $id; ?>" style="color:#330000;" class="aNoBold">
-																<?php
-																// Format the styled tooltip
-																$quickView = formatCollectionTooltip($productName, $quickViewCost, $colourValues, $sizes);
-																
-																// Put it on the image itself
-																echo '<img class="tt" src="'.$fullPath.'" border="0" title="'.$quickView.'" />';
-																
-																// Follow with the title and price
-																echo '<br/><b>'.$productName.'</b>';
-																echo '<br/>'.$costString;
-																?>
-															</a>
-														</td>
-														<td width="5"></td>
-														<?php
-														// Show 5 products per row
-														if ($iCount % 5 == 0) {
-															$iCount = 1;
-															echo '</tr><tr>';
-														} else {
-															$iCount++;
-														}
-													}//foreach $products
+// Get the products in this collection
+$products = array();
+$iCount = 1;
+$sql = 'SELECT DISTINCT
+		p.ProdID,
+		p.Title,
+		p.TotalCost,
+		MAX(pos.num_in_stock) AS MaxStock
+	FROM Product p
+	INNER JOIN product_collection pc ON p.ProdID = pc.product_id
+	LEFT JOIN product_option_size pos ON p.ProdID = pos.product_id
+	WHERE pc.collection_id = ?
+	AND p.Priority IS NOT NULL
+	GROUP BY p.ProdID
+	ORDER BY MaxStock DESC, p.Priority DESC';
+$stmt = $mysqli->prepare($sql);
+if ($stmt) {
+	$stmt->bind_param('i', intval($g_iCollectID));
+	$stmt->bind_result($productId, $productTitle, $totalCost, $maxStock);
+	$stmt->execute();
+	while ($stmt->fetch()) {
+		// Store the main product details
+		$products[$productId] = array(
+			'Title' => $productTitle,
+			'Cost' => $totalCost,
+			'MaxStock' => $maxStock,
+		);
+	}//while
+	$stmt->close();
+}//if $stmt
+
+// Loop through the products
+foreach ($products as $id => $details) {
+		
+	// Get just one product image
+	$fullPath = getSingleImageForProduct($id, 3/*small*/);
+	if (!$fullPath) {
+		$fullPath = '';	// if the function failed
+	}
+		
+	// Get the colours available, but only the first colour in each "option"
+	// e.g. if it's available in "red and white" and "black and white" then we'll
+	// just display "red" and "black" as the available colours
+	$colourValues = array();
+	$sql = 'SELECT DISTINCT
+			c.HexValue
+		FROM product_option_colour poc
+		INNER JOIN product_option po ON poc.option_id = po.id
+		INNER JOIN Colour c ON poc.colour_id = c.ColourID
+		WHERE po.product_id = ?
+		AND poc.priority = 0';
+	$stmt = $mysqli->prepare($sql);
+	if ($stmt) {
+		$stmt->bind_param('i', intval($id));
+		$stmt->bind_result($colourValue);
+		$stmt->execute();
+		while ($stmt->fetch()) {
+			$colourValues[] = $colourValue;
+		}
+		$stmt->close();
+	}
+		
+	// Get the sizes available
+	$sizes = array();
+	$sql = 'SELECT DISTINCT s.NameAbbrev
+		FROM product_option_size pos
+		INNER JOIN Size s ON pos.size_id = s.SizeID
+		WHERE pos.product_id = ?
+		ORDER BY s.SizeID';
+	$stmt = $mysqli->prepare($sql);
+	if ($stmt) {
+		$stmt->bind_param('i', intval($id));
+		$stmt->bind_result($size);
+		$stmt->execute();
+		while ($stmt->fetch()) {
+			$sizes[] = $size;
+		}
+		$stmt->close();
+	}
+	
+	// Now print out the image and price or "OUT OF STOCK" and add
+	// a styled tooltip with the colours and sizes available
+	$productName = $details['Title'];
+	$cost = '&euro;'.formatPrice($details['Cost']);
+	if ($details['MaxStock'] == 0) {
+		$costString = 'OUT OF STOCK';
+		$quickViewCost = $cost.' (OUT OF STOCK)';
+	} else {
+		$costString = $cost;
+		$quickViewCost = $cost;
+	}
+	?>
+	<td align="center" style="cursor:pointer;">
+		<a href="product.php?pid=<?php echo $id; ?>" style="color:#330000;" class="aNoBold">
+			<?php
+			// Format the styled tooltip
+			$quickView = formatCollectionTooltip($productName, $quickViewCost, $colourValues, $sizes);
+			
+			// Put it on the image itself
+			echo '<img class="tt" src="'.$fullPath.'" border="0" title="'.$quickView.'" />';
+			
+			// Follow with the title and price
+			echo '<br/><b>'.$productName.'</b>';
+			echo '<br/>'.$costString;
+			?>
+		</a>
+	</td>
+	<td width="5"></td>
+	<?php
+	// Show 5 products per row
+	if ($iCount % 5 == 0) {
+		$iCount = 1;
+		echo '</tr><tr>';
+	} else {
+		$iCount++;
+	}
+}//foreach $products
 													?>
 												</tr>
 											</table>

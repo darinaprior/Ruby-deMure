@@ -88,7 +88,7 @@ if(!$mysqli) {
                                 	$title,
                                 	$desc,
                                 	$url,
-                                	$img
+                                	$imagePath
                                 );
                                 $stmt->execute();
                                 // Loop through the results
@@ -101,10 +101,9 @@ if(!$mysqli) {
 
                                         echo '<a href="'.$url.'">';
                                         
-					// Get the root-relative filepath for the search image
-					if (isset($img) && $img != '') {
-						$fullPath = getSearchImagePath($img, $categoryId, $productCategoryId);
-						echo '<img src="http://rubydemure.com'.$fullPath.'" alt="" />';
+					// Print out the search image, if one is set
+					if (isset($imagePath) && $imagePath != '') {
+						echo '<img src="'.$imagePath.'" alt="" />';
 					}
 
                                         $name = $title;
@@ -114,8 +113,8 @@ if(!$mysqli) {
                                         echo '<span class="searchheading">'.stripslashes($name).'</span>';
 
                                         $description = $desc;
-                                        if(strlen($description) > 160) { 
-                                                $description = substr($description, 0, 160) . "...";
+                                        if(strlen($description) > 120) { 
+                                                $description = substr($description, 0, 120) . "...";
                                         }
 
                                         echo '<span>'.stripslashes($description).'</span></a>';
