@@ -26,7 +26,7 @@ if(!$mysqli) {
 			MIN(IFNULL(pi.priority, 1000))/*get highest-priority image*/, 
 			pi.filename
 		FROM Product p 
-		LEFT JOIN product_image_TEMP pi on p.ProdID = pi.product_id
+		LEFT JOIN product_image pi on p.ProdID = pi.product_id
 		WHERE p.Priority is not null
 		AND pi.filename IS NOT NULL
 		GROUP BY p.ProdID';

@@ -323,7 +323,7 @@ function mapImageToProduct($productId, $filename, $caption)
 		/** First, check if the record already exists */
 		$numRows = 0;
 		$sql = 'SELECT COUNT(*) AS NumRows
-			FROM product_image_TEMP
+			FROM product_image
 			WHERE product_id = ?
 			AND filename = ?';
 		$stmt = $mysqli->prepare($sql);
@@ -343,7 +343,7 @@ function mapImageToProduct($productId, $filename, $caption)
 		
 		/** Insert into the database if not already there */
 		if ($numRows < 1) {
-			$sql = 'INSERT INTO product_image_TEMP (product_id, filename, caption)
+			$sql = 'INSERT INTO product_image (product_id, filename, caption)
 				VALUES (?, ?, ?)';
 			$stmt = $mysqli->prepare($sql);
 			if ($stmt) {

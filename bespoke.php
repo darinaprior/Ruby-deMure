@@ -78,7 +78,7 @@ while ($recProduct = mysql_fetch_array($rsProduct))
 					<?php
 					// Get first 2 images for this product
 					$sql = 'SELECT DISTINCT filename
-						FROM product_image_TEMP
+						FROM product_image
 						WHERE product_id = ?
 						AND filename IS NOT NULL
 						ORDER BY 

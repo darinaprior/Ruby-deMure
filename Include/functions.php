@@ -789,7 +789,7 @@ function getSingleImageForProduct($productId, $size=1)
 	
 	/** Try to get the highest priority image name from the DB */
 	$sql = 'SELECT filename
-		FROM product_image_TEMP
+		FROM product_image
 		WHERE product_id = ?
 		AND filename IS NOT NULL
 		ORDER BY IFNULL(priority, 1000), id

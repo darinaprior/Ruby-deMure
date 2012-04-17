@@ -22,7 +22,7 @@ if ($_POST) {
 	$priority = 0;	// 0 = lowest priority
 	foreach ($idsInNewOrder as $id) {
 		// Update the product image in the database
-		$sql = 'UPDATE product_image_TEMP
+		$sql = 'UPDATE product_image
 			SET priority = ?
 			WHERE id = ?';
 		$stmt = $mysqli->prepare($sql);
@@ -97,7 +97,7 @@ if ($_POST) {
 	// Get all the images for this product
 	$images = array();
 	$sql = 'SELECT DISTINCT id, filename, priority
-		FROM product_image_TEMP
+		FROM product_image
 		WHERE product_id = ?
 		AND filename IS NOT NULL
 		ORDER BY IFNULL(priority, 1000), id';

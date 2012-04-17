@@ -37,7 +37,7 @@ foreach ($collections as $key => $collection) {
 			MIN(pi.id),
 			pi.filename,
 			p.ProdID
-		FROM product_image_TEMP pi
+		FROM product_image pi
 		INNER JOIN Product p ON pi.product_id = p.ProdID
 		INNER JOIN product_collection pc ON p.ProdID = pc.product_id
 		WHERE pc.collection_id = ?

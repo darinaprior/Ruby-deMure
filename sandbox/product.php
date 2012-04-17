@@ -343,7 +343,7 @@ if ($selectedProductId == -1) {
 													$whereOption = 'AND (option_id = ? OR option_id IS NULL) ';
 												}
 												$sql = 'SELECT DISTINCT filename, caption
-													FROM product_image_TEMP
+													FROM product_image
 													WHERE product_id = ?
 													'.$whereOption.'
 													AND filename IS NOT NULL
