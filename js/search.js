@@ -15,13 +15,20 @@ google.setOnLoadCallback(function()
 	 });
 });
 
-function lookup(inputString) {
+function lookup(inputString, resultsLimit) {
 	if(inputString.length == 0) {
 		jQuery('#suggestions').fadeOut(); // Hide the suggestions box
 	} else {
-		jQuery.post("Include/search.php", {queryString: ""+inputString+""}, function(data) { // Do an AJAX call
-			jQuery('#suggestions').fadeIn(); // Show the suggestions box
-			jQuery('#suggestions').html(data); // Fill the suggestions box
-		});
+		jQuery.post(
+			"/Include/search.php", 
+			{
+				queryString: ""+inputString+"",
+				limit: resultsLimit
+			}, 
+			function(data) { // Do an AJAX call
+				jQuery('#suggestions').fadeIn(); // Show the suggestions box
+				jQuery('#suggestions').html(data); // Fill the suggestions box
+			}
+		);
 	}
 }

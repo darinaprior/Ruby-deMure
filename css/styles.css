@@ -198,6 +198,14 @@ td.tdR6C2
 	height: 46px;
 	width: 804px;
 }
+td.tdR6C2_nolinks
+{
+	background-image: url('/images/backgrounds/R6C2_nolinks.jpg');
+	background-repeat:	no-repeat;
+	background-color:	#0F050D;
+	height: 46px;
+	width: 804px;
+}
 td.tdR6C3
 {
 	background-image: url('/images/backgrounds/R6C3.jpg');

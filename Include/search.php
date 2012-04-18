@@ -44,6 +44,12 @@ if(!$mysqli) {
                         }//foreach $keywords
                         $sqlUnionBlock = implode(' UNION ', $sqlUnionSelects);
                         
+                        // Set the limit (default to 6)
+                        $limit = 6;
+                        if (isset($_POST['limit']) && $_POST['limit'] > 0) {
+                        	$limit = intval($_POST['limit']);
+                        }
+                        
                         // Only display ANYTHING if there are some actual
                         // keywords i.e. not just spaces or single letters!
                         if (COUNT($bindParamValues) > 0) {
@@ -66,7 +72,7 @@ if(!$mysqli) {
                                     ON (s.title LIKE tKeys.CompareKey OR s.description LIKE tKeys.CompareKey)
                                     GROUP BY s.id
                                     ORDER BY sc.name, NumKeywordsMatched desc, s.title
-                                    LIMIT 6';                                    
+                                    LIMIT '.$limit;                                    
                                     
                             // Prepare the statement
                             $stmt = $mysqli->prepare($sql);
@@ -120,7 +126,7 @@ if(!$mysqli) {
                                         echo '<span>'.stripslashes($description).'</span></a>';
                                 }//while
                                 $stmt->close();
-                                echo '<span class="alternative"><a href="http://www.rubydemure.com/browse.php?type=1&val=1" title="Browse products">Didn\'t find what you were looking for?<br/>Try browsing - click here.</a></span><br class="break" />';
+                                echo '<span class="alternative"><a href="http://www.rubydemure.com/sitemap.php" title="Browse products">Didn\'t find what you were looking for?<br/>Try the sitemap - click here.</a></span><br class="break" />';
                             } else {
                                 echo 'ERROR: There was a problem with the query.';
                             }//if $stmt

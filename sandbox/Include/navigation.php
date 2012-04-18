@@ -280,7 +280,7 @@ if ($stmt) {
 							<form id="searchform">
 								<div>
 									<p>Search</p>
-									<input id="inputString" type="text" size="15" value="" onkeyup="lookup(this.value);" />
+									<input id="inputString" type="text" size="15" value="" onkeyup="lookup(this.value, 6);" />
 								</div>
 								<div id="suggestions"></div>
 							</form>
