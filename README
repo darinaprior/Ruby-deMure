@@ -1,8 +1,0 @@
-This git repository is the bulk of the codebase for the Ruby deMure website http://www.rubydemure.com
-It largely consists of PHP and MySQL with various third-party javascript/jQuery plugins.
-I have not included the third-party code here, though most of it is also open-source, so you can find those parts online.
-
-The Ruby deMure code is quite out-of-date and needs a serious overhaul, so please excuse its crudeness!
-
-All code (other than third-party plugins) written by Darina Prior from 2007 to date.
-My code is open-source - use whatever you like :-)

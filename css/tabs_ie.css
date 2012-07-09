@@ -1,6 +1,0 @@
-/* Tweaks needed to the TABS stylesheet for Internet Explorer browsers */
-
-/* The container for the tab headers */
-#tabs_container {
-    margin-right: 7px;
-}
